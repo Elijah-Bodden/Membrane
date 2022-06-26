@@ -1,2 +1,2 @@
 # Membrane
-Create a minimal-server-interaction network for peer routing in the browser
+A minimal-server-interaction tool for peer routing in the browser
