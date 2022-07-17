@@ -1,3 +1,5 @@
+/** @format */
+
 "use strict";
 
 const { createLogger, format, transports, addColors } = require("winston");
@@ -6,8 +8,7 @@ const http = require("http");
 const path = require("path");
 const webSocket = require("ws");
 const { URL } = require("url");
-const helmet = require('helmet');
-
+const helmet = require("helmet");
 
 class clientQueue {
 	constructor() {
@@ -26,17 +27,17 @@ class clientQueue {
 		return this.queue[index][0];
 	}
 	async modifyPriority(item, newPriority) {
-		if (this.cachedPriorities[item]===newPriority) return
-		this.delete(item)
+		if (this.cachedPriorities[item] === newPriority) return;
+		this.delete(item);
 		this.add(item, newPriority);
 	}
 	async delete(item) {
-		if (this.cachedPriorities[item] == undefined) return
+		if (this.cachedPriorities[item] == undefined) return;
 		this.queue[this.cachedPriorities[item]].splice(
 			this.queue[this.cachedPriorities[item]].indexOf(item),
 			1
 		);
-		if (this.queue[this.cachedPriorities[item]] == "") delete this.queue[this.cachedPriorities[item]];	
+		if (this.queue[this.cachedPriorities[item]] == "") delete this.queue[this.cachedPriorities[item]];
 		delete this.cachedPriorities[item];
 	}
 }
@@ -54,7 +55,7 @@ const websocketHandler = new webSocket.Server({ noServer: true });
 const expressFrontend = express();
 const ROOT = path.join(__dirname, "../development");
 expressFrontend.use(express.static(ROOT));
-expressFrontend.use(helmet())
+expressFrontend.use(helmet());
 expressFrontend.get("/", async function (req, res) {
 	res.sendFile(ROOT);
 });
@@ -196,9 +197,12 @@ function init() {
 		let present = +new Date();
 		for (let client of Object.values(clients)) {
 			++clientAges[client.CID];
-			if ((present - client.mostRecentHeartbeat) > 1000 || (client?.socket?.readyState ?? webSocket.CLOSED) === webSocket.CLOSED){
+			if (
+				present - client.mostRecentHeartbeat > 1000 ||
+				(client?.socket?.readyState ?? webSocket.CLOSED) === webSocket.CLOSED
+			) {
 				terminateAndCleanClient(client.CID);
-				return
+				return;
 			}
 		}
 	}, 1);
@@ -209,7 +213,7 @@ function init() {
 	}, 100);
 	setInterval(() => {
 		for (let client in routableClients.cachedPriorities) {
-			clients[client].recomputeTrustworthiness()
+			clients[client].recomputeTrustworthiness();
 		}
 	}, 1000);
 }
@@ -247,25 +251,25 @@ class Client {
 			imposedConnections: 0,
 			invalidSDP: 0,
 			activeRouting: 0,
-			SDPRequestRejections: 0
+			SDPRequestRejections: 0,
 		};
 		this.CID = Math.random().toString().slice(2, 17);
 		clients[this.CID] = this;
 		clientAges[this.CID] = 1;
 	}
 	incrementTrustworthinessHeuristic(prop) {
-		this.trustworthinessHeusistic[prop]++
+		this.trustworthinessHeusistic[prop]++;
 		this.recomputeTrustworthiness();
 	}
 	decrementTrustworthinessHeuristic(prop) {
-		this.trustworthinessHeusistic[prop]--
+		this.trustworthinessHeusistic[prop]--;
 		this.recomputeTrustworthiness();
 	}
 	async tether(initSDP) {
 		this.abstractConnect();
 		this.initSDP = initSDP;
 		const fetchReturn = await fetchArbitraryLinkSDP(this.initSDP);
-		if (this?.socket?.readyState!==webSocket.OPEN) return
+		if (this?.socket?.readyState !== webSocket.OPEN) return;
 		this.socket.crudeSend(...fetchReturn);
 		routableClients.add(this.CID, this.trustworthiness);
 	}
@@ -274,7 +278,7 @@ class Client {
 		routableClients.add(this.CID, this.trustworthiness);
 	}
 	async recomputeTrustworthiness() {
-		var tentativeScore = 0
+		var tentativeScore = 0;
 		if (
 			this.trustworthinessHeusistic.invalidSDP > clientAges[this.CID] / 200 ||
 			this.trustworthinessHeusistic.noAnswer > clientAges[this.CID] / 200 ||
@@ -286,9 +290,9 @@ class Client {
 			15 * this.trustworthinessHeusistic.imposedConnections +
 			100 * this.trustworthinessHeusistic.noAnswer +
 			5 * this.trustworthinessHeusistic.invalidData +
-			5 * this.trustworthinessHeusistic.SDPRequestRejections
+			5 * this.trustworthinessHeusistic.SDPRequestRejections;
 		tentativeScore /= clientAges[this.CID];
-		tentativeScore = Math.ceil(1000*tentativeScore)
+		tentativeScore = Math.ceil(1000 * tentativeScore);
 		this.trustworthiness = tentativeScore;
 		routableClients.modifyPriority(this.CID, this.trustworthiness);
 	}
@@ -322,7 +326,7 @@ class Client {
 					}
 					if (clients[parsed[1]])
 						clients[parsed[1]].incrementTrustworthinessHeuristic("invalidSDP");
-					this.socket.crudeSend(...await fetchArbitraryLinkSDP(this.initSDP));
+					this.socket.crudeSend(...(await fetchArbitraryLinkSDP(this.initSDP)));
 					break;
 				case "returnSDP":
 					if (parsed.length != 3) {
@@ -336,9 +340,9 @@ class Client {
 						flagInvalidMessage(parsed);
 						return;
 					}
-					eventHandler.forceReject(`serialRequestResponse|${this.CID}|${parsed[1]}`)
-					this.incrementTrustworthinessHeuristic("SDPRequestRejections")
-					break
+					eventHandler.forceReject(`serialRequestResponse|${this.CID}|${parsed[1]}`);
+					this.incrementTrustworthinessHeuristic("SDPRequestRejections");
+					break;
 				default:
 					flagInvalidMessage(message);
 					return;
@@ -349,13 +353,13 @@ class Client {
 
 async function terminateAndCleanClient(CID) {
 	if (clients?.[CID]?.socket?.terminate) {
-		clients?.[CID]?.socket?.terminate()
+		clients?.[CID]?.socket?.terminate();
 	}
 	delete clientAges[CID];
 	delete clients[CID];
 	Object.keys(eventHandler.dispatchWatchers)
 		.filter((key) => {
-			return key.split("|")[1] === CID
+			return key.split("|")[1] === CID;
 		})
 		.forEach((key) => {
 			eventHandler.forceReject(key, "Client channel died mid-route");
@@ -365,13 +369,14 @@ async function terminateAndCleanClient(CID) {
 
 async function fetchArbitraryLinkSDP(initSDP, recursionDepth) {
 	if (!recursionDepth) recursionDepth = 0;
-	if (Object.keys(routableClients.cachedPriorities).length === 0) return ["provideSDP", {SDP : "unresolved"}];
+	if (Object.keys(routableClients.cachedPriorities).length === 0)
+		return ["provideSDP", { SDP: "unresolved" }];
 	const requestID = Math.random().toString().slice(2, 10);
 	const nomineeIndex = await routableClients.fetchMin();
 	const nominee = clients[nomineeIndex];
-	if (nominee?.socket?.readyState !== webSocket.OPEN) await terminateAndCleanClient(nomineeIndex)
+	if (nominee?.socket?.readyState !== webSocket.OPEN) await terminateAndCleanClient(nomineeIndex);
 	if (!nominee) {
-		return fetchArbitraryLinkSDP(initSDP, recursionDepth)
+		return fetchArbitraryLinkSDP(initSDP, recursionDepth);
 	}
 	nominee.socket.crudeSend("requestSDP", { SDP: initSDP, returnID: requestID });
 	nominee.incrementTrustworthinessHeuristic("activeRouting");
@@ -391,7 +396,7 @@ async function fetchArbitraryLinkSDP(initSDP, recursionDepth) {
 	}
 	nominee.incrementTrustworthinessHeuristic("imposedConnections");
 	nominee.decrementTrustworthinessHeuristic("activeRouting");
-	return ["provideSDP", {SDP : resolution}];
+	return ["provideSDP", { SDP: resolution }];
 }
 
 init();
