@@ -1,4 +1,4 @@
 # Membrane
 ![](https://api.codiga.io/project/33828/score/svg)
-![](https://img.shields.io/github/license/JerichoJS/membrane?color=brightgreen&label=License)  
+![](https://img.shields.io/github/license/JerichoJS/membrane?color=green&label=License)  
 A minimal-server-interaction tool for peer routing in the browser
