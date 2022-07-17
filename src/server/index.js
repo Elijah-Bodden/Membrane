@@ -6,6 +6,8 @@ const http = require("http");
 const path = require("path");
 const webSocket = require("ws");
 const { URL } = require("url");
+const helmet = require('helmet');
+
 
 class clientQueue {
 	constructor() {
@@ -52,6 +54,7 @@ const websocketHandler = new webSocket.Server({ noServer: true });
 const expressFrontend = express();
 const ROOT = path.join(__dirname, "../development");
 expressFrontend.use(express.static(ROOT));
+expressFrontend.use(helmet())
 expressFrontend.get("/", async function (req, res) {
 	res.sendFile(ROOT);
 });
