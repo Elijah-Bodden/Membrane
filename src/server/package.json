@@ -5,8 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"postinstall": "cross-env NODE_ENV=production",
-		"deploy": "pm2 start production.js --exp-backoff-restart-delay=75",
-		"test": "nodemon primary.js"
+		"deploy": "pm2 start index.js --exp-backoff-restart-delay=75",
+		"test": "nodemon index.js"
 	},
 	"author": "Elijah Bodden",
 	"license": "MIT",
