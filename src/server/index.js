@@ -199,7 +199,7 @@ function init() {
 			++clientAges[client.CID];
 			if (
 				present - client.mostRecentHeartbeat > 1000 ||
-				(client?.socket?.readyState ?? webSocket.CLOSED) === webSocket.CLOSED
+				(client.socket?.readyState ?? webSocket.CLOSED) === webSocket.CLOSED
 			) {
 				terminateAndCleanClient(client.CID);
 				return;
@@ -269,7 +269,7 @@ class Client {
 		this.abstractConnect();
 		this.initSDP = initSDP;
 		const fetchReturn = await fetchArbitraryLinkSDP(this.initSDP);
-		if (this?.socket?.readyState !== webSocket.OPEN) return;
+		if (this.socket?.readyState !== webSocket.OPEN) return;
 		this.socket.crudeSend(...fetchReturn);
 		routableClients.add(this.CID, this.trustworthiness);
 	}
@@ -386,7 +386,7 @@ async function fetchArbitraryLinkSDP(initSDP, recursionDepth) {
 			CONFIG.defaultNoResponseTimeout
 		);
 	} catch (error) {
-		if (nominee) nominee.incrementTrustworthinessHeuristic("noAnswer");
+		nominee.incrementTrustworthinessHeuristic("noAnswer");
 		recursionDepth++;
 		if (recursionDepth < 2) {
 			return await fetchArbitraryLinkSDP(initSDP, recursionDepth);
