@@ -352,8 +352,8 @@ class Client {
 }
 
 async function terminateAndCleanClient(CID) {
-	if (clients?.[CID]?.socket?.terminate) {
-		clients?.[CID]?.socket?.terminate();
+	if (clients[CID]?.socket?.terminate) {
+		clients[CID]?.socket?.terminate();
 	}
 	delete clientAges[CID];
 	delete clients[CID];
