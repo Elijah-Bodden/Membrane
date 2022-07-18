@@ -1,3 +1,4 @@
 **/*.log
 !**/*.example.log
 /**/node_modules/**
+**/*.css.map
