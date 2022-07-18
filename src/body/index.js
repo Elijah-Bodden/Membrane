@@ -1,9 +1,7 @@
 /** @format */
 
 "use strict";
-
-//implement both connection permission types, users are only ever aware of the more explicit variety
-
+ 
 var CONFIG = {}
 /*
 	! NB !
@@ -56,14 +54,19 @@ var defaultConfig = {
 			reciprocalAlignment : { required : ["hiddenAlias"], optional : ["publicAlias", "map"] },
 			routeInaccessible : {required : ["routeID", "pointOfFailure", "destination"], optional : ["!"]},
 			routeRejected : {required : ["destination", "routeID"], optional : ["!*"]}, 
-			routeAccepted : {required : ["SDP", "destination", "routeID"], optional : ["!*"]}
+			routeAccepted : {required : ["SDP", "destination", "routeID"], optional : ["!*"]},
+			permissionEscalationRequest : {required : ["level"], optional : ["!*"]},
+			permissionEscalationResponse : {required : ["status"], optional : ["!*"]}
 		},
 		allowNonStandardParsers : false,
 		mapImportTimeout : 10000,
 		moderateMapInstabilityTolerance : true,
 		arbitraryPeerRouteTimeout : 10000,
 		routeAcceptHeuristic : function (pkg) {
-			return confirm(`Would you like to route in connection with node ${pkg.sender} (${hiddenAliasLookup[pkg.sender]})?`)
+			if (pkg.desiredPermissions==="advanced") {
+				return confirm(`Would you like to route in connection with node ${pkg.sender} (${hiddenAliasLookup[pkg.sender]})?`)
+			}
+			return true
 		}
 	},
 	constants : {
@@ -110,9 +113,11 @@ async function loadConfig(defaultConfig, provisionFunction) {
 		if (typeof defaultPrefParent?.[deepestProperty] === typeof provided[i]) defaultPrefParent[deepestProperty] = provided[i];
 	}
  	CONFIG = loadableConfig;
+	document.title = CONFIG.communication.hiddenAlias
 }
 
 const livePeers = {};
+const authPeers = []
 
 WebSocket.prototype.crudeSend = async function (type, typeArgs) {
 	checkForTypeErrors([{ type }, { typeArgs }], [["string"], ["object", "undefined"]]);
@@ -357,9 +362,7 @@ class AbstractMap {
 		return elected ? elected : "none";
 	}
 	async precomputeRoutes(source) {
-		console.log()
 		checkForTypeErrors([{ source }], [["string", "number"]]);
-		console.log(source, this.adjacencyList)
 		if (!Object.keys(this.nodes).includes(source)) throw new Error(`Requested source node (${source}) is not present within AbstractMap.__instance__.nodes`);
 		var dist = {};
 		var prev = {};
@@ -390,16 +393,13 @@ class AbstractMap {
 	}
 	async findNextHop(currentNode, endNode) {
 		checkForTypeErrors([{ currentNode }, { endNode }], [ ["string", "number"], ["string", "number"]]);
-		if (!this.computationRefreshed) {
-			await this.precomputeRoutes(currentNode);
-		}
+		await this.precomputeRoutes(currentNode);
 		if (!(Object.keys(this.nodes).includes(currentNode) && Object.keys(this.nodes).includes(endNode))) {
 			throw new Error(`The requested route <${currentNode} -> ${endNode}> is not possible in the current map (one of both of these members does not exist).`); 
 		}
 		var node = endNode;
 		var lastNode = undefined;
 		while (node != currentNode) {
-			console.log(node)
 			lastNode = node;
 			if (this.distances[node] == Infinity)
 				throw new Error(`The requested route <${currentNode} -> ${endNode}> is not possible in the current map (there exists no path between intermediary node ${node} and the current node).`);
@@ -470,8 +470,8 @@ class peerConnection {
 		this.peerData = {
 			hiddenAlias: undefined,
 		};
-		this.isAuth = false;
 		this.permissions = permissions ?? "standard";
+		this.isAuth = permissions==="advanced"
 		this.internalUID = `UID : ${Math.random().toString(36).slice(2, 11)}`;
 		this.transport = (() => {
 			let buffer = {};
@@ -553,6 +553,18 @@ class peerConnection {
 		throw new Error("This connection already holds a remote description, and therefore, cannot overwrite it with a new external description.");
 		this.transport.connection.setRemoteDescription(SDP);
 	}
+	async requestPermissionEscalation(level) {
+		this.transport.channel.standardSend("permissionEscalationRequest", {level : level ?? "advanced"})
+		eventHandler.acquireExpectedDispatch(`permissionEscalationResponse|${this.internalUID}`).then((value) => {
+			if (value.externalDetail.status) {
+				this.permissions = level ?? "advanced"
+				this.isAuth = (this.permissions==="advanced")
+				if (this.isAuth && !authPeers.includes(message.hiddenAlias)) authPeers.push(message.hiddenAlias)
+			}
+		},
+		indicateRouteInaccessible
+		)
+	}
 	async makeDefiniteRoute(destination, desiredPermissions) {
 		if (Object.keys(livePeers).includes(destination)) throw new Error(`Direct route already exists to requested node ${destination}`)
 		const generatedChannel = new peerConnection()
@@ -569,7 +581,6 @@ class peerConnection {
 		catch (error) {
 			var result = {signalIdentifier : "routeInaccessible"}
 		}
-		console.log(result)
 		switch (result.signalIdentifier.split("|")[0]) {
 			case "routeInaccessible":
 				peerConnection.prototype.close(generatedChannel)
@@ -593,7 +604,7 @@ class peerConnection {
 		}
 	}
 	async comprehendProspectiveRoute(routePackage) {
-		var connection = new peerConnection();
+		var connection = new peerConnection(routePackage.desiredPermissions);
 		try {
 			var SDP = await connection.recieveOffer(JSON.parse(routePackage.SDP));
 		} catch {
@@ -625,7 +636,7 @@ class peerConnection {
 	async handleMessage(message) {
 		const parsed = JSON.parse(CONFIG.rtc.binaryType === "arrayBuffer" ? new TextDecoder().decode(message) : message);
 		checkForTypeErrors([{ parsed }], [["object"]]);
-		if (!(await peerConnection.prototype.weaklyValidateMessage(parsed))) {
+		if (!(await peerConnection.prototype.weaklyValidateMessage(parsed)) || (!this.isAuth && parsed[1]==="consumable")) {
 			if (this.peerData.peer) {
 				shiftNodeWeight(this.peerData.peer, CONFIG.constants.violationWeightPenalties.invalidMessage)
 			}
@@ -703,6 +714,19 @@ class peerConnection {
 					return
 				}
 				break
+			case "permissionEscalationRequest":
+				if (CONFIG.communication.routeAcceptHeuristic.constructor.name === "AsyncFunction" ? await CONFIG.communication.routeAcceptHeuristic({sender : this.peerData.hiddenAlias, desiredPermissions : parsed[1].level}) : CONFIG.communication.routeAcceptHeuristic({sender : this.peerData.hiddenAlias, desiredPermissions : parsed[1].level})) {
+					this.transport.channel.standardSend("permissionEscalationResponse", {status : true})
+					this.permissions = parsed[1].level ?? "advanced"
+					this.isAuth = (this.permissions === "advanced")
+					if (this.isAuth && !authPeers.includes(message.hiddenAlias)) authPeers.push(message.hiddenAlias)
+				} else {
+					this.transport.channel.standardSend("permissionEscalationResponse", {status : false})
+				}
+				break
+			case "permissionEscalationResponse":
+				eventHandler.dispatch(`permissionEscalationResponse|${this.internalUID}`, {status : parsed[1].status })
+				break
 			case "invokerIntroduction":
 				if (this.acquainted) {
 					if (this.peerData.peer) {
@@ -775,6 +799,7 @@ class peerConnection {
 				return;
 			}
 			livePeers[message.hiddenAlias] = this;
+			if (this.isAuth) authPeers.push(message.hiddenAlias)
 			topologyTransport.addGossip({constituentHiddenAliases: [CONFIG.communication.hiddenAlias, message.hiddenAlias], correspondingPublicAliases: [CONFIG.communication.publicAlias, message.publicAlias], mode: "addLink"});
 			this.acquainted = true;
 			const providedMap = !message.isOriented ? await networkMap.optionalExport() : false;
@@ -796,6 +821,7 @@ class peerConnection {
 				return;
 			}
 			livePeers[message.hiddenAlias] = this;
+			if (this.isAuth) authPeers.push(message.hiddenAlias)
 			if (Object.keys(networkMap.nodes) == "") {
 				if (!message.map) {
 					const mapInterval = setTimeout(() => {
@@ -829,6 +855,7 @@ class peerConnection {
 				constituentHiddenAliases: [peer.peerData.hiddenAlias, CONFIG.communication.hiddenAlias],
 				mode: "removeLink",
 			});
+			if (peer.isAuth) if (authPeers.includes(peer.peerData.hiddenAlias)) authPeers.splice(authPeers.indexOf(peer.peerData.hiddenAlias, 1))
 			await deleteAlias(peer.peerData.hiddenAlias);
 		}
 		if (peer?.transport?.connection?.signalingState !== "closed") {
