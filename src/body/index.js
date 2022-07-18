@@ -1101,7 +1101,7 @@ async function escapeHTML(data) {
 async function parsePublicAlias(alias, hidden) {
 	alias = alias ? alias : CONFIG.communication.defaultUnknownPublicAlias ? CONFIG.communication.defaultUnknownPublicAlias : hidden ? hidden : "anonymous";
 	const escaped = await escapeHTML(alias);
-	publicAliasTallies[escaped] = !(publicAliasTallies[escaped] === undefined ?? publicAliasTallies[escaped] === null) ? ++publicAliasTallies[escaped] : 0;
+	publicAliasTallies[escaped] = !(publicAliasTallies[escaped] === undefined || publicAliasTallies[escaped] === null) ? ++publicAliasTallies[escaped] : 0;
 	return publicAliasTallies[escaped] === 0 ? escaped : `${escaped} (${publicAliasTallies[escaped]})`;
 }
 
