@@ -7,3 +7,6 @@
 An extensible, minimal-server-interaction API for peer routing in the browser
 
 ## Documentation
+## Integration
+## Application Infrastructure
+## Thanks
