@@ -8,5 +8,7 @@ An extensible, minimal-server-interaction API for peer routing in the browser
 
 ## Documentation
 ## Integration
+### What else you'll need
+<!-- A functional server with appropriate endpoints + exchange methods (see /src/server -> wget -> cd -> npm install) -->
 ## Application Infrastructure
 ## Thanks
