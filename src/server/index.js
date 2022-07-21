@@ -9,6 +9,7 @@ const path = require("path");
 const webSocket = require("ws");
 const { URL } = require("url");
 const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
 class clientQueue {
 	constructor() {
@@ -50,12 +51,19 @@ const CONFIG = {
 };
 var logger;
 
+const rateLimiter = rateLimit({
+    max: 1000,
+    windowMs: 360000,
+    message: "RateLimiterRejection: more than 1000 requests made from this IP in the last hour"
+});
+
 const websocketServer = http.createServer();
 const websocketHandler = new webSocket.Server({ noServer: true });
 const expressFrontend = express();
-const ROOT = path.join(__dirname, "../development");
+const ROOT = path.join(__dirname, "../nonvelty/dist");
 expressFrontend.use(express.static(ROOT));
 expressFrontend.use(helmet());
+expressFrontend.use(rateLimiter)
 expressFrontend.get("/", async function (req, res) {
 	res.sendFile(ROOT);
 });
