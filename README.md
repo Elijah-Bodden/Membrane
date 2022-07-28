@@ -1,5 +1,4 @@
-![Membrane](./Assets/Membrane-banner.svg#gh-light-mode-only)</br>
-![Membrane](./Assets/Membrane-banner-light.svg#gh-dark-mode-only)</br>
+![Membrane](./Assets/Membrane-banner.svg)</br>
 ![](https://api.codiga.io/project/33828/score/svg)
 ![](https://img.shields.io/github/license/JerichoJS/membrane?color=blue&label=License)
 ![](https://img.shields.io/github/languages/code-size/JerichoJS/membrane?color=%20%23d0a011%20&label=Raw%20Code%20Size)
