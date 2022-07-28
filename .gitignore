@@ -2,4 +2,4 @@
 !**/*.example.log
 /**/node_modules/**
 **/*.css.map
-.*rc.*
+**/.*rc.*
