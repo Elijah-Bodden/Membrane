@@ -11,5 +11,5 @@ A robust, minimal-server-interaction API for peer routing in the browser
 ### What else you'll need
 <!-- A functional server with appropriate endpoints + exchange methods (see /src/server -> wget -> cd -> npm install) -->
 ## Application Infrastructure
-#Utilities
+## Utilities
 ## Thanks
