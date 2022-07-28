@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head> 
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0" content="text/html;charset=utf-8"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="apple-mobile-web-app-title" content="Membrane">
+    <meta name="application-name" content="Membrane">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="theme-color" content="#f8f8ff">
+    <script src="/lib/index.js"></script>
+    <script src="/static/scripts/UI.js"></script>
+    <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="stylesheet" href="/static/FontAwesome/css/fontawesome.css" />
+    <script src="index.bundle.js" type="module"></script>
+    <title>Membrane</title>
+  </head>
+  <body>
+    <div id="aliasEntryWrapper">    
+      <div class="aliasEntryForm">
+        Welcome, new user! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <div class="aliasInputWrapper">
+          <div class="aliasEntryArea carved-element">
+            <textarea
+              maxlength="32"
+              id="aliasEntryField"
+              placeholder="Anonymous"
+            ></textarea>
+          </div>
+          <button id="aliasEntryButton" class="border-surround" onclick="eventHandler.dispatch('hiddenAliasDelivered', document.querySelector('#aliasEntryField').value || 'Anonymous')">
+            Into the network!
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="fatalWrapper">    
+      <div class="fatalBody">
+        </div>
+      </div>
+    </div>
+    <div id="init-blur-wrapper">
+      <div class="leftnav flexbox border-no-left" id="topLeftnav">
+        <div class="bg-light">
+          <div class="list-group-item bg-light no-hover nav-header">
+            <a href="https://github.com" target="_blank" style="color: rgb(29, 29, 29);">
+            <img src="/static/renderable/M-compact.svg" class="banner" alt="Membrane"/>
+            </a>
+            <div class="icon-container">
+              <a class="fa-brands fa-github icon" title="Source Code" href="https://github.com/JerichoJS/Membrane" target="_blank"></a>
+              <span id="icon-separator" style="display: inline-block;"></span>
+              <a class="fa-regular fa-file-lines icon" title="License and Copyright" href="https://github.com/JerichoJS/Membrane/raw/3da230df0c33fe46ca8a776e5f22be670a5c3e26/LICENSE" target="_blank" ></a>
+            </div>
+          </div>
+        </div>
+        <div class="list-group">
+          <a
+            class="list-group-item border-no-left"
+            id="messagefeed-open-button"
+            href="javascript:void(0);"
+            onclick="script:rightPanel.rotateIn('messageFeedPane');"
+            >Messages</a
+          >
+          <a
+            class="list-group-item border-no-left"
+            href="javascript:void(0);"
+            onclick="script:rightPanel.rotateIn('configpane');"
+            >Configuration</a
+          >
+          <a
+            class="list-group-item border-no-left"
+            href="javascript:void(0);"
+            onclick="script:rightPanel.rotateIn('aboutpane');"
+            >About</a
+          >
+          <a
+          class="list-group-item border-no-left"
+          href="javascript:void(0);"
+          id="notificationsLink"
+          onclick="script:(() => {rightPanel.rotateIn('systemEventPane'); eventStream.refresh()})()"
+          ><span>Notifications</span>
+          <span id="colorDotContainer">
+            <span class="colorDot" id="success-dot"></span>
+            <span class="colorDot" id="error-dot"></span>
+            <span class="colorDot" id="pending-dot"></span>
+          </span>
+        </a>
+        </div>
+      </div>
+      <div class="leftnav nodebar border-surround bg-white" id="bottomLeftnav">
+        <div class="search-entry-bar carved-element" id="searchBar">
+          <textarea
+            maxlength="1000"
+            id="searchEntryField"
+            placeholder="Search for an active node"
+          ></textarea>
+        </div>
+        <nav id="search-opts" class="border-surround"></nav>
+        <div id="connectedNodesPane">
+          <div id="connectedNodeCardContainer"></div>
+          <nav id="connection-card-context" class="context border-surround">
+            <li class="context-item">
+              <button
+                class="context-button border-surround"
+                onclick="script:(() => {rightPanel.rotateIn('messageFeedPane'); fusedStream.loadCache(event.target.parentElement.parentElement.getAttribute('data-reference'))})()"
+              >
+                Send a Message
+              </button>
+            </li>
+            <li class="context-item">
+              <button
+                class="context-button border-surround"
+                onclick="(event => {deauthPeer(event.target.parentElement.parentElement.getAttribute('data-reference'), true).then(renderer.refresh())})(event)"
+              >
+                Deauthenticate Connection
+              </button>
+            </li>
+            <li class="context-item">
+              <button
+                class="context-button context-terminus border-surround"
+                onclick="(event => {activateNode(event.target.parentElement.parentElement.getAttribute('data-reference'))})(event)"
+              >
+                View in Visualization
+              </button>
+            </li>
+          </nav>
+        </div>
+      </div>
+      <div class="rightnav border-surround bg-white" id="rightnav">
+        <div id="messageFeedPane" class="messageFeedPane">
+          <div class="chattingwithheader">Chatting with:</div>
+          <div
+            class="messagefeed border-surround carved-element"
+            id="messagefeed"
+          >
+            <nav id="post-context" class="context border-surround">
+              <li class="context-item">
+                <button
+                  class="context-button border-surround"
+                  onclick="navigator.clipboard.writeText(`${CONFIG.UI.renderUnfamiliarPublicAliases ? (hiddenAliasLookup[event.target.parentElement.parentElement.getAttribute('data-sender')] ?? event.target.parentElement.parentElement.getAttribute('data-sender')) : event.target.parentElement.parentElement.getAttribute('data-sender')}: ${event.target.parentElement.parentElement.getAttribute('data-content')}`)"
+                >
+                  Copy as Plain Text
+                </button>
+              </li>
+              <li class="context-item">
+                <button
+                  class="context-button border-surround"
+                  onclick="(event => {fusedStream.unLog(fusedStream.activeChat, event.target.parentElement.parentElement.getAttribute('data-index'))})(event)"
+                >
+                  Delete from History
+                </button>
+              </li>
+              <li class="context-item">
+                <button
+                  class="context-button context-terminus border-surround"
+                  onclick="fusedStream.downloadContent(fusedStream.activeChat)"
+                >
+                  Download Conversation
+                </button>
+              </li>
+            </nav>
+            <div id="messageSequence">
+            </div>
+          </div>
+          <div class="message-entry-bar carved-element" id="chatBar">
+            <textarea
+              oninput='this.style.height = "";this.style.height = this.scrollHeight+"px"'
+              maxlength="1000"
+              id="chatEntryField"
+              placeholder="Send a message"
+            ></textarea>
+            <i
+              class="sendbutton fa-solid fa-circle-arrow-right"
+              onclick="(async _ => {if (document.querySelector('#chatEntryField').value.trim().length === 0) return; if (livePeers[fusedStream.activeChat]) livePeers[fusedStream.activeChat].transport.channel.standardSend('consumable', {raw : document.querySelector('#chatEntryField').value.trim()});fusedStream.log(fusedStream.activeChat, document.querySelector('#chatEntryField').value.trim(), 'local'); document.querySelector('#chatEntryField').value=''; document.querySelector('#chatEntryField').style.height='fit-content';})()"
+            ></i>
+          </div>
+        </div>
+        <div class="configpane" id="configpane">
+          <div class="configHeader">Configure<i class="fa-solid fa-repeat" onclick="fillDefaults(true)"></i></div>
+          <div id="configBody">
+            <div class="configCardBool">
+              <div class="configText">
+                Require strict STUN connection&nbsp;<i class="fa-solid fa-circle-info" onclick="toggleDescription(event)"></i>
+                <div class="configTextDescription">This option can help ensure data sent between peers remains private by disabling TURN fallback; however, you may be unable to connect to clients behind certain firewalls. (Changes will only apply to new connections.)</div>
+              </div>
+              <input type="checkbox" class="toggle settingsToggle" data-objective="doTURN"/>
+            </div>
+            <div class="configCardBool">
+              <div class="configText">
+                Disallow map faults&nbsp;<i class="fa-solid fa-circle-info" onclick="toggleDescription(event)"></i>
+                <div class="configTextDescription">When enabled, peers will react violently to non-destructive map-package-errors, potentially increasing security, but at a great risk to connection integrity.</div>
+              </div>
+              <input type="checkbox" class="toggle settingsToggle" data-objective="communication.moderateMapInstabilityTolerance"/>
+            </div>
+            <div class="configCardBool">
+              <div class="configText">
+                Render others' public aliases&nbsp;<i class="fa-solid fa-circle-info" onclick="toggleDescription(event)"></i>
+                <div class="configTextDescription">Disabling this option will make all public aliases render as their private-alias counterparts, or else not at all, moderately reducing the risk of exposure to crude language. (This method is far from foolproof, and may be bypassed with little skill.)</div>
+              </div>
+              <input type="checkbox" class="toggle settingsToggle" data-objective="UI.renderUnfamiliarPublicAliases" checked="true"/>
+            </div>
+            <div class="configCardBool">
+              <div class="configText">
+                Remember me&nbsp;<i class="fa-solid fa-circle-info" onclick="toggleDescription(event)"></i>
+                <div class="configTextDescription">When enabled, your current public alias will be hard-cached in your system, so you need not fill out the initial prompt every load.</div>
+              </div>
+              <input type="checkbox" class="toggle settingsToggle" data-objective="rememberMe" checked="true"/>
+            </div>
+            <div class="configCardInt">
+              <div class="configText">
+                Maximum ICE gathering latency&nbsp;<i class="fa-solid fa-circle-info" onclick="toggleDescription(event)"></i>
+                <div class="configTextDescription">The maximum length of time, in milliseconds, to wait for local ICE gathering before erroring. The higher the value, the greater the probability of a successful route, but also the higher the ceiling on possible wait time.</div>
+              </div>
+              <div class="integerEntryContainer carved-element">
+                <textarea class="integerEntryField" maxlength="6" id="ICELatencyEntry" data-objective="rtc.ICEGatheringMaxLatency">10000</textarea>
+              </div>
+            </div>
+            <div class="configCardInt">
+              <div class="configText">
+                Peer route timeout&nbsp;<i class="fa-solid fa-circle-info" onclick="toggleDescription(event)"></i>
+                <div class="configTextDescription">How long, in milliseconds, to wait for a live peer to respond to a route before auto-rejecting.</div>
+              </div>
+              <div class="integerEntryContainer integerEntryContainer-wide carved-element" id="">
+                <textarea class="integerEntryField" maxlength="9" id="peerRouteTimeoutEntry" data-objective="communication.arbitraryPeerRouteTimeout">100000000</textarea>
+              </div>
+            </div>
+            <div class="configFootnote">
+              For a more comprehensive list of modifiable attributes, see <a href="placeholder" target="_blank" title="/src/lib/index.js" class="underline configFootnote">defaultConfig</a> in ./lib/index.js
+            </div>
+          </div>
+        </div>
+        <div class="aboutpane" id="aboutpane"></div>
+        <div id="systemEventPane" class="systemEventPane">
+          <div
+            class="messagefeed border-surround carved-element"
+            id="systemEventFeed"
+          >
+            <div id="systemEventSequence">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="graph-container-container" id="pcuid">
+        <div id="graphContainer">
+          <nav id="connection-context" class="context border-surround">
+            <li class="context-item">
+              <button
+                class="context-button border-surround"
+                onclick="(event => {deauthPeer(event.target.parentElement.parentElement.getAttribute('data-caller'), true).then(renderer.refresh())})(event)"
+              >
+                Deauthenticate Connection
+              </button>
+            </li>
+            <li class="context-item">
+              <button
+                class="context-button border-surround"
+                onclick="(() => {rightPanel.rotateIn('messageFeedPane'); fusedStream.loadCache(event.target.parentElement.parentElement.getAttribute('data-caller'))})()"
+              >
+                Send a Message
+              </button>
+            </li>
+            <li class="context-item">
+              <button
+                class="context-button context-terminus border-surround"
+                onclick="(event => {navigator.clipboard.writeText(FusedStream.prototype.getRenderableID(event.target.parentElement.parentElement.getAttribute('data-caller')))})(event)"
+              >
+                Copy Alias to Clipboard
+              </button>
+            </li>
+          </nav>
+          <nav id="node-context" class="context border-surround">
+            <li class="context-item">
+              <button
+                class="context-button border-surround"
+                onclick="(event => {peerConnection.prototype.negotiateAgnosticAuthConnection(event.target.parentElement.parentElement.getAttribute('data-caller'))})(event)"
+              >
+                Establish Authenticated Connection
+              </button>
+            </li>
+            <li class="context-item">
+              <button
+                class="context-button context-terminus border-surround"
+                onclick="(event => {navigator.clipboard.writeText(FusedStream.prototype.getRenderableID(event.target.parentElement.parentElement.getAttribute('data-caller')))})(event)"
+              >
+                Copy Alias to Cliboard
+              </button>
+            </li>
+          </nav>
+        </div>
+      </div>
+      <script src="postLoad.js"></script>
+    </div>
+  </body>
+</html>
