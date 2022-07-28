@@ -20,7 +20,7 @@ In the following section I have compiled a set of hopefully-only-slightly-pedant
 - ### Config
   - #### Loading custom configurations:
     All global config is loaded into the `CONFIG` object from initialization, with the contents of `defaultConfig` acting as a baseline template, which its own `constants\configLoadFunction` extends, providing a set of values to substitute, formatted as follows:
-    ```JSON
+    ```
     {
         rootType.subtype.(...).preferenceName : value
         ...
