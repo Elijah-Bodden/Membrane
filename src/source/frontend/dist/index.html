@@ -173,7 +173,7 @@
             ></textarea>
             <i
               class="sendbutton fa-solid fa-circle-arrow-right"
-              onclick="(async _ => {if (document.querySelector('#chatEntryField').value.trim().length === 0) return; if (livePeers[fusedStream.activeChat]) livePeers[fusedStream.activeChat].transport.channel.standardSend('consumable', {raw : document.querySelector('#chatEntryField').value.trim()});fusedStream.log(fusedStream.activeChat, document.querySelector('#chatEntryField').value.trim(), 'local'); document.querySelector('#chatEntryField').value=''; document.querySelector('#chatEntryField').style.height='fit-content';})()"
+              onclick="(async _ => {if (document.querySelector('#chatEntryField').value.trim().length === 0) return; if (livePeers[fusedStream.activeChat]) livePeers[fusedStream.activeChat].transport.channel.standardSend('consumable', {raw : document.querySelector('#chatEntryField').value.trim()});fusedStream.log(fusedStream.activeChat, document.querySelector('#chatEntryField').value.trim(), 'local'); eventHandler.dispatch('messageSubmit', document.querySelector('#chatEntryField').value.trim()); document.querySelector('#chatEntryField').value=''; document.querySelector('#chatEntryField').style.height='fit-content';})();"
             ></i>
           </div>
         </div>
