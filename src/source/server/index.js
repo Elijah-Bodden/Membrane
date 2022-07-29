@@ -60,7 +60,7 @@ const rateLimiter = rateLimit({
 const websocketServer = http.createServer();
 const websocketHandler = new webSocket.Server({ noServer: true });
 const expressFrontend = express();
-const ROOT = path.join(__dirname, "../nonvelty/dist");
+const ROOT = path.join(__dirname, "../frontend/dist");
 expressFrontend.use(express.static(ROOT));
 expressFrontend.use(helmet());
 expressFrontend.use(rateLimiter)
