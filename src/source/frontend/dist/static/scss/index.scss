@@ -1122,12 +1122,12 @@ a {
   margin: 6%;
   font-size: 1.04em;
   position: relative;
-  text-align: center;
+  text-align: left;
 }
 
 .fatalWrapper {
   max-width: 35%;
-  max-height: 50%;
+  max-height: 75%;
   overflow: auto;
   width: fit-content;
   height: fit-content;
@@ -1144,4 +1144,14 @@ a {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.336) 18px 18px 16px -24px;
   border: 1px #c7cace solid;
+  -ms-overflow-style: unset;
+  scrollbar-width: unset;
+  &::-webkit-scrollbar {
+    display: unset;
+  }
+
+}
+
+.center {
+  text-align: center;
 }
