@@ -1,5 +1,12 @@
 /** @format */
 
+// Copyright 2022 Elijah Bodden
+
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
+
+
 "use strict";
  
 var CONFIG = {}
@@ -82,16 +89,6 @@ var defaultConfig = {
 		moderateMapInstabilityTolerance : true,
 		arbitraryPeerRouteTimeout : 100000000,
 		routeAcceptHeuristic : async function (pkg) {
-			if (pkg.desiredPermissions==="advanced") {
-				eventStream.log("system", `Peer authentication requested by ${CONFIG.UI.renderUnfamiliarPublicAliases ? (hiddenAliasLookup[pkg.sender] ?? pkg.sender) : pkg.sender}`, "transient", ["align-center", "system-message-card-route-pending", "message-card-slim"], pkg.sender)
-				var accepted = true 
-				try {
-					await eventHandler.acquireExpectedDispatch(`authenticationAuthorized|${pkg.sender}`, CONFIG.communication.arbitraryPeerRouteTimeout)
-				} catch {
-					accepted = false
-				}
-				return accepted
-			}
 			return true
 		}
 	},
@@ -119,27 +116,7 @@ var defaultConfig = {
 		configLoadFunction : async function() {
 			window.addEventListener("DOMContentLoaded", () => eventHandler.dispatch('DOMFunctional'), 1000)
 			await eventHandler.acquireExpectedDispatch("DOMFunctional")
-  			await fillDefaults()
-			if (!JSON.parse(window.localStorage.config ?? "{}")?.["communication.publicAlias"] || !JSON.parse(window.localStorage.config ?? "{}").rememberMe) {
-				await (async () => {
-					var contentDisabler = document.createElement("iframe")
-					contentDisabler.style.position = "absolute"
-					contentDisabler.style.left = contentDisabler.style.right = contentDisabler.style.top = contentDisabler.style.bottom = "0px"
-					contentDisabler.style.width = contentDisabler.style.height = "100%"
-					contentDisabler.style.border = "0px"
-					contentDisabler.style.zIndex = 100000
-					document.querySelector("#init-blur-wrapper").style.visibility = "visible"
-					document.querySelector("#init-blur-wrapper").style.filter = "blur(3px) saturate(90%) brightness(90%)"
-					document.body.appendChild(contentDisabler)
-					const selectedHiddenAlias = await hiddenAliasPromptMenu()
-					document.querySelector("#init-blur-wrapper").replaceWith(...document.querySelector("#init-blur-wrapper").childNodes)
-					document.body.removeChild(contentDisabler)
-					exportToLS("communication.publicAlias", selectedHiddenAlias)
-				})()
-			} else {
-				document.querySelector("#init-blur-wrapper").replaceWith(...document.querySelector("#init-blur-wrapper").childNodes)
-			}
-			return JSON.parse(window.localStorage.config ?? "{}")
+			return {}
 		}
 	},
 	serverLink : {
@@ -1513,14 +1490,15 @@ async function onPublicError(callback) {
 	eventHandler.onReceipt("fatalError", callback)
 }
 
+//#to be defined as needed:
 async function nonstandardParserDrain(type, args) {
-	//#to be individually defined
+
 }
 
 function indicateRouteAccepted(node) {
-	blinkStatus("success", node)
+
 }
 
 async function obviatePeerError(node) {
-	blinkStatus("error", node)
+
 }
