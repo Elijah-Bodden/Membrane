@@ -80,3 +80,45 @@ class eventHandlingMechanism {
 		}
 	}
 }
+
+//Note: each of these items are fully independant, I have simply grouped them as one.
+
+function checkForTypeErrors(requiredArgs, expectedTypes) {
+	var mistyped = requiredArgs.filter((argumentObj, index) => {
+		return expectedTypes[index]
+			? !expectedTypes[index].includes(typeof Object.values(argumentObj)[0])
+			: false;
+	});
+	if (mistyped != "") {
+		throw new TypeError(
+			`expected the argument "${
+				Object.keys(mistyped[0])[0]
+			}" to be of one of the following types: ${expectedTypes[
+				requiredArgs
+					.map((obj) => {
+						return Object.keys(obj)[0];
+					})
+					.indexOf(Object.keys(mistyped[0])[0])
+			].reduce((previous, current, index, array) => {
+				return (
+					previous +
+					current +
+					(array.length > 1 && index !== array.length - 1
+						? index === array.length - 2
+							? " or "
+							: ", "
+						: "")
+				);
+			}, "")}; got ${typeof Object.values(mistyped[0])[0]}`
+		);
+	}
+}
+//example use:
+try {
+	let a = "test"
+	let b = undefined
+	checkForTypeErrors([{a}, {b}], [["string", "number"], ["number]]
+}
+catch error {
+	console.warn(error)
+}
