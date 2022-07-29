@@ -4,7 +4,7 @@
 	"description": "A lightweight backend for the mebmrane project.",
 	"main": "index.js",
 	"scripts": {
-		"postinstall": "cross-env NODE_ENV=production",
+		"postinstall": "cross-env NODE_ENV=production; npx pm2 update",
 		"deploy": "pm2 start index.js --exp-backoff-restart-delay=75",
 		"kill" : "pm2 stop index.js; kill -9 $(lsof -t -i:8000); kill -9 $(lsof -t -i:8777)"
 	},
