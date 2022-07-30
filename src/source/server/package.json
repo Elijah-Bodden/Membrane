@@ -24,7 +24,6 @@
 		"express-rate-limit": "^6.4.0",
 		"helmet": "^5.1.0",
 		"pm2": "^5.2.0",
-		"whatwg-url": "^11.0.0",
 		"winston": "^3.7.2",
 		"ws": "^8.4.0"
 	}
