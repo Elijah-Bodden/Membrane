@@ -1,7 +1,7 @@
 @use "sass:color";
 
 $right-panel-pane-transition: transform 1s cubic-bezier(0.4, 0, 0.6, 1);
-f * {
+* {
   font-family: Cantarell, Roboto, Oxygen, Ubuntu, "Open Sans", "Helvetica Neue",
     sans-serif, serif;
   -ms-overflow-style: none;
@@ -103,7 +103,6 @@ body {
   border: none;
   resize: none;
   background-color: transparent;
-
   &:focus {
     outline: none;
   }
@@ -504,13 +503,11 @@ li {
 .aliasEntryArea {
   flex-grow: 1;
   height: fit-content;
-  // max-height: 2em;
   max-width: auto;
   width: auto;
   border: 1px solid #dee2e6 !important;
   position: relative;
   padding-left: 5px;
-  // padding-bottom: 10px;
   border-radius: 15px 15px 15px 15px;
   box-shadow: inset rgba(0, 0, 0, 0.2) 6px 6px 12px -6px;
   position: relative;
@@ -518,7 +515,6 @@ li {
   overflow-x: scroll;
   resize: none;
   -ms-overflow-style: scrollbar;
-
   &:focus-within {
     border: 1px solid #9c9fa1 !important;
   }
@@ -528,7 +524,7 @@ li {
   width: 100%;
   font-size: 0.9em;
   height: 2.2em;
-  padding-top: 10px;
+  padding-top: 7px;
   margin-top: 0vh;
   margin-bottom: 0vh;
   margin-left: 0.3vw;
@@ -537,11 +533,9 @@ li {
   border: none;
   resize: none;
   background-color: transparent;
-
   &:focus {
     outline: none;
   }
-
   white-space: nowrap;
 }
 
@@ -682,6 +676,23 @@ li {
       transform: translatex(20px);
     }
   }
+}
+
+.aboutHeader {
+  border-bottom: 1px solid #dee2e6 !important;
+  margin-top: 0.5em;
+  padding-bottom: 0.5em;
+  font-size: 1.4em;
+  text-align: center;
+}
+
+#aboutBody {
+  background-color: white;
+  height: calc(100vh - 3em);
+  position: relative;
+  overflow-y: auto;
+  text-align: center;
+  margin: 0.9em;
 }
 
 .configHeader {
