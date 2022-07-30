@@ -103,7 +103,7 @@ Here I have compiled a set of hopefully-only-slightly-pedantic descriptions for 
   Within Membrane networks, peers do not connect solely for the purpose of explicit data exchange; the network constantly [stabilizes](https://github.com/Elijah-Bodden/Membrane#stabilizelink) by creating redundant routes between nodes to improve fault tolerance. Therefore, authentication is a necessary formalism to show that, not only are two nodes implicitly connected, but, too, they both agree to exchange consumable data. There are three main ways to establish an authenticated route: `peerConnection.prototype.makeDefiniteRoute` with "permissions" set to "advanced," `(instance of peerConnection).requestPermissionEscalation`, again passing the value "advanced," or the more dynamic hybrid of the two--`peerConnection.prototype.negotiateAgnosticConnection`, which will perform an escalation if a route already exists to the destination, and, if not, employ the makeDefiniteRoute method.
 ## Installation and Integation
 ### Demo
-  The following commands will install and initiate the demonstration on 127.0.0.1:8000 on any reasonably recent *nix operating system.
+  The following commands will install and initiate the transpiled, minified, auto-prefixed production demo on 127.0.0.1:8000 on any reasonably recent *nix operating system.
   ```shell
   curl -LJo Membrane-v1.0.0.tar.gz https://github.com/Elijah-Bodden/Membrane/tarball/v1.0.0
   tar xfv Membrane-v1.0.0.tar.gz --transform 's!^[^/]\+\($\|/\)!Membrane-v1.0.0\1!'
