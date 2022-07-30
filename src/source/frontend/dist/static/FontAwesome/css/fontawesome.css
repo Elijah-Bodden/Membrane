@@ -47,6 +47,9 @@
 .fa-ellipsis-vertical::before {
   content: "\f142"
 }
+.fa-repeat::before {
+  content: "\f363";
+}
   
 :root,
 :host {
