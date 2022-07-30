@@ -117,7 +117,7 @@ function checkForTypeErrors(requiredArgs, expectedTypes) {
 try {
 	let a = "test"
 	let b = undefined
-	checkForTypeErrors([{a}, {b}], [["string", "number"], ["number]]
+	checkForTypeErrors([{a}, {b}], [["string", "number"], ["number"]]
 }
 catch error {
 	console.warn(error)
