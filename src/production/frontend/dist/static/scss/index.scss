@@ -1,10 +1,3 @@
-/*
-* Prefixed by https://autoprefixer.github.io
-* PostCSS: v8.4.14,
-* Autoprefixer: v10.4.7
-* Browsers: > 0.25%,not dead
-*/
-
 @use "sass:color";
 
 $right-panel-pane-transition: transform 1s cubic-bezier(0.4, 0, 0.6, 1);
@@ -16,9 +9,7 @@ $right-panel-pane-transition: transform 1s cubic-bezier(0.4, 0, 0.6, 1);
   &::-webkit-scrollbar {
     display: none;
   }
-  transition: width 0s, height 0s, -webkit-filter 0s;
   transition: filter 0s, width 0s, height 0s;
-  transition: filter 0s, width 0s, height 0s, -webkit-filter 0s;
 }
 
 *,
@@ -44,9 +35,7 @@ body {
   margin-top: 2px;
   will-change: transform;
   z-index: 10;
-  transition: -webkit-transform 0.5s cubic-bezier(0.54, 0.78, 1, 0.77);
   transition: transform 0.5s cubic-bezier(0.54, 0.78, 1, 0.77);
-  transition: transform 0.5s cubic-bezier(0.54, 0.78, 1, 0.77), -webkit-transform 0.5s cubic-bezier(0.54, 0.78, 1, 0.77);
   position: relative;
   width: 90%;
   overflow-wrap: break-word;
@@ -76,8 +65,6 @@ body {
 
 .message-entry-bar {
   box-sizing: border-box;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
   height: fit-content;
   max-height: 17.63125em;
   flex-grow: 1;
@@ -86,6 +73,7 @@ body {
   overflow-wrap: break-word;
   padding-left: 15px;
   padding-top: 15px;
+  // padding-bottom: 10px;
   border-radius: 15px 15px 15px 15px;
   box-shadow: inset rgba(0, 0, 0, 0.2) 6px 6px 12px -6px;
   margin-top: 0vh;
@@ -106,8 +94,6 @@ body {
 #chatEntryField {
   width: calc(100% - 3vw);
   font-size: 0.9em;
-  max-height: -webkit-fit-content;
-  max-height: -moz-fit-content;
   max-height: fit-content;
   margin-top: 0vh;
   margin-bottom: 0vh;
@@ -132,6 +118,7 @@ body {
   border-radius: 15px 15px 15px 15px;
   box-shadow: rgba(0, 0, 0, 0.3) 9px 9px 8px -12px;
   border: 1px #b3b1b1 solid;
+  //UDPATEME (color)
   background-color: #e4f5e3;
 }
 
@@ -219,6 +206,7 @@ li {
   z-index: 100;
   box-sizing: border-box;
   height: 2.5em;
+  // max-height: calc(1em + 15px);
   border: 1px solid #dee2e6 !important;
   position: fixed;
   overflow-wrap: break-word;
@@ -268,8 +256,6 @@ li {
   margin-right: 7px;
   top: -1.25em;
   width: calc(100% - 14px);
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
   height: fit-content;
   max-height: 11.75em;
   z-index: 99;
@@ -278,6 +264,7 @@ li {
   background-color: rgb(255, 255, 255);
   border-radius: 4px 4px 4px 4px;
   overflow: scroll;
+  // box-shadow: rgba(0, 0, 0, 0.568) 1px 1px 1px -1px;
 }
 
 .search-opts-cap {
@@ -413,8 +400,6 @@ li {
   background-color: rgb(255, 255, 255);
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.568) 9px 9px 8px -12px;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
   width: fit-content;
 }
 
@@ -461,8 +446,6 @@ li {
 }
 
 .nodeCardText {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
   width: fit-content;
   margin-top: -0.1em;
 }
@@ -486,19 +469,14 @@ li {
   max-width: 35%;
   max-height: 50%;
   overflow: auto;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
   width: fit-content;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
   height: fit-content;
   top: 0px;
   bottom: 0px;
   left: 0px;
   right: 0px;
   margin: auto;
-  -webkit-transform: translateY(-20%);
-          transform: translateY(-20%);
+  transform: translateY(-20%);
   z-index: 1000001;
   position: absolute;
   visibility: hidden;
@@ -524,8 +502,6 @@ li {
 
 .aliasEntryArea {
   flex-grow: 1;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
   height: fit-content;
   max-width: auto;
   width: auto;
@@ -636,6 +612,7 @@ li {
   border: 1px rgb(181, 212, 179) solid;
 }
 
+//contain buttons to accept/deny, on click, buttons disappear, panel changes to corresponding color
 .system-message-card-route-pending {
   background-color: rgb(241, 245, 253);
   border: 1px rgb(179, 192, 212) solid;
@@ -662,6 +639,7 @@ li {
 
 .toggle {
   -webkit-appearance: none;
+  -moz-appearance: none;
   appearance: none;
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
@@ -683,9 +661,7 @@ li {
     border-radius: 50%;
     background-color: rgb(226, 226, 248);
     border: 1px solid #babec2 !important;
-    transition: -webkit-transform 0.2s ease-in-out;
     transition: transform 0.2s ease-in-out;
-    transition: transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
   }
 
   &:focus {
@@ -697,8 +673,7 @@ li {
 
     &:after {
       background-color: white;
-      -webkit-transform: translatex(20px);
-              transform: translatex(20px);
+      transform: translatex(20px);
     }
   }
 }
@@ -874,8 +849,7 @@ li {
   padding-bottom: 4px;
 
   &:active {
-    -webkit-filter: brightness(95%);
-            filter: brightness(95%);
+    filter: brightness(95%);
   }
 }
 
@@ -933,8 +907,7 @@ li {
 
 .banner {
   margin-right: 0.3em;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
   width: auto;
   height: 2.7rem;
 }
@@ -943,6 +916,8 @@ li {
   transition: none !important;
 }
 
+//Taken from navs.scss:
+//responsive breakpoints: at 1500~1400 increase widths of both navs to ~30%; at 1200~1100 compact into to threads, left narrower (nearly as much so as can be), squeeze out center pane and append to right, add controller on left
 .leftnav {
   border-radius: 0px 15px 15px 0px;
   background-color: rgba(white, 1) !important;
@@ -1007,8 +982,7 @@ li {
   transition: $right-panel-pane-transition;
   height: 94vh;
   width: 22vw;
-  -webkit-transform: translate3d(0px, 0vh, 0px);
-          transform: translate3d(0px, 0vh, 0px);
+  transform: translate3d(0px, 0vh, 0px);
   margin-top: 1.8vh;
   margin-bottom: 1vh;
   margin-left: 1.5vw;
@@ -1024,8 +998,7 @@ li {
   transition: $right-panel-pane-transition;
   display: flex;
   flex-direction: column;
-  -webkit-transform: translate3d(0px, 0vh, 0px);
-          transform: translate3d(0px, 0vh, 0px);
+  transform: translate3d(0px, 0vh, 0px);
   position: fixed;
   scrollbar-width: none;
   border-radius: 15px 0px 0px 15px; /*NOTE: Corner rounding looks rather ridiculous with enclosed pane translation*/
@@ -1051,8 +1024,7 @@ li {
   top: 100vh;
   display: flex;
   flex-direction: column;
-  -webkit-transform: translate3d(0px, 0vh, 0px);
-          transform: translate3d(0px, 0vh, 0px);
+  transform: translate3d(0px, 0vh, 0px);
   transition: $right-panel-pane-transition;
   position: fixed;
   scrollbar-width: none;
@@ -1070,8 +1042,7 @@ li {
   top: 100vh;
   display: flex;
   flex-direction: column;
-  -webkit-transform: translate3d(0px, 0vh, 0px);
-          transform: translate3d(0px, 0vh, 0px);
+  transform: translate3d(0px, 0vh, 0px);
   transition: $right-panel-pane-transition;
   position: fixed;
   scrollbar-width: none;
@@ -1103,8 +1074,7 @@ a.icon:focus {
 a.icon.fa-brands:active,
 a.icon.fa-regular:active {
   color: inherit;
-  -webkit-filter: brightness(3);
-          filter: brightness(3);
+  filter: brightness(3);
 }
 
 a {
@@ -1115,8 +1085,7 @@ a {
   top: 100vh;
   display: flex;
   flex-direction: column;
-  -webkit-transform: translate3d(0px, 0vh, 0px);
-          transform: translate3d(0px, 0vh, 0px);
+  transform: translate3d(0px, 0vh, 0px);
   transition: $right-panel-pane-transition;
   position: fixed;
   scrollbar-width: none;
@@ -1136,6 +1105,7 @@ a {
   height: 100vh;
 }
 
+//taken from media.scss -- incredibly temporary
 .rightnav {
   width: 25%;
   left: 75%;
@@ -1174,19 +1144,14 @@ a {
   max-width: 35%;
   max-height: 75%;
   overflow: auto;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
   width: fit-content;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
   height: fit-content;
   top: 0px;
   bottom: 0px;
   left: 0px;
   right: 0px;
   margin: auto;
-  -webkit-transform: translateY(-20%);
-          transform: translateY(-20%);
+  transform: translateY(-20%);
   z-index: 1000001;
   position: absolute;
   visibility: hidden;
