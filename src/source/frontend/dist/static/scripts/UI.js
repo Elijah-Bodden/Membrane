@@ -303,7 +303,7 @@ class FusedStream {
 		if (!JSON.parse(localStorage.config ?? "{}")["communication.hiddenAlias"]) {
 			this.makeCache("system", { transient: "System", local: "Me" }, true);
 			this.loadCache("system");
-			eventHandler.acquireExpectedDispatch("configLoaded", 200000000).then(this.loadDefaultWelcomeSequence, () => {})
+			eventHandler.acquireExpectedDispatch("configLoaded", 200000000).then(this.loadDefaultWelcomeSequence.bind(this), () => {})
 		}
 	}
 	async streamInit() {
