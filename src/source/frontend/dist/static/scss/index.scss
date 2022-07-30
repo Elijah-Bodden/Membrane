@@ -628,18 +628,18 @@ li {
 .message-card-slim {
   padding-right: 15px;
 
-  &>i {
+  & > i {
     visibility: hidden;
     position: absolute;
   }
 
-  &>.date {
+  & > .date {
     margin-top: 2px;
   }
 }
 
 .align-center {
-  &>* {
+  & > * {
     text-align: center;
   }
 }
@@ -1053,12 +1053,16 @@ li {
   overflow: hidden;
 }
 
-a.icon:link, a.icon:visited, a.icon:hover, a.icon:focus {
-  color : inherit
+a.icon:link,
+a.icon:visited,
+a.icon:hover,
+a.icon:focus {
+  color: inherit;
 }
 
-a.icon.fa-brands:active, a.icon.fa-regular:active {
-  color : inherit;
+a.icon.fa-brands:active,
+a.icon.fa-regular:active {
+  color: inherit;
   filter: brightness(3);
 }
 
@@ -1149,7 +1153,6 @@ a {
   &::-webkit-scrollbar {
     display: unset;
   }
-
 }
 
 .center {
