@@ -190,7 +190,6 @@ var defaultConfig = {
       );
       await eventHandler.acquireExpectedDispatch("DOMFunctional");
       await fillDefaults();
-      effectiveFirstVisit = true;
       if (
         !JSON.parse(window.localStorage.config ?? "{}")?.[
           "communication.publicAlias"
@@ -198,7 +197,8 @@ var defaultConfig = {
         !JSON.parse(window.localStorage.config ?? "{}").rememberMe
       ) {
         await (async () => {
-          var contentDisabler = document.createElement("iframe");
+          effectiveFirstVisit = true;
+	  var contentDisabler = document.createElement("iframe");
           contentDisabler.style.position = "absolute";
           contentDisabler.style.left =
             contentDisabler.style.right =
