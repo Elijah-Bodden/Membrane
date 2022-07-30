@@ -119,7 +119,8 @@ function checkForTypeErrors(requiredArgs, expectedTypes) {
     );
   }
 }
-//example use:
+
+//example usecase:
 try {
   let a = "test";
   let b = undefined;
