@@ -1,7 +1,5 @@
 /** @format */
 
-//load saved LS in visual config on load
-
 window.addEventListener("DOMContentLoaded", async function () {
 	document.querySelector("#searchEntryField").value = "";
 	document.querySelector("#chatEntryField").style.height =
@@ -305,7 +303,7 @@ class FusedStream {
 		if (!JSON.parse(localStorage.config ?? "{}")["communication.hiddenAlias"]) {
 			this.makeCache("system", { transient: "System", local: "Me" }, true);
 			this.loadCache("system");
-			this.loadDefaultWelcomeSequence();
+			eventHandler.acquireExpectedDispatch("configLoaded", 200000000).then(this.loadDefaultWelcomeSequence, () => {})
 		}
 	}
 	async streamInit() {
