@@ -119,6 +119,6 @@ try {
 	let b = undefined
 	checkForTypeErrors([{a}, {b}], [["string", "number"], ["number"]])
 }
-catch error {
+catch (error) {
 	console.warn(error)
 }
