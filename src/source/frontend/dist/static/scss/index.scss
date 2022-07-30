@@ -1,6 +1,6 @@
 @use "sass:color";
 
-$right-panel-pane-transition: transform 1s cubic-bezier(0.4, 0, 0.6, 1);
+$right-panel-pane-transition: transform 1s cubic-bezier(0.4, 0, 0.6, 1);f
 
 * {
   font-family: Cantarell, Roboto, Oxygen, Ubuntu, "Open Sans", "Helvetica Neue",
@@ -965,6 +965,7 @@ li {
   -ms-overflow-style: scrollbar;
   height: 90vh;
   width: 22vw;
+  overflow-x: hide !important;
 }
 .IDpane {
   top: 100vh;
