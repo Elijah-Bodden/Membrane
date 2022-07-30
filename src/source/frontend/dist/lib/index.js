@@ -1,24 +1,30 @@
 /** @format */
 
+// Copyright 2022 Elijah Bodden
+
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
+
 "use strict";
- 
-var CONFIG = {}
+
+var CONFIG = {};
 
 const allICEServers = [
 	{
-		urls: "stun:stun.1.google.com:19302", 
+		urls: "stun:stun.1.google.com:19302",
 	},
 	{
 		urls: "turn:openrelay.metered.ca:80",
 		username: "openrelayproject",
 		credential: "openrelayproject",
 	},
-]
+];
 const STUNOnly = [
 	{
-		urls: "stun:stun.1.google.com:19302", 
+		urls: "stun:stun.1.google.com:19302",
 	},
-]
+];
 
 /*
 	! NB !
@@ -34,7 +40,7 @@ var defaultConfig = {
 		ICEpresets: {
 			iceServers: [
 				{
-					urls: "stun:stun.1.google.com:19302", 
+					urls: "stun:stun.1.google.com:19302",
 				},
 				{
 					urls: "turn:openrelay.metered.ca:80",
@@ -42,61 +48,77 @@ var defaultConfig = {
 					credential: "openrelayproject",
 				},
 			],
-			iceCandidatePoolSize : 255,
+			iceCandidatePoolSize: 255,
 		},
-		ICEGatheringMaxLatency : 10000,
-		defaultChannelLabel : "channel",
-		channelOptions : {
+		ICEGatheringMaxLatency: 10000,
+		defaultChannelLabel: "channel",
+		channelOptions: {
 			negotiated: true,
 			id: 0,
 			ordered: true,
 		},
-		channelID : undefined,
-		binaryType : "arraybuffer"
+		channelID: undefined,
+		binaryType: "arraybuffer",
 	},
 	communication: {
-		defaultUnknownPublicAlias : undefined,
-		basicPropogationInterval : 100,
-		publicAlias : "",
-		specHiddenAliasAttributes : {
-			len : 9,
+		defaultUnknownPublicAlias: undefined,
+		basicPropogationInterval: 100,
+		publicAlias: "",
+		specHiddenAliasAttributes: {
+			len: 9,
 		},
-		hiddenAlias : Math.random().toString(36).slice(2, 11),
-		packageArgs : {
-			consumable : { required : ["raw"], optional : [] },
-			gossip : { required : ["type", "block"], optional : ["!*"] },
-			mapFetch : { required : [], optional : [] },
-			mapReturn : { required : ["map"], optional : [] },
-			routeImperative : { required : ["SDP", "sender", "destination", "routeID"], optional : ["desiredPermissions", "!*"] },
-			invokerIntroduction : { required : ["hiddenAlias", "isOriented"], optional : ["publicAlias"] },
-			reciprocalAlignment : { required : ["hiddenAlias"], optional : ["publicAlias", "map"] },
-			routeInaccessible : {required : ["routeID", "pointOfFailure", "destination"], optional : ["!"]},
-			routeRejected : {required : ["destination", "routeID"], optional : ["!*"]}, 
-			routeAccepted : {required : ["SDP", "destination", "routeID"], optional : ["!*"]},
-			permissionEscalationRequest : {required : ["level"], optional : ["!*"]},
-			permissionEscalationResponse : {required : ["status"], optional : ["!*"]},
-			forcefulDeauth : {required : [], optional : ["!*"]}
+		hiddenAlias: Math.random().toString(36).slice(2, 11),
+		packageArgs: {
+			consumable: { required: ["raw"], optional: [] },
+			gossip: { required: ["type", "block"], optional: ["!*"] },
+			mapFetch: { required: [], optional: [] },
+			mapReturn: { required: ["map"], optional: [] },
+			routeImperative: {
+				required: ["SDP", "sender", "destination", "routeID"],
+				optional: ["desiredPermissions", "!*"],
+			},
+			invokerIntroduction: { required: ["hiddenAlias", "isOriented"], optional: ["publicAlias"] },
+			reciprocalAlignment: { required: ["hiddenAlias"], optional: ["publicAlias", "map"] },
+			routeInaccessible: { required: ["routeID", "pointOfFailure", "destination"], optional: ["!"] },
+			routeRejected: { required: ["destination", "routeID"], optional: ["!*"] },
+			routeAccepted: { required: ["SDP", "destination", "routeID"], optional: ["!*"] },
+			permissionEscalationRequest: { required: ["level"], optional: ["!*"] },
+			permissionEscalationResponse: { required: ["status"], optional: ["!*"] },
+			forcefulDeauth: { required: [], optional: ["!*"] },
 		},
-		allowNonStandardParsers : false,
-		mapImportTimeout : 10000,
-		moderateMapInstabilityTolerance : true,
-		arbitraryPeerRouteTimeout : 100000000,
-		routeAcceptHeuristic : async function (pkg) {
-			if (pkg.desiredPermissions==="advanced") {
-				eventStream.log("system", `Peer authentication requested by ${CONFIG.UI.renderUnfamiliarPublicAliases ? (hiddenAliasLookup[pkg.sender] ?? pkg.sender) : pkg.sender}`, "transient", ["align-center", "system-message-card-route-pending", "message-card-slim"], pkg.sender)
-				var accepted = true 
+		allowNonStandardParsers: false,
+		mapImportTimeout: 10000,
+		moderateMapInstabilityTolerance: true,
+		arbitraryPeerRouteTimeout: 100000000,
+		routeAcceptHeuristic: async function (pkg) {
+			if (pkg.desiredPermissions === "advanced") {
+				eventStream.log(
+					"system",
+					`Peer authentication requested by ${
+						CONFIG.UI.renderUnfamiliarPublicAliases
+							? hiddenAliasLookup[pkg.sender] ?? pkg.sender
+							: pkg.sender
+					}`,
+					"transient",
+					["align-center", "system-message-card-route-pending", "message-card-slim"],
+					pkg.sender
+				);
+				var accepted = true;
 				try {
-					await eventHandler.acquireExpectedDispatch(`authenticationAuthorized|${pkg.sender}`, CONFIG.communication.arbitraryPeerRouteTimeout)
+					await eventHandler.acquireExpectedDispatch(
+						`authenticationAuthorized|${pkg.sender}`,
+						CONFIG.communication.arbitraryPeerRouteTimeout
+					);
 				} catch {
-					accepted = false
+					accepted = false;
 				}
-				return accepted
+				return accepted;
 			}
-			return true
-		}
+			return true;
+		},
 	},
-	constants : {
-		defaultPropagationIterMod : 1,
+	constants: {
+		defaultPropagationIterMod: 1,
 		radix36Charset : [
 			"0", "1", "2", "3", "4", "5", 
 			"6", "7", "8", "9", "a", "b",
@@ -105,58 +127,70 @@ var defaultConfig = {
 			"o", "p", "q", "r", "s", "t",
 			"u", "v", "w", "x", "y", "z"
 		],
-		defaultEventHandlingMechanismTimeout : 100000,
-		violationWeightPenalties : {
-			pointOfRouteFailure : 10,
-			acquaintedInitAttempt : 10,
-			invalidMessage : 15,
-			invalidAliasInRoutingMap : 20,
-			failedGossip : 25,
-			genericUncaughtError : 35,
+		defaultEventHandlingMechanismTimeout: 100000,
+		violationWeightPenalties: {
+			pointOfRouteFailure: 10,
+			acquaintedInitAttempt: 10,
+			invalidMessage: 15,
+			invalidAliasInRoutingMap: 20,
+			failedGossip: 25,
+			genericUncaughtError: 35,
 			initSequenceError: 100,
-			invalidSDP : 100,
+			invalidSDP: 100,
 		},
-		configLoadFunction : async function() {
-			window.addEventListener("DOMContentLoaded", () => eventHandler.dispatch("DOMFunctional"))
-			await eventHandler.acquireExpectedDispatch("DOMFunctional")
-			await fillDefaults()
-			effectiveFirstVisit = true
-			if (!JSON.parse(window.localStorage.config ?? "{}")?.["communication.publicAlias"] || !JSON.parse(window.localStorage.config ?? "{}").rememberMe) {
+		configLoadFunction: async function () {
+			window.addEventListener("DOMContentLoaded", () => eventHandler.dispatch("DOMFunctional"));
+			await eventHandler.acquireExpectedDispatch("DOMFunctional");
+			await fillDefaults();
+			effectiveFirstVisit = true;
+			if (
+				!JSON.parse(window.localStorage.config ?? "{}")?.["communication.publicAlias"] ||
+				!JSON.parse(window.localStorage.config ?? "{}").rememberMe
+			) {
 				await (async () => {
-					var contentDisabler = document.createElement("iframe")
-					contentDisabler.style.position = "absolute"
-					contentDisabler.style.left = contentDisabler.style.right = contentDisabler.style.top = contentDisabler.style.bottom = "0px"
-					contentDisabler.style.width = contentDisabler.style.height = "100%"
-					contentDisabler.style.border = "0px"
-					contentDisabler.style.zIndex = 100000
-					document.querySelector("#init-blur-wrapper").style.visibility = "visible"
-					document.querySelector("#init-blur-wrapper").style.filter = "blur(3px) saturate(90%) brightness(90%)"
-					document.body.appendChild(contentDisabler)
-					const selectedHiddenAlias = await hiddenAliasPromptMenu()
-					document.querySelector("#init-blur-wrapper").replaceWith(...document.querySelector("#init-blur-wrapper").childNodes)
-					document.body.removeChild(contentDisabler)
-					exportToLS("communication.publicAlias", selectedHiddenAlias)
-				})()
+					var contentDisabler = document.createElement("iframe");
+					contentDisabler.style.position = "absolute";
+					contentDisabler.style.left =
+						contentDisabler.style.right =
+						contentDisabler.style.top =
+						contentDisabler.style.bottom =
+							"0px";
+					contentDisabler.style.width = contentDisabler.style.height = "100%";
+					contentDisabler.style.border = "0px";
+					contentDisabler.style.zIndex = 100000;
+					document.querySelector("#init-blur-wrapper").style.visibility = "visible";
+					document.querySelector("#init-blur-wrapper").style.filter =
+						"blur(3px) saturate(90%) brightness(90%)";
+					document.body.appendChild(contentDisabler);
+					const selectedHiddenAlias = await hiddenAliasPromptMenu();
+					document
+						.querySelector("#init-blur-wrapper")
+						.replaceWith(...document.querySelector("#init-blur-wrapper").childNodes);
+					document.body.removeChild(contentDisabler);
+					exportToLS("communication.publicAlias", selectedHiddenAlias);
+				})();
 			} else {
-				document.querySelector("#init-blur-wrapper").replaceWith(...document.querySelector("#init-blur-wrapper").childNodes)
+				document
+					.querySelector("#init-blur-wrapper")
+					.replaceWith(...document.querySelector("#init-blur-wrapper").childNodes);
 			}
-			return JSON.parse(window.localStorage.config ?? "{}")
-		}
+			return JSON.parse(window.localStorage.config ?? "{}");
+		},
 	},
-	serverLink : {
-		initBindURL : `ws://${window.location.hostname}:8777/bind?originatingSDP=*`,
-		reconnectURL : `ws://${window.location.hostname}/reconnect`,
-		reconnectInterval : 5000
+	serverLink: {
+		initBindURL: `ws://${window.location.hostname}:8777/bind?originatingSDP=*`,
+		reconnectURL: `ws://${window.location.hostname}/reconnect`,
+		reconnectInterval: 5000,
 	},
-	UI : {
-		renderUnfamiliarPublicAliases : true
-	}
-}
+	UI: {
+		renderUnfamiliarPublicAliases: true,
+	},
+};
 
-var effectiveFirstVisit = false
+var effectiveFirstVisit = false;
 const livePeers = {};
-const authPeers = []
-var serverHardRestart
+const authPeers = [];
+var serverHardRestart;
 const pubAliasLookup = {};
 const hiddenAliasLookup = {};
 const pubAliasUnparser = {};
@@ -164,60 +198,62 @@ const publicAliasTallies = {};
 const initialReferenceLedger = {};
 const HTMLEscape = document.createElement("textarea");
 HTMLEscape.setAttribute("style", "visibility : hidden; left -10000px; position: fixed;");
-var eventHandler
-var networkMap
-var gossipTransport
-var topologyTransport
-var routingTableTransport
+var eventHandler;
+var networkMap;
+var gossipTransport;
+var topologyTransport;
+var routingTableTransport;
 
 function addAuthPeer(peer) {
-	if (typeof peer != "string") return
-	authPeers.push(peer)
-	eventHandler.dispatch("authPeersUpdated", ["addition", peer])
+	if (typeof peer != "string") return;
+	authPeers.push(peer);
+	eventHandler.dispatch("authPeersUpdated", ["addition", peer]);
 }
 
 function deleteAuthPeer(peer) {
-	if (authPeers.indexOf(peer) == -1) return
-	authPeers.splice(authPeers.indexOf(peer), 1)
-	eventHandler.dispatch("authPeersUpdated", ["deletion", peer])
+	if (authPeers.indexOf(peer) == -1) return;
+	authPeers.splice(authPeers.indexOf(peer), 1);
+	eventHandler.dispatch("authPeersUpdated", ["deletion", peer]);
 }
 
 async function onAuthPeersUpdated(callback) {
-	eventHandler.onReceipt("authPeersUpdated", callback)
+	eventHandler.onReceipt("authPeersUpdated", callback);
 }
 
 async function deauthPeer(peer, isPredicator) {
-	if (!authPeers.includes(peer)) return
+	if (!authPeers.includes(peer)) return;
 	if (isPredicator) {
-		livePeers[peer].transport.channel.standardSend("forcefulDeauth")
-		deleteAuthPeer(peer)
-	}
-	else {
-		deleteAuthPeer(peer)
-		obviatePeerError(peer)	
+		livePeers[peer].transport.channel.standardSend("forcefulDeauth");
+		deleteAuthPeer(peer);
+	} else {
+		deleteAuthPeer(peer);
+		obviatePeerError(peer);
 	}
 }
 
 async function loadConfig(defaultConfig, provisionFunction) {
-	checkForTypeErrors([{defaultConfig}, {provisionFunction}], [["object"], ["function", "undefined"]])
+	checkForTypeErrors([{ defaultConfig }, { provisionFunction }], [["object"], ["function", "undefined"]]);
 	if (!provisionFunction) {
-		CONFIG = defaultConfig
-		return
+		CONFIG = defaultConfig;
+		return;
 	}
-	const provided = provisionFunction.constructor.name === "AsyncFunction" ? await provisionFunction() : provisionFunction()
-	checkForTypeErrors([{provided}], [["object"]])
+	const provided =
+		provisionFunction.constructor.name === "AsyncFunction"
+			? await provisionFunction()
+			: provisionFunction();
+	checkForTypeErrors([{ provided }], [["object"]]);
 	var loadableConfig = defaultConfig;
 	for (let i in provided) {
 		const referenceChain = i.split(".");
 		const deepestProperty = referenceChain.slice(-1);
 		const defaultPrefParent = referenceChain.slice(0, -1).reduce((previous, current) => {
-				return previous[current];
+			return previous[current];
 		}, loadableConfig);
 		if (typeof defaultPrefParent[deepestProperty] === typeof provided[i]) {
 			defaultPrefParent[deepestProperty] = provided[i];
 		}
 	}
- 	CONFIG = loadableConfig;
+	CONFIG = loadableConfig;
 }
 
 WebSocket.prototype.crudeSend = async function (type, typeArgs) {
@@ -231,15 +267,20 @@ WebSocket.prototype.crudeSend = async function (type, typeArgs) {
 			this.send(JSON.stringify(["reportNode", typeArgs.nodeID]));
 			break;
 		case "returnSDP":
-			checkForTypeErrors([{ "typeArgs.SDP": typeArgs.SDP }, { "typeArgs.reciprocalID": typeArgs.reciprocalID }], [["string"], ["string"]]);
+			checkForTypeErrors(
+				[{ "typeArgs.SDP": typeArgs.SDP }, { "typeArgs.reciprocalID": typeArgs.reciprocalID }],
+				[["string"], ["string"]]
+			);
 			this.send(JSON.stringify(["returnSDP", typeArgs.SDP, typeArgs.reciprocalID]));
 			break;
 		case "ignoreSDPRequest":
 			checkForTypeErrors([{ "typeArgs.reciprocalID": typeArgs.reciprocalID }], [["string"]]);
-			this.send(JSON.stringify(["ignoreSDPRequest", typeArgs.reciprocalID]))
-			break
+			this.send(JSON.stringify(["ignoreSDPRequest", typeArgs.reciprocalID]));
+			break;
 		default:
-			throw new Error(`unable to communicate websocket message of type "${type}": no specified bundling method matches the criterion.`);
+			throw new Error(
+				`unable to communicate websocket message of type "${type}": no specified bundling method matches the criterion.`
+			);
 	}
 };
 
@@ -309,10 +350,12 @@ class eventHandlingMechanism {
 						if (!hasResolved)
 							reject(
 								`Dispatch listener promise for the identifier ${dispatchIdentifier} timed out after ${
-									timeout ?? CONFIG?.constants?.defaultEventHandlingMechanismTimeout ?? 100000
+									timeout ??
+									CONFIG?.constants?.defaultEventHandlingMechanismTimeout ??
+									100000
 								}ms`
 							);
-					}, timeout ?? CONFIG?.constants?.defaultEventHandlingMechanismTimeout ?? 100000)
+					}, timeout ?? CONFIG?.constants?.defaultEventHandlingMechanismTimeout ?? 100000);
 				}),
 				reject: rejectGeneratedPromise,
 				resolve: resolveGeneratedPromise,
@@ -344,16 +387,17 @@ class AbstractMap {
 		this.exportRefreshed = false;
 	}
 	async onUpdate(callback) {
-		eventHandler.onReceipt("abstractMapUpdate", callback)
+		eventHandler.onReceipt("abstractMapUpdate", callback);
 	}
 	async triggerUpdate(method, relevantInformation) {
-		eventHandler.dispatch("abstractMapUpdate", [method, relevantInformation])
+		eventHandler.dispatch("abstractMapUpdate", [method, relevantInformation]);
 	}
 	async importList(raw, provider) {
 		try {
 			checkForTypeErrors([{ raw }, { provider }], [["string"], ["string"]]);
 			var mappedList = JSON.parse(raw);
-			if (!Array.isArray(mappedList)) throw new TypeError(`the provided JSON-parsed object (${raw} raw) is not an array`);
+			if (!Array.isArray(mappedList))
+				throw new TypeError(`the provided JSON-parsed object (${raw} raw) is not an array`);
 			Object.keys(mappedList[0]).reduce((expendedKeys, currentKey) => {
 				expendedKeys.push(currentKey);
 				try {
@@ -362,7 +406,10 @@ class AbstractMap {
 					this.addNode(mappedList[0][currentKey][0], mappedList[0][currentKey][1]);
 				} catch (error) {
 					if (CONFIG.communication.moderateMapInstabilityTolerance) {
-						shiftNodeWeight(provider, CONFIG.constants.violationWeightPenalties.invalidAliasInRoutingMap)
+						shiftNodeWeight(
+							provider,
+							CONFIG.constants.violationWeightPenalties.invalidAliasInRoutingMap
+						);
 						this.removeNode(mappedList[0][currentKey][0]);
 						deleteAlias(mappedList[0][currentKey][0]);
 						delete mappedList[0][currentKey];
@@ -372,7 +419,9 @@ class AbstractMap {
 							this.removeNode(key);
 							deleteAlias(key);
 						});
-						throw new Error(`sumarily terminating map import: provided key ${currentKey} could not be admitted because ${error}`);
+						throw new Error(
+							`sumarily terminating map import: provided key ${currentKey} could not be admitted because ${error}`
+						);
 					}
 				}
 				return expendedKeys;
@@ -387,50 +436,75 @@ class AbstractMap {
 			if (livePeers[provider]) peerConnection.prototype.close(livePeers[provider]);
 			return;
 		}
-		eventHandler.dispatch("mapImportSuccessful")
+		eventHandler.dispatch("mapImportSuccessful");
 		this.export = raw;
 		this.exportRefreshed = true;
 	}
 	addEdge(i, j) {
-		checkForTypeErrors([{ i }, { j }], [["string", "number"],["string", "number"]]);
+		checkForTypeErrors(
+			[{ i }, { j }],
+			[
+				["string", "number"],
+				["string", "number"],
+			]
+		);
 		var nodePresences = [Object.keys(this.nodes).includes(i), Object.keys(this.nodes).includes(j)];
-		if (!(nodePresences[0] && nodePresences[1])) throw new Error(`Unable to create a representative edge between the nodes aliased ${i} and ${j} as ${nodePresences[0] ^ nodePresences[1] ? 'there exists no node "' + [i, j][nodePresences.indexOf(false)] + '"': "neither may be found"} within the present networkMap`);
+		if (!(nodePresences[0] && nodePresences[1]))
+			throw new Error(
+				`Unable to create a representative edge between the nodes aliased ${i} and ${j} as ${
+					nodePresences[0] ^ nodePresences[1]
+						? 'there exists no node "' + [i, j][nodePresences.indexOf(false)] + '"'
+						: "neither may be found"
+				} within the present networkMap`
+			);
 		this.adjacencyList[i][j] = this.nodes[j];
 		this.adjacencyList[j][i] = this.nodes[i];
-		this.triggerUpdate("addEdge", [i, j])
+		this.triggerUpdate("addEdge", [i, j]);
 		this.exportRefreshed = false;
 	}
 	addNode(key, weight) {
-		checkForTypeErrors([{ key }, { weight }], [["string", "number"],["undefined", "number"]]);
+		checkForTypeErrors(
+			[{ key }, { weight }],
+			[
+				["string", "number"],
+				["undefined", "number"],
+			]
+		);
 		this.adjacencyList[key] = {};
-		this.setweight(key, weight ?? 1)
-		this.triggerUpdate("addNode", key)
+		this.setweight(key, weight ?? 1);
+		this.triggerUpdate("addNode", key);
 		this.exportRefreshed = false;
 	}
 	removeNode(key) {
 		try {
 			checkForTypeErrors([{ key }], [["string", "number"]]);
 		} catch {
-			return
+			return;
 		}
 		if (!(this.nodes[key] || this.adjacencyList[key])) return;
 		delete this.nodes[key];
 		delete this.adjacencyList[key];
-		this.triggerUpdate("removeNode", key)
+		this.triggerUpdate("removeNode", key);
 		this.exportRefreshed = false;
 	}
 	removeEdge(i, j) {
 		try {
-			checkForTypeErrors([{ i }, { j }], [ ["string", "number"], ["string", "number"]]);
+			checkForTypeErrors(
+				[{ i }, { j }],
+				[
+					["string", "number"],
+					["string", "number"],
+				]
+			);
 		} catch (error) {
-			return
+			return;
 		}
 		if (!(this.adjacencyList[i]?.[j] || this.adjacencyList[j]?.[i])) {
-			return
+			return;
 		}
 		delete this.adjacencyList[i]?.[j];
 		delete this.adjacencyList[j]?.[i];
-		this.triggerUpdate("removeEdge", [i, j])
+		this.triggerUpdate("removeEdge", [i, j]);
 		this.exportRefreshed = false;
 	}
 	async exportList() {
@@ -440,7 +514,10 @@ class AbstractMap {
 		var iters = 0;
 		for (let alias in this.nodes) {
 			let shorthand = iters.toString(36);
-			persistentNodeMap[shorthand] = alias === CONFIG.communication.hiddenAlias ? [alias, this.nodes[alias].weight, CONFIG.communication.publicAlias] : [alias, this.nodes[alias].weight, initialReferenceLedger[alias]];
+			persistentNodeMap[shorthand] =
+				alias === CONFIG.communication.hiddenAlias
+					? [alias, this.nodes[alias].weight, CONFIG.communication.publicAlias]
+					: [alias, this.nodes[alias].weight, initialReferenceLedger[alias]];
 			mapped[shorthand] = this.adjacencyList[alias];
 			temporaryNodeMap[alias] = iters.toString(36);
 			iters++;
@@ -462,7 +539,10 @@ class AbstractMap {
 	}
 	async precomputeRoutes(source) {
 		checkForTypeErrors([{ source }], [["string", "number"]]);
-		if (!Object.keys(this.nodes).includes(source)) throw new Error(`Requested source node (${source}) is not present within AbstractMap.__instance__.nodes`);
+		if (!Object.keys(this.nodes).includes(source))
+			throw new Error(
+				`Requested source node (${source}) is not present within AbstractMap.__instance__.nodes`
+			);
 		var dist = {};
 		var prev = {};
 		var queue = new crudeQueue();
@@ -491,17 +571,27 @@ class AbstractMap {
 		this.computationRefreshed = true;
 	}
 	async findNextHop(currentNode, endNode) {
-		checkForTypeErrors([{ currentNode }, { endNode }], [ ["string", "number"], ["string", "number"]]);
+		checkForTypeErrors(
+			[{ currentNode }, { endNode }],
+			[
+				["string", "number"],
+				["string", "number"],
+			]
+		);
 		await this.precomputeRoutes(currentNode);
 		if (!(Object.keys(this.nodes).includes(currentNode) && Object.keys(this.nodes).includes(endNode))) {
-			throw new Error(`The requested route <${currentNode} -> ${endNode}> is not possible in the current map (one of both of these members does not exist).`); 
+			throw new Error(
+				`The requested route <${currentNode} -> ${endNode}> is not possible in the current map (one of both of these members does not exist).`
+			);
 		}
 		var node = endNode;
 		var lastNode = undefined;
 		while (node != currentNode) {
 			lastNode = node;
 			if (this.distances[node] == Infinity)
-				throw new Error(`The requested route <${currentNode} -> ${endNode}> is not possible in the current map (there exists no path between intermediary node ${node} and the current node).`);
+				throw new Error(
+					`The requested route <${currentNode} -> ${endNode}> is not possible in the current map (there exists no path between intermediary node ${node} and the current node).`
+				);
 			node = this.previous[node];
 		}
 		return lastNode;
@@ -514,21 +604,21 @@ class AbstractMap {
 		this.previous = undefined;
 		this.computationRefreshed = false;
 		this.exportRefreshed = false;
-		this.triggerUpdate("totalWipe")
+		this.triggerUpdate("totalWipe");
 	}
 	async setweight(key, weight) {
-		this.nodes[key] = {weight}
+		this.nodes[key] = { weight };
 	}
 }
 
 networkMap = new AbstractMap();
 
 networkMap.onUpdate((_sig, externalDetail) => {
-	if (Object.keys(livePeers).length!=1 || externalDetail[0]!="addNode") return
+	if (Object.keys(livePeers).length != 1 || externalDetail[0] != "addNode") return;
 	setTimeout(() => {
-		peerConnection.prototype.stabilizeLink().catch(() => {})
-	}, 500);}
-)
+		peerConnection.prototype.stabilizeLink().catch(() => {});
+	}, 500);
+});
 
 class crudeQueue {
 	constructor() {
@@ -544,7 +634,7 @@ class crudeQueue {
 		this.queue[priority].push(item);
 	}
 	extractMin() {
-		if (Object.keys(this.queue)=="")
+		if (Object.keys(this.queue) == "")
 			throw new Error(`unable to extract key of minimum priority, queue is empty`);
 		const index = Math.min(...Object.keys(this.queue));
 		const extracted = this.queue[index].pop();
@@ -561,54 +651,57 @@ class crudeQueue {
 			],
 			[["number", "string"], ["number"], ["object"]]
 		);
-		this.queue[this.cachedPriorities[item]].splice(this.queue[this.cachedPriorities[item]].indexOf(item), 1);
+		this.queue[this.cachedPriorities[item]].splice(
+			this.queue[this.cachedPriorities[item]].indexOf(item),
+			1
+		);
 		if (this.queue[this.cachedPriorities[item]] == "") delete this.queue[this.cachedPriorities[item]];
 		this.add(item, newPriority);
 	}
 }
 
 async function addLivePeer(ref, value) {
-	livePeers[ref] = value
-	eventHandler.dispatch("livePeersUpdated")
+	livePeers[ref] = value;
+	eventHandler.dispatch("livePeersUpdated");
 }
 
 async function onLivePeersUpdated(callback) {
-	eventHandler.onReceipt("livePeersUpdated", callback)
+	eventHandler.onReceipt("livePeersUpdated", callback);
 }
 
-async function deleteLivePeer(ref) { 
-	delete livePeers[ref]
-	if (authPeers.includes(ref)) deleteAuthPeer(ref)
-	eventHandler.dispatch("livePeersUpdated")
+async function deleteLivePeer(ref) {
+	delete livePeers[ref];
+	if (authPeers.includes(ref)) deleteAuthPeer(ref);
+	eventHandler.dispatch("livePeersUpdated");
 }
 
 class peerConnection {
 	constructor(permissions) {
 		checkForTypeErrors([{ permissions }], [["string", "undefined"]]);
-		this.closed = false
+		this.closed = false;
 		this.acquainted = false;
-		this.volutary = true;
+		this.voluntary = true;
 		this.peerData = {
 			hiddenAlias: undefined,
 		};
 		this.permissions = permissions ?? "standard";
-		this.isAuth = permissions == "advanced"
+		this.isAuth = permissions == "advanced";
 		this.internalUID = `UID : ${Math.random().toString(36).slice(2, 11)}`;
 		this.transport = (() => {
 			let buffer = {};
 			buffer.connection = new RTCPeerConnection(CONFIG.rtc.ICEpresets);
 			buffer.channel = buffer.connection.createDataChannel(
 				CONFIG.rtc.defaultChannelLabel,
-				CONFIG.rtc.channelOptions,
+				CONFIG.rtc.channelOptions
 			);
 			buffer.channel.binaryType = CONFIG.rtc.binaryType;
 			buffer.channel.onclose = function () {
-				if (this.closed) return
+				if (this.closed) return;
 				peerConnection.prototype.close(this);
-			}.bind(this)
+			}.bind(this);
 			buffer.channel.onopen = function () {
-				this.announcePeer()
-				if (this.volutary) {
+				this.announcePeer();
+				if (this.voluntary) {
 					this.transport.channel.standardSend("invokerIntroduction", {
 						hiddenAlias: CONFIG.communication.hiddenAlias,
 						isOriented: Object.keys(networkMap.nodes) != "",
@@ -616,34 +709,37 @@ class peerConnection {
 					});
 					if (Object.keys(networkMap.nodes) == "") primeForMapImport(this.internalUID);
 				}
-			}.bind(this)
+			}.bind(this);
 			buffer.channel.onmessage = async function (event) {
 				peerConnection.prototype.handleMessage
 					.bind(this)(event.data)
 					.catch((error) => {
 						if (this.peerData.hiddenAlias) {
-							shiftNodeWeight(this.peerData.hiddenAlias, CONFIG.constants.genericUncaughtError)
+							shiftNodeWeight(this.peerData.hiddenAlias, CONFIG.constants.genericUncaughtError);
 						}
-						throw (error);
+						throw error;
 					});
-			}.bind(this)
+			}.bind(this);
 			return buffer;
 		})();
 	}
 	async onpeer(cb) {
-		eventHandler.onReceipt(`peerEstablished | ${this.internalUID}`, cb)
+		eventHandler.onReceipt(`peerEstablished | ${this.internalUID}`, cb);
 	}
 	async announcePeer() {
-		eventHandler.dispatch(`peerEstablished | ${this.internalUID}`)
+		eventHandler.dispatch(`peerEstablished | ${this.internalUID}`);
 	}
 	async onConsumableAuth(cb) {
-		eventHandler.onReceipt(`consumableAuth | ${this.internalUID}`, cb)
+		eventHandler.onReceipt(`consumableAuth | ${this.internalUID}`, cb);
 	}
 	async dispatchConsumableAuth(consumableRaw) {
-		eventHandler.dispatch(`consumableAuth | ${this.internalUID}`, escapeHTML(consumableRaw))
+		eventHandler.dispatch(`consumableAuth | ${this.internalUID}`, escapeHTML(consumableRaw));
 	}
 	async makeOffer() {
-		if (this.transport.connection.remoteDescription || this.transport.connection.localDescription) throw new Error("This connection has already begun another ICE exchange sequence, and is, therefore, unable to generate a new local description.");
+		if (this.transport.connection.remoteDescription || this.transport.connection.localDescription)
+			throw new Error(
+				"This connection has already begun another ICE exchange sequence, and is, therefore, unable to generate a new local description."
+			);
 		await this.transport.connection.setLocalDescription(await this.transport.connection.createOffer());
 		const concurrentICEDifferentiator = Math.floor(Math.random() * 1000);
 		this.transport.connection.onicecandidate = async ({ candidate }) => {
@@ -656,13 +752,13 @@ class peerConnection {
 		);
 		return this.transport.connection.localDescription;
 	}
-	async recieveOffer(SDP) {
+	async receiveOffer(SDP) {
 		checkForTypeErrors([{ SDP }], [["object"]]);
 		if (this.transport.connection.remoteDescription || this.transport.connection.localDescription)
 			throw new Error(
 				"This connection has already begun another ICE exchange sequence, and is, therefore, unable to generate a new remote description."
 			);
-		this.volutary = false;
+		this.voluntary = false;
 		await this.transport.connection.setRemoteDescription(SDP);
 		await this.transport.connection.setLocalDescription(await this.transport.connection.createAnswer());
 		const concurrentICEDifferentiator = Math.floor(Math.random() * 1000);
@@ -670,133 +766,182 @@ class peerConnection {
 			if (candidate) return;
 			eventHandler.dispatch(`exhaustedICECandidates | ${concurrentICEDifferentiator}`);
 		};
-		await eventHandler.acquireExpectedDispatch(`exhaustedICECandidates | ${concurrentICEDifferentiator}`, CONFIG.rtc.ICEGatheringMaxLatency);
+		await eventHandler.acquireExpectedDispatch(
+			`exhaustedICECandidates | ${concurrentICEDifferentiator}`,
+			CONFIG.rtc.ICEGatheringMaxLatency
+		);
 		return this.transport.connection.localDescription;
 	}
-	async recieveAnswer(SDP) {
-		if (typeof SDP === "string") SDP = JSON.parse(SDP)
+	async receiveAnswer(SDP) {
+		if (typeof SDP === "string") SDP = JSON.parse(SDP);
 		checkForTypeErrors([{ SDP }], [["object"]]);
 		if (this.transport.connection.remoteDescription)
-		throw new Error("This connection already holds a remote description, and therefore, cannot overwrite it with a new external description.");
+			throw new Error(
+				"This connection already holds a remote description, and therefore, cannot overwrite it with a new external description."
+			);
 		this.transport.connection.setRemoteDescription(SDP);
 	}
 	async requestPermissionEscalation(level) {
-		this.transport.channel.standardSend("permissionEscalationRequest", {level : level ?? "advanced"})
-		eventHandler.acquireExpectedDispatch(`permissionEscalationResponse|${this.internalUID}`, CONFIG.communication.arbitraryPeerRouteTimeout).then((value) => {
-			if (value.externalDetail.status) {
-				this.permissions = level ?? "advanced"
-				if (this.permissions==="advanced" && !authPeers.includes(this.peerData.hiddenAlias)) addAuthPeer(this.peerData.hiddenAlias)
-				indicateRouteAccepted(this.peerData.hiddenAlias)
-			} else {
-				announceAuthRejected(this.peerData.hiddenAlias)
-				obviatePeerError(this.peerData.hiddenAlias)
-			}
-		},
-		() => {
-			announceAuthRejected(this.peerData.hiddenAlias)
-			obviatePeerError(this.peerData.hiddenAlias)
-		}
-		)
+		this.transport.channel.standardSend("permissionEscalationRequest", { level: level ?? "advanced" });
+		eventHandler
+			.acquireExpectedDispatch(
+				`permissionEscalationResponse|${this.internalUID}`,
+				CONFIG.communication.arbitraryPeerRouteTimeout
+			)
+			.then(
+				(value) => {
+					if (value.externalDetail.status) {
+						this.permissions = level ?? "advanced";
+						if (this.permissions === "advanced" && !authPeers.includes(this.peerData.hiddenAlias))
+							addAuthPeer(this.peerData.hiddenAlias);
+						indicateRouteAccepted(this.peerData.hiddenAlias);
+					} else {
+						announceAuthRejected(this.peerData.hiddenAlias);
+						obviatePeerError(this.peerData.hiddenAlias);
+					}
+				},
+				() => {
+					announceAuthRejected(this.peerData.hiddenAlias);
+					obviatePeerError(this.peerData.hiddenAlias);
+				}
+			);
 	}
 	async makeDefiniteRoute(destination, desiredPermissions) {
-		if (Object.keys(livePeers).includes(destination)) throw new Error(`Direct route already exists to requested node ${destination}`)
-		const generatedChannel = new peerConnection()
-		const SDP = JSON.stringify(await generatedChannel.makeOffer())
-		const routeID = Math.random().toString().slice(2, 12)
+		if (Object.keys(livePeers).includes(destination))
+			throw new Error(`Direct route already exists to requested node ${destination}`);
+		const generatedChannel = new peerConnection();
+		const SDP = JSON.stringify(await generatedChannel.makeOffer());
+		const routeID = Math.random().toString().slice(2, 12);
+		var result;
 		try {
-			await detatchedRoute(destination, "routeImperative", { SDP, sender : CONFIG.communication.hiddenAlias, destination, desiredPermissions, routeID })
-			var result = await Promise.race(
-				["routeInaccessible", "routeAccepted", "routeRejected"].map(outcome => {
-					return eventHandler.acquireExpectedDispatch(`${outcome}|${routeID}`, CONFIG.communication.arbitraryPeerRouteTimeout)
+			await detatchedRoute(destination, "routeImperative", {
+				SDP,
+				sender: CONFIG.communication.hiddenAlias,
+				destination,
+				desiredPermissions,
+				routeID,
+			});
+			result = await Promise.race(
+				["routeInaccessible", "routeAccepted", "routeRejected"].map((outcome) => {
+					return eventHandler.acquireExpectedDispatch(
+						`${outcome}|${routeID}`,
+						CONFIG.communication.arbitraryPeerRouteTimeout
+					);
 				})
-			)
-		}
-		catch (error) {
-			var result = {signalIdentifier : "routeInaccessible"}
+			);
+		} catch (error) {
+			result = { signalIdentifier: "routeInaccessible" };
 		}
 		switch (result.signalIdentifier.split("|")[0]) {
 			case "routeInaccessible":
-				peerConnection.prototype.close(generatedChannel)
-				if (desiredPermissions=="advanced")
-				announceAuthRejected(destination)
+				peerConnection.prototype.close(generatedChannel);
+				if (desiredPermissions == "advanced") announceAuthRejected(destination);
 				if (result.externalDetail?.pointOfFailure) {
-					shiftNodeWeight(result.externalDetail.pointOfFailure, CONFIG.constants.violationWeightPenalties.pointOfRouteFailure)
+					shiftNodeWeight(
+						result.externalDetail.pointOfFailure,
+						CONFIG.constants.violationWeightPenalties.pointOfRouteFailure
+					);
 				}
-				break
+				break;
 			case "routeRejected":
-				peerConnection.prototype.close(generatedChannel)
-				if (desiredPermissions=="advanced")
-				announceAuthRejected(destination)
-				obviatePeerError(destination)
-				break
+				peerConnection.prototype.close(generatedChannel);
+				if (desiredPermissions == "advanced") announceAuthRejected(destination);
+				obviatePeerError(destination);
+				break;
 			case "routeAccepted":
 				try {
-					generatedChannel.recieveAnswer(result.externalDetail.SDP)
+					generatedChannel.receiveAnswer(result.externalDetail.SDP);
 				} catch {
-					obviatePeerError(destination)
-					return
+					obviatePeerError(destination);
+					return;
 				}
-				if (desiredPermissions==="advanced") {
-					addAuthPeer(destination)
+				if (desiredPermissions === "advanced") {
+					addAuthPeer(destination);
 				}
-				indicateRouteAccepted(destination)
+				indicateRouteAccepted(destination);
 		}
 	}
 	async comprehendProspectiveRoute(routePackage) {
 		var connection = new peerConnection(routePackage.desiredPermissions);
 		try {
-			var SDP = await connection.recieveOffer(JSON.parse(routePackage.SDP));
+			var SDP = await connection.receiveOffer(JSON.parse(routePackage.SDP));
 		} catch {
 			if (routePackage.sender) {
-				shiftNodeWeight(routePackage.sender, CONFIG.constants.violationWeightPenalties.invalidSDP)
+				shiftNodeWeight(routePackage.sender, CONFIG.constants.violationWeightPenalties.invalidSDP);
 			}
-			this.rejectProspectiveRoute(routePackage, connection)
+			this.rejectProspectiveRoute(routePackage, connection);
 			return;
 		}
-		if (CONFIG.communication.routeAcceptHeuristic.constructor.name === "AsyncFunction" ? await CONFIG.communication.routeAcceptHeuristic(routePackage) : CONFIG.communication.routeAcceptHeuristic(routePackage)) {
-			this.acceptProspectiveRoute(routePackage, SDP, connection)
+		if (
+			CONFIG.communication.routeAcceptHeuristic.constructor.name === "AsyncFunction"
+				? await CONFIG.communication.routeAcceptHeuristic(routePackage)
+				: CONFIG.communication.routeAcceptHeuristic(routePackage)
+		) {
+			this.acceptProspectiveRoute(routePackage, SDP, connection);
 		} else {
-			this.rejectProspectiveRoute(routePackage, connection)
+			this.rejectProspectiveRoute(routePackage, connection);
 		}
 	}
 	async rejectProspectiveRoute(routePackage, allocatedChannel) {
-		allocatedChannel.transport.connection.close()
-		detatchedRoute(routePackage.sender, "routeRejected", { destination : routePackage.sender, routeID : routePackage.routeID }).catch(() => {})
+		allocatedChannel.transport.connection.close();
+		detatchedRoute(routePackage.sender, "routeRejected", {
+			destination: routePackage.sender,
+			routeID: routePackage.routeID,
+		}).catch(() => {});
 	}
 	async acceptProspectiveRoute(routePackage, SDP, allocatedChannel) {
-		eventHandler.acquireExpectedDispatch(`peerEstablished | ${allocatedChannel.internalUID}`, 1000).then(() => {
-			indicateRouteAccepted(routePackage.sender)
-		}, () => {
-			obviatePeerError(routePackage.sender)
-			allocatedChannel.transport.connection.close()
-		})
-		await detatchedRoute(routePackage.sender, "routeAccepted", { SDP, destination : routePackage.sender, routeID : routePackage.routeID })
+		eventHandler.acquireExpectedDispatch(`peerEstablished | ${allocatedChannel.internalUID}`, 1000).then(
+			() => {
+				indicateRouteAccepted(routePackage.sender);
+			},
+			() => {
+				obviatePeerError(routePackage.sender);
+				allocatedChannel.transport.connection.close();
+			}
+		);
+		await detatchedRoute(routePackage.sender, "routeAccepted", {
+			SDP,
+			destination: routePackage.sender,
+			routeID: routePackage.routeID,
+		});
 	}
 	async handleMessage(message) {
-		const parsed = JSON.parse(CONFIG.rtc.binaryType === "arrayBuffer" ? new TextDecoder().decode(message) : message);
+		const parsed = JSON.parse(
+			CONFIG.rtc.binaryType === "arrayBuffer" ? new TextDecoder().decode(message) : message
+		);
 		checkForTypeErrors([{ parsed }], [["object"]]);
-		if (!(await peerConnection.prototype.weaklyValidateMessage(parsed)) || (!authPeers.includes(this.peerData?.hiddenAlias ?? Math.random().toString()) && parsed[0]==="consumable")) {
+		if (
+			!(await peerConnection.prototype.weaklyValidateMessage(parsed)) ||
+			(!authPeers.includes(this.peerData?.hiddenAlias ?? Math.random().toString()) &&
+				parsed[0] === "consumable")
+		) {
 			if (this.peerData.peer) {
-				shiftNodeWeight(this.peerData.peer, CONFIG.constants.violationWeightPenalties.invalidMessage)
+				shiftNodeWeight(this.peerData.peer, CONFIG.constants.violationWeightPenalties.invalidMessage);
 			}
-			return
+			return;
 		}
 		switch (parsed[0]) {
 			case "consumable":
-				if (!this.peerData?.hiddenAlias) return
-				this.dispatchConsumableAuth(escapeHTML(parsed[1].raw))
+				if (!this.peerData?.hiddenAlias) return;
+				this.dispatchConsumableAuth(escapeHTML(parsed[1].raw));
 				break;
 			case "gossip":
 				gossipTransport.consumeGossip(parsed[1]);
 				if (this.peerData.peer) {
-					shiftNodeWeight(this.peerData.peer, CONFIG.constants.violationWeightPenalties.failedGossip)
+					shiftNodeWeight(
+						this.peerData.peer,
+						CONFIG.constants.violationWeightPenalties.failedGossip
+					);
 				}
 				break;
 			case "mapFetch":
-				this.transport.channel.standardSend("mapReturn", {map: await networkMap.optionalExport()});	
-				break
+				this.transport.channel.standardSend("mapReturn", { map: await networkMap.optionalExport() });
+				break;
 			case "mapReturn":
-				if (parsed[1].map === "none" || eventHandler.dispatchWatchers[`networkMapRecieved${this.internalUID}`].length < 1) {
+				if (
+					parsed[1].map === "none" ||
+					eventHandler.dispatchWatchers[`networkMapRecieved${this.internalUID}`].length < 1
+				) {
 					return;
 				}
 				eventHandler.dispatch(`networkMapRecieved${this.internalUID}`);
@@ -804,7 +949,7 @@ class peerConnection {
 				break;
 			case "routeImperative":
 				if (parsed[1].destination == CONFIG.communication.hiddenAlias) {
-					this.comprehendProspectiveRoute(parsed[1])
+					this.comprehendProspectiveRoute(parsed[1]);
 					return;
 				}
 				try {
@@ -812,95 +957,120 @@ class peerConnection {
 				} catch {
 					try {
 						detatchedRoute(parsed[1].sender, "routeInaccessible", {
-							routeID : parsed[1].routeID,
-							pointOfFailure : CONFIG.communication.hiddenAlias,
-							destination : parsed[1].sender
+							routeID: parsed[1].routeID,
+							pointOfFailure: CONFIG.communication.hiddenAlias,
+							destination: parsed[1].sender,
 						});
 					} catch {
-						return
+						return;
 					}
 				}
 				break;
 			case "routeInaccessible":
 				if (parsed[1].destination == CONFIG.communication.hiddenAlias) {
-					eventHandler.dispatch(`routeInaccessible|${parsed[1].routeID}`, parsed[1])
-					return
+					eventHandler.dispatch(`routeInaccessible|${parsed[1].routeID}`, parsed[1]);
+					return;
 				}
 				try {
 					detatchedRoute(parsed[1].destination, "routeInaccessible", parsed[1]);
 				} catch {
-					return
+					return;
 				}
-				break
+				break;
 			case "routeRejected":
 				if (parsed[1].destination == CONFIG.communication.hiddenAlias) {
-					eventHandler.dispatch(`routeRejected|${parsed[1].routeID}`, parsed[1])
-					return
+					eventHandler.dispatch(`routeRejected|${parsed[1].routeID}`, parsed[1]);
+					return;
 				}
 				try {
 					detatchedRoute(parsed[1].destination, "routeRejected", parsed[1]);
 				} catch {
-					return
+					return;
 				}
-				break
+				break;
 			case "routeAccepted":
 				if (parsed[1].destination == CONFIG.communication.hiddenAlias) {
-					eventHandler.dispatch(`routeAccepted|${parsed[1].routeID}`, parsed[1])
-					return
+					eventHandler.dispatch(`routeAccepted|${parsed[1].routeID}`, parsed[1]);
+					return;
 				}
 				try {
 					detatchedRoute(parsed[1].destination, "routeAccepted", parsed[1]);
 				} catch {
-					return
+					return;
 				}
-				break
+				break;
 			case "permissionEscalationRequest":
-				if (!this.peerData.hiddenAlias) return
-				if (CONFIG.communication.routeAcceptHeuristic.constructor.name === "AsyncFunction" ? await CONFIG.communication.routeAcceptHeuristic({sender : this.peerData.hiddenAlias, desiredPermissions : parsed[1].level}) : CONFIG.communication.routeAcceptHeuristic({sender : this.peerData.hiddenAlias, desiredPermissions : parsed[1].level})) {
-					this.transport.channel.standardSend("permissionEscalationResponse", {status : true})
-					this.permissions = parsed[1].level ?? "advanced"
-					if (this.permissions==="advanced" && !authPeers.includes(this.peerData.hiddenAlias)) addAuthPeer(this.peerData.hiddenAlias)
-					indicateRouteAccepted(this.peerData.hiddenAlias)
+				if (!this.peerData.hiddenAlias) return;
+				if (
+					CONFIG.communication.routeAcceptHeuristic.constructor.name === "AsyncFunction"
+						? await CONFIG.communication.routeAcceptHeuristic({
+								sender: this.peerData.hiddenAlias,
+								desiredPermissions: parsed[1].level,
+						  })
+						: CONFIG.communication.routeAcceptHeuristic({
+								sender: this.peerData.hiddenAlias,
+								desiredPermissions: parsed[1].level,
+						  })
+				) {
+					this.transport.channel.standardSend("permissionEscalationResponse", { status: true });
+					this.permissions = parsed[1].level ?? "advanced";
+					if (this.permissions === "advanced" && !authPeers.includes(this.peerData.hiddenAlias))
+						addAuthPeer(this.peerData.hiddenAlias);
+					indicateRouteAccepted(this.peerData.hiddenAlias);
 				} else {
-					this.transport.channel.standardSend("permissionEscalationResponse", {status : false})
+					this.transport.channel.standardSend("permissionEscalationResponse", { status: false });
 				}
-				break
+				break;
 			case "permissionEscalationResponse":
-				eventHandler.dispatch(`permissionEscalationResponse|${this.internalUID}`, {status : parsed[1].status })
-				break
+				eventHandler.dispatch(`permissionEscalationResponse|${this.internalUID}`, {
+					status: parsed[1].status,
+				});
+				break;
 			case "invokerIntroduction":
 				if (this.acquainted) {
 					if (this.peerData.peer) {
-						shiftNodeWeight(this.peerData.peer, CONFIG.constants.violationWeightPenalties.acquaintedInitAttempt)
+						shiftNodeWeight(
+							this.peerData.peer,
+							CONFIG.constants.violationWeightPenalties.acquaintedInitAttempt
+						);
 					}
-					return
+					return;
 				}
-				this.messageMethods.invokerIntroduction(parsed[1]).catch((error) => {
+				this.initializationMethods.invokerIntroduction(parsed[1]).catch((error) => {
 					if (this.peerData.peer || typeof parsed[1].hiddenAlias === "string") {
-						obviatePeerError(this.peerData.peer || parsed[1].hiddenAlias)
-						shiftNodeWeight(this.peerData.peer, CONFIG.constants.violationWeightPenalties.initSequenceError)
+						obviatePeerError(this.peerData.peer || parsed[1].hiddenAlias);
+						shiftNodeWeight(
+							this.peerData.peer,
+							CONFIG.constants.violationWeightPenalties.initSequenceError
+						);
 					}
-					peerConnection.prototype.close(this)
+					peerConnection.prototype.close(this);
 				});
 				break;
 			case "reciprocalAlignment":
 				if (this.acquainted) {
 					if (this.peerData.peer) {
-						shiftNodeWeight(this.peerData.peer, CONFIG.constants.violationWeightPenalties.acquaintedInitAttempt)
+						shiftNodeWeight(
+							this.peerData.peer,
+							CONFIG.constants.violationWeightPenalties.acquaintedInitAttempt
+						);
 					}
-					return
-				};
-				this.messageMethods.reciprocalAlignment(parsed[1]).catch((error) => {
+					return;
+				}
+				this.initializationMethods.reciprocalAlignment(parsed[1]).catch((error) => {
 					if (this.peerData.peer || typeof parsed[1].hiddenAlias === "string") {
-						obviatePeerError(this.peerData.peer || parsed[1].hiddenAlias)
-						shiftNodeWeight(this.peerData.peer, CONFIG.constants.violationWeightPenalties.initSequenceError)
+						obviatePeerError(this.peerData.peer || parsed[1].hiddenAlias);
+						shiftNodeWeight(
+							this.peerData.peer,
+							CONFIG.constants.violationWeightPenalties.initSequenceError
+						);
 					}
-					peerConnection.prototype.close(this)
-				})
+					peerConnection.prototype.close(this);
+				});
 				break;
 			case "forcefulDeauth":
-				deauthPeer(this.peerData.hiddenAlias, false)
-				break
+				deauthPeer(this.peerData.hiddenAlias, false);
+				break;
 			default:
 				nonstandardParserDrain(...parsed);
 				return;
@@ -924,48 +1094,71 @@ class peerConnection {
 			observedIncludedArgs.splice(observedIncludedArgs.indexOf(arg), 1);
 		}
 		if (!CONFIG.communication.packageArgs[message[0]].optional.includes("!*")) return true;
-		if (observedIncludedArgs.filter((arg) => {return !CONFIG.communication.packageArgs[message[0]].optional.includes(arg)&&arg!="!*"}) == "") return true;
+		if (
+			observedIncludedArgs.filter((arg) => {
+				return !CONFIG.communication.packageArgs[message[0]].optional.includes(arg) && arg != "!*";
+			}) == ""
+		)
+			return true;
 		return false;
 	}
-	messageMethods = {
+	initializationMethods = {
 		invokerIntroduction: async (message) => {
 			try {
 				checkForTypeErrors(
-					[{ message }, { "message.hiddenAlias": message.hiddenAlias }, { "message.publicAlias": message.publicAlias }, { "message.isOriented": message.isOriented }],
+					[
+						{ message },
+						{ "message.hiddenAlias": message.hiddenAlias },
+						{ "message.publicAlias": message.publicAlias },
+						{ "message.isOriented": message.isOriented },
+					],
 					[["object"], ["string"], ["string"], ["boolean"]]
 				);
 				if (Object.keys(livePeers).includes(message.hiddenAlias)) {
 					throw new Error(`a route has already been secured to the desired destination`);
 				}
 			} catch (error) {
-				if (typeof message.hiddenAlias === "string") obviatePeerError(message.hiddenAlias)
+				if (typeof message.hiddenAlias === "string") obviatePeerError(message.hiddenAlias);
 				peerConnection.prototype.close(this);
 				return;
 			}
 			addAlias(message.publicAlias, message.hiddenAlias);
-			addLivePeer(message.hiddenAlias, this)
-			if (this.isAuth) addAuthPeer(message.hiddenAlias)
-			topologyTransport.addGossip({constituentHiddenAliases: [CONFIG.communication.hiddenAlias, message.hiddenAlias], correspondingPublicAliases: [CONFIG.communication.publicAlias, message.publicAlias], mode: "addLink"});
+			addLivePeer(message.hiddenAlias, this);
+			if (this.isAuth) addAuthPeer(message.hiddenAlias);
+			topologyTransport.addGossip({
+				constituentHiddenAliases: [CONFIG.communication.hiddenAlias, message.hiddenAlias],
+				correspondingPublicAliases: [CONFIG.communication.publicAlias, message.publicAlias],
+				mode: "addLink",
+			});
 			this.acquainted = true;
 			const providedMap = !message.isOriented ? await networkMap.optionalExport() : false;
-			this.transport.channel.standardSend("reciprocalAlignment", {publicAlias: CONFIG.communication.publicAlias, hiddenAlias: CONFIG.communication.hiddenAlias, map: providedMap});
-			this.peerData = {hiddenAlias: message.hiddenAlias};
+			this.transport.channel.standardSend("reciprocalAlignment", {
+				publicAlias: CONFIG.communication.publicAlias,
+				hiddenAlias: CONFIG.communication.hiddenAlias,
+				map: providedMap,
+			});
+			this.peerData = { hiddenAlias: message.hiddenAlias };
 		},
 		reciprocalAlignment: async (message) => {
 			try {
 				checkForTypeErrors(
-					[{ message }, { "message.hiddenAlias": message.hiddenAlias }, { "message.publicAlias": message.publicAlias }],
+					[
+						{ message },
+						{ "message.hiddenAlias": message.hiddenAlias },
+						{ "message.publicAlias": message.publicAlias },
+					],
 					[["object"], ["string"], ["string"], ["boolean"]]
 				);
-				if (Object.keys(livePeers).includes(message.hiddenAlias)) throw new Error(`a route has already been secured to the desired destination`);
+				if (Object.keys(livePeers).includes(message.hiddenAlias))
+					throw new Error(`a route has already been secured to the desired destination`);
 			} catch (error) {
-				if (typeof message.hiddenAlias === "string") obviatePeerError(message.hiddenAlias)
+				if (typeof message.hiddenAlias === "string") obviatePeerError(message.hiddenAlias);
 				peerConnection.prototype.close(this);
 				return;
 			}
 			addAlias(message.publicAlias, message.hiddenAlias);
-			addLivePeer(message.hiddenAlias, this)
-			if (this.isAuth) addAuthPeer(message.hiddenAlias)
+			addLivePeer(message.hiddenAlias, this);
+			if (this.isAuth) addAuthPeer(message.hiddenAlias);
 			if (Object.keys(networkMap.nodes) == "") {
 				if (!message.map) {
 					const mapInterval = setTimeout(() => {
@@ -987,28 +1180,28 @@ class peerConnection {
 		},
 	};
 	async close(peer, avoidFlounder) {
-		checkForTypeErrors([{peer}], [["object"]])
-		if (!peer.peerData) return
+		checkForTypeErrors([{ peer }], [["object"]]);
+		if (!peer.peerData) return;
 		if (peer.peerData.hiddenAlias) {
-			obviatePeerError(peer.peerData.hiddenAlias)
+			obviatePeerError(peer.peerData.hiddenAlias);
 			topologyTransport.addGossip({
 				constituentHiddenAliases: [peer.peerData.hiddenAlias, CONFIG.communication.hiddenAlias],
 				mode: "removeLink",
 			});
-			if (authPeers.includes(peer.peerData.hiddenAlias)) deleteAuthPeer(peer.peerData.hiddenAlias)
+			if (authPeers.includes(peer.peerData.hiddenAlias)) deleteAuthPeer(peer.peerData.hiddenAlias);
 			await deleteAlias(peer.peerData.hiddenAlias);
 		}
 		if (peer.transport?.connection?.signalingState !== "closed") {
-			peer.closed = true
+			peer.closed = true;
 			peer.transport.connection.close();
 		}
-		deleteLivePeer(peer.peerData.hiddenAlias)
-		peerConnection.prototype.stabilizeLink()
-		if (Object.keys(livePeers)==""&&!avoidFlounder) flounder()
+		deleteLivePeer(peer.peerData.hiddenAlias);
+		peerConnection.prototype.stabilizeLink();
+		if (Object.keys(livePeers) == "" && !avoidFlounder) flounder();
 	}
 	async stabilizeLink() {
-		if (Object.keys(livePeers).length !== 1) return
-		await networkMap.precomputeRoutes(CONFIG.communication.hiddenAlias)
+		if (Object.keys(livePeers).length !== 1) return;
+		await networkMap.precomputeRoutes(CONFIG.communication.hiddenAlias);
 		var invertedDistances = Object.keys(networkMap.distances).reduce((previous, key) => {
 			if (previous[networkMap.distances[key]]) {
 				previous[networkMap.distances[key]].push(key);
@@ -1016,26 +1209,26 @@ class peerConnection {
 				previous[networkMap.distances[key]] = [key];
 			}
 			return previous;
-		}, {})
-		var target = invertedDistances[Math.max(...Object.keys(invertedDistances))][0]
-		if (Object.keys(livePeers).includes(target)) return
-		peerConnection.prototype.makeDefiniteRoute(target)
+		}, {});
+		var target = invertedDistances[Math.max(...Object.keys(invertedDistances))][0];
+		if (Object.keys(livePeers).includes(target)) return;
+		peerConnection.prototype.makeDefiniteRoute(target);
 	}
 	async negotiateAgnosticAuthConnection(target) {
 		if (authPeers.includes(target)) {
-			return
+			return;
 		}
 		if (livePeers[target]) {
-			livePeers[target].requestPermissionEscalation()
-			return
+			livePeers[target].requestPermissionEscalation();
+			return;
 		}
-		peerConnection.prototype.makeDefiniteRoute(target, "advanced")
+		peerConnection.prototype.makeDefiniteRoute(target, "advanced");
 	}
 }
 
 async function flounder() {
-	networkMap.reload()
-	serverHardRestart()
+	networkMap.reload();
+	serverHardRestart();
 }
 
 class GossipTransport {
@@ -1047,7 +1240,7 @@ class GossipTransport {
 		this.pulseIterations = 0;
 		this.parsers = {
 			default: async (block, type, constantArgs, preliminaryVerification, canExclude) => {
-				preliminaryVerification = preliminaryVerification ?? (() => {})
+				preliminaryVerification = preliminaryVerification ?? (() => {});
 				constantArgs = constantArgs ? constantArgs : Object.keys(block[0]);
 				if (!constantArgs.includes("type")) constantArgs.push("type");
 				block.type = type;
@@ -1070,7 +1263,7 @@ class GossipTransport {
 						!this.knownFacts[type].includes(JSON.stringify(data)) &&
 						Object.keys(data).length > 0
 					) {
-						if (!this.types[type]) this.addType(type)
+						if (!this.types[type]) this.addType(type);
 						committable.push(data);
 						unknown.push(component);
 						this.types[type].buffer.push(component);
@@ -1089,19 +1282,9 @@ class GossipTransport {
 	}
 	addType(type, iterModulo) {
 		checkForTypeErrors([{ type }, { iterModulo }], [["string"], ["number", "undefined"]]);
-		iterModulo = iterModulo ?? CONFIG.constants.defaultPropagationIterMod
+		iterModulo = iterModulo ?? CONFIG.constants.defaultPropagationIterMod;
 		if (this.types[type]) throw new Error(`cannot satisfy attempt to redefine type ${type}`);
 		var triggerFunctions = {
-			designateEndpoints: async function (...endpoints) {
-				this.types[type].endpoints = endpoints.filter((endpoint) => {
-					try {
-						checkForTypeErrors([{ endpoint }], [["string"]]);
-					} catch {
-						return false;
-					}
-					return true;
-				});
-			}.bind(this),
 			addGossip: async function (gossip) {
 				await this.parsers[type]([gossip]);
 			}.bind(this),
@@ -1117,15 +1300,8 @@ class GossipTransport {
 				if (this.interval[iterModulo] == "") delete this.intervals[iterModulo];
 			}.bind(this),
 		};
-		if (typeof iterModulo != "number") {
-			this.intervals["null"].push(type);
-			triggerFunctions.propogate = () => {
-				this.pushToPropogationStack(type);
-			};
-		} else {
-			if (!this.intervals[iterModulo]) this.intervals[iterModulo] = [];
-			this.intervals[iterModulo].push(type);
-		}
+		if (!this.intervals[iterModulo]) this.intervals[iterModulo] = [];
+		this.intervals[iterModulo].push(type);
 		this.types[type] = {
 			endpoints: false,
 			buffer: [],
@@ -1134,10 +1310,8 @@ class GossipTransport {
 	}
 	async addParser(type, useDefault, parserCallback, constantArgs, preliminaryVerification) {
 		checkForTypeErrors(
-			[{ type }, { useDefault }, { parserCallback }, { constantArgs }, { preliminaryVerification }], 
-			[
-				["string", "number"], ["boolean"], ["function"], ["object"], ["function", "undefined"]
-			]
+			[{ type }, { useDefault }, { parserCallback }, { constantArgs }, { preliminaryVerification }],
+			[["string", "number"], ["boolean"], ["function"], ["object"], ["function", "undefined"]]
 		);
 		const pre = useDefault ? this.parsers.default : async () => [];
 		this.parsers[type] = async function (block) {
@@ -1148,9 +1322,9 @@ class GossipTransport {
 			}
 			try {
 				const defaultOutput = await pre(block, type, constantArgs, preliminaryVerification);
-				return await (parserCallback ?? (async () => {}))(block, type, ...defaultOutput);
+				return await (parserCallback ?? (async () => {}))(block, ...defaultOutput);
 			} catch (error) {
-				return
+				return;
 			}
 		};
 		this.parsers[type].constantArgs = constantArgs;
@@ -1187,18 +1361,21 @@ class GossipTransport {
 					this.sendGossipPackage({ type, block: chunk }, channel);
 				});
 			}
-			this.types[type].buffer = []
-			return
+			this.types[type].buffer = [];
+			return;
 		}
 		for (let channel in this.types[type].endpoints || livePeers) {
 			if (!Object.keys(livePeers).includes(channel)) continue;
 			this.sendGossipPackage({ type, block: this.types[type].buffer }, channel);
 		}
-		this.types[type].buffer = []
+		this.types[type].buffer = [];
 	}
 	async sendGossipPackage(pkg, channel) {
 		checkForTypeErrors([{ pkg }, { channel }], [["object"], ["string"]]);
-		if (!livePeers[channel]) throw new Error(`unable to access requested gossip endpoint ${channel}: no peer exists with this alias`);
+		if (!livePeers[channel])
+			throw new Error(
+				`unable to access requested gossip endpoint ${channel}: no peer exists with this alias`
+			);
 		livePeers[channel].transport.channel.standardSend("gossip", pkg);
 	}
 	async consumeGossip(gossip) {
@@ -1218,7 +1395,7 @@ class GossipTransport {
 				});
 			}
 		}
-		if (Object.keys[livePeers]=="") return
+		if (Object.keys[livePeers] == "") return;
 		this.propogationStack.forEach((type, index) => {
 			this.propogateAll(type);
 			this.propogationStack.splice(index, 1);
@@ -1230,16 +1407,17 @@ class GossipTransport {
 async function detatchedRoute(destination, ...content) {
 	try {
 		var nextHop = await networkMap.findNextHop(CONFIG.communication.hiddenAlias, destination);
-	}
-	catch {
-		return
+	} catch {
+		return;
 	}
 	livePeers[nextHop].transport.channel.standardSend(...content);
 }
 
 async function primeForMapImport(UID) {
 	checkForTypeErrors([{ UID }], [["number", "string"]]);
-	eventHandler.acquireExpectedDispatch(`networkMapRecieved${UID}`, CONFIG.communication.mapImportTimeout).catch(() => {});
+	eventHandler
+		.acquireExpectedDispatch(`networkMapRecieved${UID}`, CONFIG.communication.mapImportTimeout)
+		.catch(() => {});
 }
 
 function escapeHTML(data) {
@@ -1250,20 +1428,33 @@ function escapeHTML(data) {
 function parsePublicAlias(alias, hidden) {
 	alias = alias ?? CONFIG.communication.defaultUnknownPublicAlias ?? hidden ?? "Anonymous";
 	const escaped = escapeHTML(alias);
-	publicAliasTallies[escaped] = (typeof publicAliasTallies[escaped] == "number") ? ++publicAliasTallies[escaped] : 0;
+	publicAliasTallies[escaped] =
+		typeof publicAliasTallies[escaped] == "number" ? ++publicAliasTallies[escaped] : 0;
 	return publicAliasTallies[escaped] === 0 ? escaped : `${escaped} (${publicAliasTallies[escaped]})`;
 }
 
 function verifyHiddenAlias(hidden) {
-	if ( typeof hidden !== "string" || hidden.length != CONFIG.communication.specHiddenAliasAttributes.len || hidden.split("").filter((char) => { return !CONFIG.constants.radix36Charset.includes(char); }) != "" )
-    throw new Error(
-      `Provided hidden alias does not conform to the delineated formatting restrictions. (${typeof hidden !== "string"}, ${hidden.length != CONFIG.communication.specHiddenAliasAttributes.len}, ${hidden.split("").filter((char) => { return !CONFIG.constants.radix36Charset.includes(char)})} on ${hidden})`
-    );
+	if (
+		typeof hidden !== "string" ||
+		hidden.length != CONFIG.communication.specHiddenAliasAttributes.len ||
+		hidden.split("").filter((char) => {
+			return !CONFIG.constants.radix36Charset.includes(char);
+		}) != ""
+	)
+		throw new Error(
+			`Provided hidden alias does not conform to the delineated formatting restrictions. (${
+				typeof hidden !== "string"
+			}, ${hidden.length != CONFIG.communication.specHiddenAliasAttributes.len}, ${hidden
+				.split("")
+				.filter((char) => {
+					return !CONFIG.constants.radix36Charset.includes(char);
+				})} on ${hidden})`
+		);
 }
 
 function addAlias(pub, hidden) {
-	if (hiddenAliasLookup[hidden]) return
-	pub = pub ?? undefined
+	if (hiddenAliasLookup[hidden]) return;
+	pub = pub ?? undefined;
 	checkForTypeErrors([{ pub }], [["string", "undefined"]]);
 	verifyHiddenAlias(hidden);
 	const parsedPub = parsePublicAlias(pub, hidden);
@@ -1279,14 +1470,13 @@ async function deleteAlias(hidden) {
 	} catch {
 		return;
 	}
-	delete initialReferenceLedger[hidden]
+	delete initialReferenceLedger[hidden];
 	const parsedPub = hiddenAliasLookup[hidden];
 	delete hiddenAliasLookup[hidden];
 	--publicAliasTallies[parsedPub];
 	delete pubAliasLookup[parsedPub];
 	delete pubAliasUnparser[parsedPub];
 }
-
 
 async function makeServerLink(isReconnect) {
 	var instanceSDPFailures = 0;
@@ -1297,15 +1487,15 @@ async function makeServerLink(isReconnect) {
 		try {
 			var offer = await linkPeer.makeOffer();
 		} catch (error) {
-			var alertError = new Error(`Error: ${error} in offer process with basic timeout set to ${CONFIG.rtc.ICEGatheringMaxLatency}`)
-			publicError(alertError.message, alertError.stack)
+			var alertError = new Error(
+				`Error: ${error} in offer process with basic timeout set to ${CONFIG.rtc.ICEGatheringMaxLatency}`
+			);
+			publicError(alertError.message, alertError.stack);
 		}
 		unparsedAddress = CONFIG.serverLink.initBindURL;
 		const addressComponents = unparsedAddress.split("*");
 		if (addressComponents[1] === undefined)
-			throw new Error(
-				`no viable SDP insertion point in the provided server URL : ${unparsedAddress}`
-			);
+			throw new Error(`no viable SDP insertion point in the provided server URL : ${unparsedAddress}`);
 		server = new WebSocket(
 			[
 				addressComponents[0],
@@ -1320,7 +1510,7 @@ async function makeServerLink(isReconnect) {
 	server.onclose = () => {
 		if (server.intentionalClose) return;
 		setTimeout(() => {
-			makeServerLink(livePeers!="")
+			makeServerLink(livePeers != "");
 		}, CONFIG.serverLink.reconnectInterval);
 	};
 	server.onmessage = async (event) => {
@@ -1331,18 +1521,18 @@ async function makeServerLink(isReconnect) {
 				return;
 			case "provideSDP":
 				if (message[1] === "unresolved") {
-					peerConnection.prototype.close(linkPeer, true)
+					peerConnection.prototype.close(linkPeer, true);
 					return;
 				}
 				try {
-					await linkPeer.recieveAnswer(message[1]);
+					await linkPeer.receiveAnswer(message[1]);
 				} catch (error) {
 					++instanceSDPFailures;
 					if (instanceSDPFailures >= 3) {
 						const error = new Error(
 							`Experieneced three consequent violations of SDP formatting protocol; ceasing attempt loop.`
 						);
-						publicError(error.stack)
+						publicError(error.stack);
 					}
 					server.crudeSend("reportNode", { nodeID: message[3] });
 				}
@@ -1351,17 +1541,18 @@ async function makeServerLink(isReconnect) {
 				const error = new Error(
 					`The specified routing server experienced an unidentified internal error in the process of connection : ${unparsedAddress}`
 				);
-				publicError(error, error.stack)
+				publicError(error, error.stack);
+				break;
 			case "requestSDP":
 				var connection = new peerConnection();
 				try {
-					var SDP = await connection.recieveOffer(JSON.parse(atob(message[1])));
+					var SDP = await connection.receiveOffer(JSON.parse(atob(message[1])));
 				} catch {
 					connection.transport.connection.close();
 					server.crudeSend("ignoreSDPRequest", { reciprocalID: message[2] });
 					return;
 				}
-				server.crudeSend("returnSDP", { SDP : JSON.stringify(SDP), reciprocalID: message[2] });
+				server.crudeSend("returnSDP", { SDP: JSON.stringify(SDP), reciprocalID: message[2] });
 				break;
 		}
 	};
@@ -1373,8 +1564,8 @@ async function makeServerLink(isReconnect) {
 }
 
 async function init() {
-	await loadConfig(defaultConfig, defaultConfig.constants.configLoadFunction)
-	eventHandler.dispatch("configLoaded")
+	await loadConfig(defaultConfig, defaultConfig.constants.configLoadFunction);
+	eventHandler.dispatch("configLoaded");
 	await makeServerLink();
 	gossipTransport = new GossipTransport();
 	topologyTransport = gossipTransport.addType("topology");
@@ -1382,9 +1573,11 @@ async function init() {
 	gossipTransport.addParser(
 		"topology",
 		true,
-		async function (_, __, committable) {
+		async function (_, committable) {
 			const removeNegated = function (negated) {
-				let inverseIndex = gossipTransport.knownFacts[negated.type] ? gossipTransport.knownFacts[negated.type].indexOf(JSON.stringify(negated)) : -1
+				let inverseIndex = gossipTransport.knownFacts[negated.type]
+					? gossipTransport.knownFacts[negated.type].indexOf(JSON.stringify(negated))
+					: -1;
 				if (inverseIndex !== -1) {
 					gossipTransport.knownFacts[negated.type].splice(inverseIndex, 1);
 				}
@@ -1398,12 +1591,12 @@ async function init() {
 							modification.constituentHiddenAliases.forEach((alias, index) => {
 								if (!Object.keys(networkMap.nodes).includes(alias)) {
 									if (!hiddenAliasLookup[alias])
-									addAlias(modification.correspondingPublicAliases[index], alias);
-									networkMap.addNode(alias)
+										addAlias(modification.correspondingPublicAliases[index], alias);
+									networkMap.addNode(alias);
 								}
 							});
 						} catch {
-							return
+							return;
 						}
 						removeNegated(negated);
 						networkMap.addEdge(
@@ -1414,14 +1607,17 @@ async function init() {
 					case "removeLink":
 						negated.mode = "addLink";
 						removeNegated(negated);
-						networkMap.removeEdge(modification.constituentHiddenAliases[0], modification.constituentHiddenAliases[1]);
+						networkMap.removeEdge(
+							modification.constituentHiddenAliases[0],
+							modification.constituentHiddenAliases[1]
+						);
 						modification.constituentHiddenAliases.forEach((alias) => {
 							if (!networkMap.adjacencyList[alias]) {
-								return
+								return;
 							}
-							if (Object.keys(networkMap.adjacencyList[alias]??{}) == "") {
+							if (Object.keys(networkMap.adjacencyList[alias] ?? {}) == "") {
 								networkMap.removeNode(alias);
-								deleteAlias(alias)
+								deleteAlias(alias);
 							}
 						});
 						break;
@@ -1430,30 +1626,51 @@ async function init() {
 		},
 		["constituentHiddenAliases", "correspondingPublicAliases", "mode"],
 		async function (component) {
-				if (component.mode !== "addLink" && component.mode !== "removeLink") {
-					throw new Error(`No mode "${component.mode} has been defined by the current parser`);
+			if (component.mode !== "addLink" && component.mode !== "removeLink") {
+				throw new Error(`No mode "${component.mode} has been defined by the current parser`);
+			}
+			if (
+				!(
+					component.constituentHiddenAliases?.length === 2 &&
+					(component.mode === "addLink" ? component.correspondingPublicAliases?.length === 2 : true)
+				)
+			) {
+				throw new Error(
+					`Component does not contain the necessary parity or form of constituentHiddenAliases and correspondingPublicAliases for its mode (${component.mode})`
+				);
+			}
+			if (component.mode === "addLink") {
+				var originalOrder = component.constituentHiddenAliases + "";
+				component.constituentHiddenAliases = component.constituentHiddenAliases.sort();
+				if (originalOrder != component.constituentHiddenAliases + "") {
+					component.correspondingPublicAliases.reverse();
 				}
-				if (!(component.constituentHiddenAliases?.length === 2 && (component.mode === "addLink" ? (component.correspondingPublicAliases?.length === 2) : true))) {
-					throw new Error(`Component does not contain the necessary parity or form of constituentHiddenAliases and correspondingPublicAliases for its mode (${component.mode})`);
-				}
-				if (component.mode === "addLink") {
-					var originalOrder = component.constituentHiddenAliases+""
-					component.constituentHiddenAliases = component.constituentHiddenAliases.sort()
-					if (originalOrder != component.constituentHiddenAliases+"") {component.correspondingPublicAliases.reverse()}
-				}
-			}, ["correspondingPublicAliases"]
+			}
+		},
+		["correspondingPublicAliases"]
 	);
 	gossipTransport.addParser(
 		"weight",
 		true,
-		async function (_, __, committable) {
+		async function (_, committable) {
 			committable.forEach((modification) => {
-				if (networkMap.nodes[modification.alias]) networkMap.setweight(modification.alias, networkMap.nodes[modification.alias].weight + modification.weightModification)
+				if (networkMap.nodes[modification.alias])
+					networkMap.setweight(
+						modification.alias,
+						networkMap.nodes[modification.alias].weight + modification.weightModification
+					);
 			});
 		},
 		["alias", "weightModification", "occurenceID"],
 		async function (component) {
-			checkForTypeErrors([{"modification.alias" : component.alias}, {"modification.weightModification" : component.weightModification}, {"modification.occurenceID" : component.occurenceID}], [["string"], ["number"], ["string"]])
+			checkForTypeErrors(
+				[
+					{ "modification.alias": component.alias },
+					{ "modification.weightModification": component.weightModification },
+					{ "modification.occurenceID": component.occurenceID },
+				],
+				[["string"], ["number"], ["string"]]
+			);
 		}
 	);
 }
@@ -1493,26 +1710,26 @@ init();
 
 async function shiftNodeWeight(alias, weightModification) {
 	routingTableTransport.addGossip({
-		alias : alias,
-		weightModification : weightModification,
-		occurenceID : Math.random().toString().slice(2, 12)
-	})
+		alias: alias,
+		weightModification: weightModification,
+		occurenceID: Math.random().toString().slice(2, 12),
+	});
 }
 
 async function announceAuthRejected(destination) {
-	eventHandler.dispatch("authPeerRejected", destination)
+	eventHandler.dispatch("authPeerRejected", destination);
 }
 
 async function onAuthRejected(callback) {
-	eventHandler.onReceipt("authPeerRejected", callback)
+	eventHandler.onReceipt("authPeerRejected", callback);
 }
 
 async function publicError(message, stack) {
-	eventHandler.dispatch("fatalError", [message, stack])
+	eventHandler.dispatch("fatalError", [message, stack]);
 }
 
 async function onPublicError(callback) {
-	eventHandler.onReceipt("fatalError", callback)
+	eventHandler.onReceipt("fatalError", callback);
 }
 
 async function nonstandardParserDrain(type, args) {
@@ -1520,9 +1737,9 @@ async function nonstandardParserDrain(type, args) {
 }
 
 function indicateRouteAccepted(node) {
-	blinkStatus("success", node)
+	blinkStatus("success", node);
 }
 
 async function obviatePeerError(node) {
-	blinkStatus("error", node)
+	blinkStatus("error", node);
 }
