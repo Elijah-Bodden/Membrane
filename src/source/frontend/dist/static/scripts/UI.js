@@ -156,6 +156,25 @@ window.onload = function () {
 			["align-center", "system-message-card-error", "message-card-slim"]
 		);
 	});
+	onPublicError(async (_sig, externalDetail) => {
+	    var blurWrapper = document.createElement("div")
+	    blurWrapper.style.position = "absolute"
+	    blurWrapper.style.left = blurWrapper.style.right = blurWrapper.style.top = blurWrapper.style.bottom = "0px"
+	    blurWrapper.style.width = blurWrapper.style.height = "100%"
+	    blurWrapper.style.border = "0px"
+	    blurWrapper.style.zIndex = 100000
+	    blurWrapper.style.visibility = "visible"
+	    blurWrapper.style.filter = "blur(3px) saturate(90%) brightness(90%)"
+	    blurWrapper.classList.add("dontBlur")
+	    document.body.appendChild(blurWrapper)
+	    document.querySelectorAll("body > *:not(.fatalWrapper):not(.dontBlur)").forEach((element) => {blurWrapper.appendChild(element)})
+	    document.addEventListener("click", (event) => {
+	      event.stopImmediatePropagation()
+	      event.preventDefault()
+	    }, true)
+	    document.querySelector(".fatalBody").innerHTML = `<div class="center">Oh no! Something went wrong!</div><br><br>That's all we know. We apologize sincerely for this terrible inconvenience. If you wish to try and proceed with the service as normal, simply reload the page. If this error persits, feel free to email <b>admin@membranexus.com</b> the following error text:<div class="center"></div><br>${externalDetail[0]}<br>[stack]<br>${externalDetail[1]}</div>`
+	    document.querySelector(".fatalWrapper").style.visibility = "visible"
+	})
 	if (!JSON.parse(localStorage.config ?? "{}")["UI.renderUnfamiliarPublicAliases"]) {
 		var field = document.querySelector("#searchEntryField");
 		field.disabled = true;
