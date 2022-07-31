@@ -234,7 +234,7 @@ var defaultConfig = {
   },
   serverLink: {
     initBindURL: `ws://${window.location.hostname}:8777/bind?originatingSDP=*`,
-    reconnectURL: `ws://${window.location.hostname}/reconnect`,
+    reconnectURL: `ws://${window.location.hostname}:8777/reconnect`,
     reconnectInterval: 5000,
   },
   UI: {
