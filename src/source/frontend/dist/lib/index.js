@@ -1812,7 +1812,7 @@ async function makeServerLink(isReconnect) {
   server.onclose = () => {
     if (server.intentionalClose) return;
     setTimeout(() => {
-      makeServerLink(livePeers != "");
+      makeServerLink(Object.keys(livePeers) != "");
     }, CONFIG.serverLink.reconnectInterval);
   };
   server.onmessage = async (event) => {
