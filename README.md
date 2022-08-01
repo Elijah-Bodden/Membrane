@@ -105,7 +105,7 @@ Here I have compiled a set of hopefully-only-slightly-pedantic descriptions for 
 ### Demo
   The following commands will install and initiate the demo on 127.0.0.1:8000 on any reasonably recent *nix operating system.
   ```shell
-  curl -LJo Membrane-current.tar.gz https://github.com/Elijah-Bodden/Membrane/tarball/v1.0.3
+  curl -LJo Membrane-current.tar.gz https://github.com/Elijah-Bodden/Membrane/tarball/v1.0.4
   tar xfv Membrane-current.tar.gz --transform 's!^[^/]\+\($\|/\)!Membrane-current\1!'
   cd Membrane-current/src/source/frontend
   npm install
