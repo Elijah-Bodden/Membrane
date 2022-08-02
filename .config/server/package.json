@@ -1,12 +1,12 @@
 {
 	"name": "membrane-server",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "A lightweight backend for the mebmrane project.",
 	"main": "index.js",
 	"scripts": {
-		"postinstall": "cross-env NODE_ENV=production",
-		"deploy": "pm2 start production.js --exp-backoff-restart-delay=75",
-		"test": "nodemon primary.js"
+		"postinstall": "cross-env NODE_ENV=production; npx pm2 update",
+		"deploy": "pm2 start index.js --exp-backoff-restart-delay=75",
+		"kill" : "pm2 stop index.js; kill -9 $(lsof -t -i:8000); kill -9 $(lsof -t -i:8777)"
 	},
 	"author": "Elijah Bodden",
 	"license": "MIT",
@@ -21,11 +21,10 @@
 	"dependencies": {
 		"cross-env": "^7.0.3",
 		"express": "^4.18.1",
+		"express-rate-limit": "^6.4.0",
 		"helmet": "^5.1.0",
 		"pm2": "^5.2.0",
-		"whatwg-url": "^11.0.0",
 		"winston": "^3.7.2",
 		"ws": "^8.4.0"
 	}
 }
- 
