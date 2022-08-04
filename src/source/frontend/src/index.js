@@ -531,7 +531,6 @@ renderer.on("rightClickNode", async (event) => {
   );
 });
 
-
 window.graphState = state;
 window.generateNodeContext = generateNodeContext;
 window.setSearchQuery = setSearchQuery;

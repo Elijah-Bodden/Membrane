@@ -46,7 +46,8 @@ body {
   z-index: 10;
   transition: -webkit-transform 0.5s cubic-bezier(0.54, 0.78, 1, 0.77);
   transition: transform 0.5s cubic-bezier(0.54, 0.78, 1, 0.77);
-  transition: transform 0.5s cubic-bezier(0.54, 0.78, 1, 0.77), -webkit-transform 0.5s cubic-bezier(0.54, 0.78, 1, 0.77);
+  transition: transform 0.5s cubic-bezier(0.54, 0.78, 1, 0.77),
+    -webkit-transform 0.5s cubic-bezier(0.54, 0.78, 1, 0.77);
   position: relative;
   width: 90%;
   overflow-wrap: break-word;
@@ -498,7 +499,7 @@ li {
   right: 0px;
   margin: auto;
   -webkit-transform: translateY(-20%);
-          transform: translateY(-20%);
+  transform: translateY(-20%);
   z-index: 1000001;
   position: absolute;
   visibility: hidden;
@@ -698,7 +699,7 @@ li {
     &:after {
       background-color: white;
       -webkit-transform: translatex(20px);
-              transform: translatex(20px);
+      transform: translatex(20px);
     }
   }
 }
@@ -875,7 +876,7 @@ li {
 
   &:active {
     -webkit-filter: brightness(95%);
-            filter: brightness(95%);
+    filter: brightness(95%);
   }
 }
 
@@ -934,7 +935,7 @@ li {
 .banner {
   margin-right: 0.3em;
   -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 
 .force-noAnimation {
@@ -1005,7 +1006,7 @@ li {
   height: 94vh;
   width: 22vw;
   -webkit-transform: translate3d(0px, 0vh, 0px);
-          transform: translate3d(0px, 0vh, 0px);
+  transform: translate3d(0px, 0vh, 0px);
   margin-top: 1.8vh;
   margin-bottom: 1vh;
   margin-left: 1.5vw;
@@ -1022,7 +1023,7 @@ li {
   display: flex;
   flex-direction: column;
   -webkit-transform: translate3d(0px, 0vh, 0px);
-          transform: translate3d(0px, 0vh, 0px);
+  transform: translate3d(0px, 0vh, 0px);
   position: fixed;
   scrollbar-width: none;
   border-radius: 15px 0px 0px 15px; /*NOTE: Corner rounding looks rather ridiculous with enclosed pane translation*/
@@ -1049,7 +1050,7 @@ li {
   display: flex;
   flex-direction: column;
   -webkit-transform: translate3d(0px, 0vh, 0px);
-          transform: translate3d(0px, 0vh, 0px);
+  transform: translate3d(0px, 0vh, 0px);
   transition: $right-panel-pane-transition;
   position: fixed;
   scrollbar-width: none;
@@ -1068,7 +1069,7 @@ li {
   display: flex;
   flex-direction: column;
   -webkit-transform: translate3d(0px, 0vh, 0px);
-          transform: translate3d(0px, 0vh, 0px);
+  transform: translate3d(0px, 0vh, 0px);
   transition: $right-panel-pane-transition;
   position: fixed;
   scrollbar-width: none;
@@ -1101,7 +1102,7 @@ a.icon.fa-brands:active,
 a.icon.fa-regular:active {
   color: inherit;
   -webkit-filter: brightness(3);
-          filter: brightness(3);
+  filter: brightness(3);
 }
 
 a {
@@ -1113,7 +1114,7 @@ a {
   display: flex;
   flex-direction: column;
   -webkit-transform: translate3d(0px, 0vh, 0px);
-          transform: translate3d(0px, 0vh, 0px);
+  transform: translate3d(0px, 0vh, 0px);
   transition: $right-panel-pane-transition;
   position: fixed;
   scrollbar-width: none;
@@ -1183,7 +1184,7 @@ a {
   right: 0px;
   margin: auto;
   -webkit-transform: translateY(-20%);
-          transform: translateY(-20%);
+  transform: translateY(-20%);
   z-index: 1000001;
   position: absolute;
   visibility: hidden;

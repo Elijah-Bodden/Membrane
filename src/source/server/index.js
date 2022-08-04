@@ -138,14 +138,17 @@ class eventHandlingMechanism {
             reject(rejection);
             hasRejected = true;
           };
-          setTimeout(() => {
-            if (!hasResolved)
-              reject(
-                `Dispatch listener promise for the identifier ${dispatchIdentifier} timed out after ${
-                  (timeout==undefined) ? 100000 : timeout
-                }ms`
-              );
-          }, (timeout==undefined) ? 100000 : timeout);
+          setTimeout(
+            () => {
+              if (!hasResolved)
+                reject(
+                  `Dispatch listener promise for the identifier ${dispatchIdentifier} timed out after ${
+                    timeout == undefined ? 100000 : timeout
+                  }ms`
+                );
+            },
+            timeout == undefined ? 100000 : timeout
+          );
         }),
         reject: rejectGeneratedPromise,
         resolve: resolveGeneratedPromise,
@@ -217,11 +220,17 @@ function init() {
       ++clientAges[client.CID];
       if (
         present - client.mostRecentHeartbeat > defaultNoResponseTimeout ||
-        ((client.socket?.readyState===undefined || client.socket?.readyState===null) ? webSocket.CLOSED : client.socket?.readyState) === webSocket.CLOSED
+        (client.socket?.readyState === undefined ||
+        client.socket?.readyState === null
+          ? webSocket.CLOSED
+          : client.socket?.readyState) === webSocket.CLOSED
       ) {
         console.log(
           present - client.mostRecentHeartbeat > defaultNoResponseTimeout,
-        ((client.socket?.readyState===undefined || client.socket?.readyState===null) ? webSocket.CLOSED : client.socket?.readyState) === webSocket.CLOSED
+          (client.socket?.readyState === undefined ||
+          client.socket?.readyState === null
+            ? webSocket.CLOSED
+            : client.socket?.readyState) === webSocket.CLOSED
         );
         terminateAndCleanClient(client.CID);
         return;
@@ -428,6 +437,5 @@ async function fetchArbitraryLinkSDP(initSDP, recursionDepth) {
   nominee.decrementTrustworthinessHeuristic("activeRouting");
   return ["provideSDP", { SDP: resolution }];
 }
-
 
 init();

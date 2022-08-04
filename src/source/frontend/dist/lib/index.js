@@ -198,7 +198,7 @@ var defaultConfig = {
       ) {
         await (async () => {
           effectiveFirstVisit = true;
-	  var contentDisabler = document.createElement("iframe");
+          var contentDisabler = document.createElement("iframe");
           contentDisabler.style.position = "absolute";
           contentDisabler.style.left =
             contentDisabler.style.right =
