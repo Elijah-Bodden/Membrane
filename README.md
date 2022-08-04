@@ -3,6 +3,7 @@
 ![](https://img.shields.io/github/license/Elijah-Bodden/membrane?color=blue&label=License)
 ![](https://img.shields.io/github/languages/code-size/Elijah-Bodden/membrane?color=%20%23d0a011%20&label=Raw%20Code%20Size)
 [![](https://img.shields.io/website?down_color=%23D0342C&down_message=Offline&label=Website%20Status&up_color=%23e8daef&up_message=Operational&url=https%3A%2F%2Fmembranexus.com)](https://membranexus.com)
+[![CodeQL](https://github.com/Elijah-Bodden/Membrane/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Elijah-Bodden/Membrane/actions/workflows/codeql-analysis.yml)
 </br>
 A robust, minimal-server-interaction API for peer routing in the browser
 
