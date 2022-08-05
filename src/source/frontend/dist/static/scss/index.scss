@@ -980,6 +980,7 @@ li {
   /*border: 2px rgba(255,255,255,0.4) solid;*/
 }
 .messagefeed {
+  overflow-x: hidden;
   display: flex;
   flex-direction: column-reverse;
   transition: inherit;
