@@ -119,7 +119,7 @@ Here I have compiled a set of hopefully-only-slightly-pedantic descriptions for 
   
   However, just because this demo functions, it does not mean it should be used in production. It is a quick-and-dirty demonstration of the library's promise, and thus is not made for any serious scalable production situation. quoting `./src/source/frontend`'s "`PLEASENOTE.md`", 
   >Excluding the included modified `lib` code, the vast majority of that found within this directory and its descendants should never see the light of day in any serious production environment. It was hastily, and, at that, slopily coded to fit the specific closed use case for which it was designed. This is nothing more than a demo of the library—far out-of-scope of this project's goal, and therefore given much less care and attention than the actual objective.  
-TLDR; use this code at a great risk to the performance and stability of your frontend. Unlike `lib`, it was not intended to be an actual viable product, and should not be treated as such.
+TL;DR: use this code at a great risk to the performance and stability of your frontend. Unlike `lib`, it was not intended to be an actual viable product, and should not be treated as such.
 ### Custom Applications
 The process of integrating the vanilla `lib` module with a custom use-case is relatively straightforward and simple. Following is a rough overview of the typical unification process.
 1. Clone `/lib/index.js`
