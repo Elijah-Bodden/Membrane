@@ -114,14 +114,14 @@ async function blinkStatus(statusIdentifier, node) {
       setTimeout(() => {
         state.errorNodes.splice(state.errorNodes.indexOf(node), 1);
         renderer.refresh();
-      }, 5000);
+      }, 1500);
       break;
     case "success":
       state.successNodes.push(node);
       setTimeout(() => {
         state.successNodes.splice(state.successNodes.indexOf(node), 1);
         renderer.refresh();
-      }, 5000);
+      }, 1500);
       break;
   }
   renderer.refresh();
