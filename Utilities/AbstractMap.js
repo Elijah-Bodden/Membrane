@@ -7,11 +7,11 @@ class AbstractMap {
     this.computationRefreshed = false;
   }
   async onUpdate(callback) {
-    //Optional dependancy; simply comment out the following line to make fully this utility self-contained
+    //Optional dependency; simply comment out the following line to make fully this utility self-contained
     eventHandler.onReciept("abstractMapUpdate", callback);
   }
   async triggerUpdate(method, relevantInformation) {
-    //Optional dependancy; simply comment out the following line to make fully this utility self-contained
+    //Optional dependency; simply comment out the following line to make fully this utility self-contained
     eventHandler.dispatch("abstractMapUpdate", [method, relevantInformation]);
   }
   addEdge(i, j) {
