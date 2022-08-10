@@ -11,9 +11,9 @@
 A robust, minimal-server-interaction API for peer routing in the browser
 
 ## What  is this?
-The official Membrane project, that is, `./lib/index.js`, capitalizes upon the `RTCPeerConnection` API's inherent agnosticism regarding signaling. That you could just as well communicate `ICE` connectivity data through smoke signals or quantum teleportation (*if only*), as through a more conventional signalling server. That's profound; *we aren't constrained to this terribly unreliable, centralized approach*. Membrane creates unencumbered, living peer networks. Just one server-based signal opens access to an entire realm of peers, composing a single, behemoth router. Distant, unconnected members can exchange arbitrary data in miliseconds, with no cumbersome, slow intermediary server, nor any risk of downtime.
+Membrane capitalizes upon the `RTCPeerConnection` API's inherent agnosticism regarding signaling. That you could just as well communicate `ICE` connectivity data through smoke signals or quantum teleportation (*if only*), as through a more conventional signalling server. That's profound; *we aren't constrained to this terribly unreliable, centralized approach*. Membrane creates unencumbered, living peer networks. Just one server-based signal opens access to an entire realm of peers, forming a single, behemoth router. Distant, unconnected members can exchange arbitrary data in miliseconds, with no clumsy intermediary server, nor any risk of downtime.
 
-However, this approach is far from perfect. The great boon of decentralization may in fact be this project's worst enemy. Without a singular, trusted register to authenticate peers, spoofing, posing, and generally manipulating the structure of the network become elementary. 
+However, this approach is far from perfect. The boon of decentralization may in fact be this project's worst enemy. Without a singular, trusted register to authenticate peers, spoofing, posing, and generally manipulating the structure of the network become elementary. 
 
 In brief, this tool is robustly functional at enabling anonymous, homogeneous, untrusted data exchange across a network, but very poor at most else.
 
