@@ -5,8 +5,7 @@
 [![](https://img.shields.io/website?down_color=%23D0342C&down_message=Offline&label=Website%20Status&up_color=%23e8daef&up_message=Operational&url=https%3A%2F%2Fmembranexus.com)](https://membranexus.com)
 [![CodeQL](https://github.com/Elijah-Bodden/Membrane/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Elijah-Bodden/Membrane/actions/workflows/codeql-analysis.yml)
 <a href="https://twitter.com/intent/tweet?text=An+unkillable+browser-based+p2p+network.&url=https%3A%2F%2Fgithub.com%2FElijah-Bodden%2FMembrane&hashtags=webrtc+opensource+p2p+peer2peer+github&original_referer=http%3A%2F%2Fgithub.com%2F&tw_p=tweetbutton" target="_blank">
-  <img src="http://jpillora.com/github-twitter-button/img/tweet.png"
-       alt="tweet button" title="An unkillable browser-based p2p network."></img>
+  <img src="http://jpillora.com/github-twitter-button/img/tweet.png" title="An unkillable browser-based p2p network."></img>
 </a>
 </br>
 A robust, minimal-server-interaction API for peer routing in the browser
