@@ -122,7 +122,8 @@ TL;DR: use this code at a great risk to the performance and stability of your fr
 The process of integrating the vanilla `lib` module with a custom use-case is relatively straightforward and simple. Following is a rough overview of the typical unification process.
 1. Clone `/lib/index.js`
 2. Modify `CONFIG.communication.configLoaderFunction` as needed in [this](https://github.com/Elijah-Bodden/Membrane#loading-custom-configurations) form.
-3. Create a `CONFIG.communication.routeAcceptHeuristic` either statically in `defaultConfig` or dynamically at runtime through `CONFIG.constants.configLoadFunction`. If you want to allow the user to explicitly accept any varieties of routes, you can touch a function in your interface from inside.
+3. Create a `CONFIG.communication.routeAcceptHeuristic` either statically in `defaultConfig` or dynamically at runtime through `CONFIG.constants.configLoadFunction`. If you want to allow the user to explicitly accept any varieties of routes, you can touch a function in your interface from inside.  
+At this stage, the script should be effectively capable of standalone function. To verify, serve up several instances of it into any relatively-recent `window`-based environment (i.e. a browser) with the server in `/src/source/server/`. If looking at the `livePeers` variable through the environment console on any given instance renders an Object with at least one entry, everything's good. 
 4. Use `negotiateAgnosticAuthRoute` on members of `Object.keys(networkMap.nodes)` to authenticate explicit data exchange with arbitrary nodes.
 5. Use `livePeers[* some member of authPeers *].standardSend("consumable", *arbitrary data*)` to send consumable data to authenticated peers.
 6. Define an output for consumable data with `onConsumableAuth((_dontUse, data) => {useData(data)})`.
