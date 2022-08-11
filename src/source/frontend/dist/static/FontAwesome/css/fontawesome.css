@@ -50,7 +50,22 @@
 .fa-repeat::before {
   content: "\f363";
 }
-  
+.fa-user-group::before {
+  content: "\f500";
+}
+.fa-bell::before {
+  content: "\f0f3"; 
+}
+.fa-circle-nodes::before {
+  content: "\e4e2";
+}
+.fa-wrench::before {
+  content: "\f0ad";
+}
+.fa-comments::before {
+  content: "\f086";
+}
+
 :root,
 :host {
   --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
