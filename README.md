@@ -24,7 +24,7 @@ In brief, this tool is robustly functional at enabling anonymous, homogeneous, u
   - `npm`
   - `npx`
   - `node.js`  
-  The following commands will install and initiate the demo on 127.0.0.1:8000 on any *nix operating system with the listed prerequisities installed.
+The following commands will install and initiate the demo on 127.0.0.1:8000 on any *nix operating system with the listed prerequisities installed.
   ```shell
   curl -LJo Membrane-current.tar.gz https://github.com/Elijah-Bodden/Membrane/tarball/v1.0.5
   tar xfv Membrane-current.tar.gz --transform 's!^[^/]\+\($\|/\)!Membrane-current\1!'
