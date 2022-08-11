@@ -121,3 +121,24 @@ Here I have compiled a set of hopefully-only-slightly-pedantic descriptions for 
   However, just because this demo functions, it does not mean it should be used in production. It is a quick-and-dirty demonstration of the library's promise, and thus is not made for any serious scalable production situation. quoting `./src/source/frontend`'s "`PLEASENOTE.md`", 
   >Excluding the included modified `lib` code, the vast majority of that found within this directory and its descendants should never see the light of day in any serious production environment. It was hastily, and, at that, slopily coded to fit the specific closed use case for which it was designed. This is nothing more than a demo of the library—far out-of-scope of this project's goal, and therefore not to be treated as a module of it.  
 TL;DR: use this code at a great risk to the performance and stability of your frontend. Unlike `lib`, it was not intended to be an actual viable product, and should not be treated as such.
+### Custom Applications
+The process of integrating the vanilla `lib` module with a custom use-case is relatively straightforward and simple. Following is a rough overview of the typical unification process.
+1. Clone `/lib/index.js`
+2. Modify `CONFIG.communication.configLoaderFunction` as needed in [this](https://github.com/Elijah-Bodden/Membrane#loading-custom-configurations) form.
+3. Create a `CONFIG.communication.routeAcceptHeuristic` either statically in `defaultConfig` or dynamically at runtime through `CONFIG.constants.configLoadFunction`. If you want to allow the user to explicitly accept any varieties of routes, you can touch a function in your interface from inside.
+<!--List Break-->
+At this stage, the script should be effectively capable of standalone function. To verify, serve up several instances of it into any relatively-recent `window`-based environment (i.e. a browser) with the server in `/src/source/server/`. If looking at the `livePeers` variable through the environment console on any given instance renders an Object with at least one entry, everything's good.  
+Then:
+- Use `negotiateAgnosticAuthRoute` on members of `Object.keys(networkMap.nodes)` to authenticate explicit data exchange with arbitrary nodes.
+- Use `livePeers[* some member of authPeers *].standardSend("consumable", *arbitrary data*)` to send consumable data to authenticated peers.
+- Define an output for consumable data with `onConsumableAuth((_dontUse, data) => {useData(data)})`.
+- Provide initial connect and reconnect websocket urls in `CONFIG.serverLink`.
+- Set up a signaling server with the appropriate endpoints and exchange methods (alternatively, clone `/src/source/server` and run `npm install && npm run deploy` from within to use the server written for the demo)
+## Utilities
+Within the root directory of this repository, you will find a subdirectory named `"Utilities."` Here I have compiled two of the most helpful independent utilities I wrote for this project. Each is remarkably small (they weigh just over 200 lines of code combined,) but they have been absolutely invaluable in the later stages of the project; I hope they may do for someone else. Both of these are stripped down versions of classes found in the `lib` source, and, as such, if you wish for full functionality at the expense of a few more resources, you can find classes of the same names in `index.js`.
+- ### EventHandlingMechanism
+    This lightweight utility acts as a fully functional event-dispatch and -signaling device, with both asyncronous, promise-based channels (invoked by the method `acquireExpectedDispatch`), and more traditional, callback-based modes (bound by calling `onReceipt`). After attatching listeners to a particular "`signalIdentifier`" by either method, you can then trigger them, resolving all promises and calling all callbacks, with `dispatch`, passing the desired identifier as the first parameter. You can also, optionally provide a second argument—an `externalDetail`—which will then pass to every callback and return with the value of every promise.
+- ### AbstractMap
+    This utility is simply a lightweight, adjacency-list-based representation vector for (optionally weighted) undirected force maps. Alongside standard methods for node and edge manipulation and weighting, I also include an efficient representation of Dijkstra's pathfinding algorithm, invoked by the function `precomputeRoutes`. The product of this algorithm is saved to the locally-scoped variable `distances`, and may be extracted further through the method `findNextHop`, which identifies the first intermediary between two desired nodes.
+    <!-- Terminate list -->
+Additionally, although I did not feel it consequential enough to merit its own individual file, you will find at the bottom of EventHandlingMechanism's utility file my heavily-used, if rather-high-overhead `checkForTypeErrors` function.
