@@ -1,34 +1,33 @@
 5a6
-> const express = require("express");
+< const express = require("express");
 6a8
-> const path = require("path");
+< const path = require("path");
 8a11,12
-> const helmet = require("helmet");
-> const rateLimit = require("express-rate-limit");
+< const helmet = require("helmet");
+< const rateLimit = require("express-rate-limit");
 50a55,61
-> const rateLimiter = rateLimit({
->   max: 1000,
->   windowMs: 360000,
->   message:
->     "RateLimiterRejection: more than 1000 requests made from this IP in the last hour",
-> });
-> 
-52a64,74
-> const expressFrontend = express();
-> const ROOT = path.join(__dirname, "../frontend/dist");
-> expressFrontend.use(express.static(ROOT));
-> expressFrontend.use(helmet());
-> expressFrontend.use(rateLimiter);
-> expressFrontend.get("/", async function (req, res) {
->   res.sendFile(ROOT);
-> });
-> expressFrontend.get("*", async function (req, res) {
->   res.redirect("/");
-> });
-186c208,209
-<   websocketServer.listen(8192);
----
->   websocketServer.listen(8777);
->   expressFrontend.listen(8000);
-411d433
+< const rateLimiter = rateLimit({
+<   max: 1000,
+<   windowMs: 360000,
+<   message:
+<     "RateLimiterRejection: more than 1000 requests made from this IP in the last hour",
+< });
 < 
+52a64,74
+< const expressFrontend = express();
+< const ROOT = path.join(__dirname, "../frontend/dist");
+< expressFrontend.use(express.static(ROOT));
+< expressFrontend.use(helmet());
+< expressFrontend.use(rateLimiter);
+< expressFrontend.get("/", async function (req, res) {
+<   res.sendFile(ROOT);
+< });
+< expressFrontend.get("*", async function (req, res) {
+<   res.redirect("/");
+< });
+186c208,209
+>   websocketServer.listen(8192);
+---
+<   websocketServer.listen(8777);
+<   expressFrontend.listen(8000);
+411d433 
