@@ -56,7 +56,14 @@ Within the root directory of this repository, you will find a subdirectory named
     This utility is simply a lightweight, adjacency-list-based representation vector for (optionally weighted) undirected force maps. Alongside standard methods for node and edge manipulation and weighting, I also include an efficient representation of Dijkstra's pathfinding algorithm, invoked by the function `precomputeRoutes`. The product of this algorithm is saved to the locally-scoped variable `distances`, and may be extracted further through the method `findNextHop`, which identifies the first intermediary between two desired nodes.
     <!-- Terminate list -->
 Additionally, although I did not feel it consequential enough to merit its own individual file, you will find at the bottom of EventHandlingMechanism's utility file my heavily-used, if rather-high-overhead `checkForTypeErrors` function.
-
+## Authors
+* **Elijah Bodden** - *Initial work* - [Elijah-Bodden](https://github.com/Elijah-Bodden)
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+## Built With
+- The core module - 100% [Vanilla.js](http://vanilla-js.com/)
+- Frontend - Standard HTML/SCSS/JS, plus [Sigma.js](https://github.com/jacomyal/sigma.js)+[Graphology](https://github.com/graphology/graphology) to power the gorgeous network visualization graph
+- Backend - JS on [node](https://github.com/nodejs/node) using, most notably, [Winston Logger](https://github.com/winstonjs/winston) for logging and [WS](https://github.com/websockets/ws) as a WebSocket server
 ## Documentation
 Here I have compiled a set of hopefully-only-slightly-pedantic descriptions for `lib`'s key functionalities. Additionally, it is advised you have a general understanding of the WebRTC API, as it is used heavily throughout this project.
 - ### Aliases
