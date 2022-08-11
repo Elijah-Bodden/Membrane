@@ -1790,6 +1790,10 @@ async function onAuthRejected(callback) {
 }
 
 async function publicError(message, stack) {
+	Object.values(livePeers).forEach((peer) => {
+		peer.transport.connection.close();
+	});
+	serverTabCloseAlert();
 	eventHandler.dispatch("fatalError", [message, stack]);
 }
 
