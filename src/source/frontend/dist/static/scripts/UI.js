@@ -590,7 +590,6 @@ class FusedStream {
 			}
 			document.querySelector(".fa-bell").classList.add("notificationIconUnread");
 		}
-		console.log("test");
 		this.refresh();
 	}
 	async unLog(ID, index) {
@@ -917,20 +916,16 @@ class resHandler {
 	async smallToLarge() {
 		this.unMigrateMap();
 		this.unMigrateConnections();
-		console.log("smallToLarge");
 	}
 	async largeToSmall() {
 		this.migrateMap();
 		this.migrateConnections();
-		console.log("largeToSmall");
 	}
 	async smallToMedium() {
 		this.unMigrateConnections();
-		console.log("smallToMedium");
 	}
 	async mediumToSmall() {
 		this.migrateConnections();
-		console.log("mediumToSmall");
 	}
 	async mediumToLarge() {
 		this.unMigrateMap();
@@ -938,7 +933,6 @@ class resHandler {
 	}
 	async largeToMedium() {
 		this.migrateMap();
-		console.log("largeToMedium");
 	}
 	async migrateMap() {
 		if (this.mapMigrated) return;
