@@ -68,7 +68,7 @@ Additionally, although I did not feel it consequential enough to merit its own i
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 ## Built With
 - The core module - 100% [Vanilla.js](http://vanilla-js.com/)
-- Frontend - Standard HTML/SCSS/JS, plus [Sigma.js](https://github.com/jacomyal/sigma.js)+[Graphology](https://github.com/graphology/graphology) to power the gorgeous network visualization graph
+- Frontend - Standard HTML/SCSS/JS, plus [Sigma.js](https://github.com/jacomyal/sigma.js)+[Graphology](https://github.com/graphology/graphology) to power the gorgeous network visualization graph (and a pinch of Font Awesome for icons)
 - Backend - JS on [node](https://github.com/nodejs/node) using, most notably, [Winston Logger](https://github.com/winstonjs/winston) for logging and [WS](https://github.com/websockets/ws) as a WebSocket server
 ## Documentation
 Here I have compiled a set of hopefully-only-slightly-pedantic descriptions for `lib`'s key functionalities. Additionally, it is advised you have a general understanding of the WebRTC API, as it is used heavily throughout this project.
