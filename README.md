@@ -8,8 +8,8 @@
   <img src="http://jpillora.com/github-twitter-button/img/tweet.png" title="An unkillable browser-based p2p network."></img>
 </a>
 </br>
-Robust, minimal-server-interaction peer routing in the browser,    
-  or:    
+Robust, minimal-server-interaction peer routing in the browser,<br><br>
+  or:<br><br>
   "**The app that cannot die**"
 ## What  is this?
 The Membrane JavaScript module creates hardy, living WebRTC-based peer networks, taking signalling to the browser. After just one initial server-based signal, a node never again needs centrality. The network acts as one giant signaling *membrane*, connecting far-flung peers at a whim. So long as a node remains a part of the network, it has full contact with every participant. Meanwhile, the network actively stabilizes around each new member, ensuring that severed connections will not damage the network nor cut off nodes, and allowing for an overall seamless "immediate-access-to-anyone" experience.
