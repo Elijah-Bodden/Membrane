@@ -42,20 +42,20 @@ The following commands will install and initiate the demo on 127.0.0.1:8000 on a
   >Excluding the included modified `lib` code, the vast majority of that found within this directory and its descendants should never see the light of day in any serious production environment. It was hastily, and, at that, slopily coded to fit the specific closed use case for which it was designed. This is nothing more than a demo of the library—far out-of-scope of this project's goal, and therefore not to be treated as a module of it.  
 TL;DR: use this code at a great risk to the performance and stability of your frontend. Unlike `lib`, it was not intended to be an actual viable product, and should not be treated as such.
 ### Custom Applications
-The process of integrating the vanilla `lib` module with a custom use-case is relatively simple. Here is a rough overview of the typical integration process.
+Integrating the vanilla `lib` module in a custom use-case is relatively simple. Here is an overview of the typical integration process.
 1. Clone `/lib/index.js`
-2. Modify `CONFIG.communication.configLoaderFunction` as needed in [this](https://github.com/Elijah-Bodden/Membrane#loading-custom-configurations) form.
-3. Create a `CONFIG.communication.routeAcceptHeuristic` either statically in `defaultConfig` or dynamically at runtime through `CONFIG.constants.configLoadFunction`. If you want to allow the user to explicitly accept certain routes, you can include an awaited async function which fetches user responses.
+2. (optionally) Modify `CONFIG.communication.configLoaderFunction` as needed in [this](https://github.com/Elijah-Bodden/Membrane#loading-custom-configurations) form.
+3. (optionally) Create a `CONFIG.communication.routeAcceptHeuristic` either statically in `defaultConfig` or dynamically at runtime through `CONFIG.constants.configLoadFunction`. If you want to allow the user to explicitly accept certain routes, you can include an awaited async function which fetches user responses.
 <!--List Break-->
-At this stage, the script should be effectively capable of standalone function. To verify, serve up several instances of it into any relatively-recent `window`-based environment (i.e. a browser) with the server in `/src/source/server/`. If looking at the `livePeers` variable through the environment console on a given instance renders an Object with at least one entry, everything's good.  
+At this stage, the script should be capable of standalone function. To verify, serve several instances of it into any relatively-recent `window`-based environment (i.e. a browser) with the server in `/src/source/server/`. If the global `livePeers` variable contains at least one entry of the type `Object`, everything's working.  
 Then:
-- Use `negotiateAgnosticAuthRoute` on members of `Object.keys(networkMap.nodes)` to authenticate explicit data exchange with arbitrary nodes.
-- Use `livePeers[* some member of authPeers *].standardSend("consumable", *arbitrary data*)` to send consumable data to authenticated peers.
-- Define an output for consumable data with `onConsumableAuth((_dontUse, data) => {useData(data)})`.
+- Use `negotiateAgnosticAuthRoute` on members of `Object.keys(networkMap.nodes)` to authenticate arbitrary nodes.
+- Use `* Authenticated Peer *.standardSend("consumable", *arbitrary data*)` to send consumable data to authenticated peers.
+- Define an output for consumable data with `onConsumableAuth((_dontUse, data) => {* useData *(data)})`.
 - Provide initial connect and reconnect websocket urls in `CONFIG.serverLink`.
-- Set up a signaling server with the appropriate endpoints and exchange methods (alternatively, clone `/src/source/server` and run `npm install && npm run deploy` from within to use the server written for the demo)
+- Set up a signaling server with the appropriate endpoints and exchange methods (alternately, clone `/src/source/server` and run `npm install && npm run deploy` from within to use the server written for the demo)
 ## Utilities
-Within the root directory of this repository, you will find a subdirectory named `"Utilities."` Here I have compiled two of the most helpful independent utilities I wrote for this project. Each is remarkably small (they weigh just over 200 lines of code combined,) but they have been absolutely invaluable in the later stages of the project; I hope they may do for someone else. Both of these are stripped down versions of classes found in the `lib` source, and, as such, if you wish for full functionality at the expense of a few more resources, you can find classes of the same names in `index.js`.
+In the root directory of this repository, you will find a subdirectory named `"Utilities."` Here I have compiled two of the most helpful independent utilities I wrote for this project. Each is relatively small (they weigh just over 200 lines of code combined,) but they have been absolutely invaluable in the later stages of the project. Both of these are stripped down versions of classes found in the `lib` source, and, as such, if you wish for full functionality at the expense of a few more resources, you can find classes of the same names in `index.js`.
 - ### EventHandlingMechanism
     This lightweight utility acts as a fully functional event-dispatch and -signaling device, with both asyncronous, promise-based channels (invoked by the method `acquireExpectedDispatch`), and more traditional, callback-based modes (bound by calling `onReceipt`). After attatching listeners to a particular "`signalIdentifier`" by either method, you can then trigger them, resolving all promises and calling all callbacks, with `dispatch`, passing the desired identifier as the first parameter. You can also, optionally provide a second argument—an `externalDetail`—which will then pass to every callback and return with the value of every promise.
 - ### AbstractMap
