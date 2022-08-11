@@ -36,12 +36,12 @@ In brief, this tool is robustly functional at enabling anonymous, homogeneous, u
   >Excluding the included modified `lib` code, the vast majority of that found within this directory and its descendants should never see the light of day in any serious production environment. It was hastily, and, at that, slopily coded to fit the specific closed use case for which it was designed. This is nothing more than a demo of the library—far out-of-scope of this project's goal, and therefore not to be treated as a module of it.  
 TL;DR: use this code at a great risk to the performance and stability of your frontend. Unlike `lib`, it was not intended to be an actual viable product, and should not be treated as such.
 ### Custom Applications
-The process of integrating the vanilla `lib` module with a custom use-case is relatively straightforward and simple. Following is a rough overview of the typical unification process.
+The process of integrating the vanilla `lib` module with a custom use-case is relatively simple. Here is a rough overview of the typical integration process.
 1. Clone `/lib/index.js`
 2. Modify `CONFIG.communication.configLoaderFunction` as needed in [this](https://github.com/Elijah-Bodden/Membrane#loading-custom-configurations) form.
-3. Create a `CONFIG.communication.routeAcceptHeuristic` either statically in `defaultConfig` or dynamically at runtime through `CONFIG.constants.configLoadFunction`. If you want to allow the user to explicitly accept any varieties of routes, you can touch a function in your interface from inside.
+3. Create a `CONFIG.communication.routeAcceptHeuristic` either statically in `defaultConfig` or dynamically at runtime through `CONFIG.constants.configLoadFunction`. If you want to allow the user to explicitly accept certain routes, you can include an awaited async function which fetches user responses.
 <!--List Break-->
-At this stage, the script should be effectively capable of standalone function. To verify, serve up several instances of it into any relatively-recent `window`-based environment (i.e. a browser) with the server in `/src/source/server/`. If looking at the `livePeers` variable through the environment console on any given instance renders an Object with at least one entry, everything's good.  
+At this stage, the script should be effectively capable of standalone function. To verify, serve up several instances of it into any relatively-recent `window`-based environment (i.e. a browser) with the server in `/src/source/server/`. If looking at the `livePeers` variable through the environment console on a given instance renders an Object with at least one entry, everything's good.  
 Then:
 - Use `negotiateAgnosticAuthRoute` on members of `Object.keys(networkMap.nodes)` to authenticate explicit data exchange with arbitrary nodes.
 - Use `livePeers[* some member of authPeers *].standardSend("consumable", *arbitrary data*)` to send consumable data to authenticated peers.
