@@ -11,19 +11,19 @@
 var CONFIG = {};
 
 const allICEServers = [
-	{
-		urls: "stun:stun.1.google.com:19302",
-	},
-	{
-		urls: "turn:openrelay.metered.ca:80",
-		username: "openrelayproject",
-		credential: "openrelayproject",
-	},
+        {
+                urls: "stun:membranexus.com"
+        },
+        {
+                urls: "turn:membranexus.com",
+                username: "membrane",
+                credential: "membrane"
+        }
 ];
 const STUNOnly = [
-	{
-		urls: "stun:stun.1.google.com:19302",
-	},
+        {
+                urls: "stun:membranexus.com"
+        }
 ];
 
 /*
@@ -40,13 +40,13 @@ var defaultConfig = {
 		ICEpresets: {
 			iceServers: [
 				{
-					urls: "stun:stun.1.google.com:19302",
+					urls: "stun:membranexus.com"
 				},
 				{
-					urls: "turn:openrelay.metered.ca:80",
-					username: "openrelayproject",
-					credential: "openrelayproject",
-				},
+					urls: "turn:membranexus.com",
+					username: "membrane",
+					credential: "membrane"
+				}
 			],
 			iceCandidatePoolSize: 255,
 		},
