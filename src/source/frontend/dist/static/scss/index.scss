@@ -1246,6 +1246,7 @@ a {
 	-webkit-text-fill-color: ghostwhite;
 	-webkit-text-stroke: 1px;
 	font-size: min(9vw, 9vh, 2.3em);
+	font-size: min(9vw, calc(var(--vh, 1vh) * 9), 2.3em);
 	margin-top: 1vh;
     margin-top: var(--vh, 1vh);
 	margin-bottom: 1vh;
