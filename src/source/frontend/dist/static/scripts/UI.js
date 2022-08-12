@@ -4,10 +4,14 @@ window.addEventListener("DOMContentLoaded", async function () {
 	document.querySelector("#searchEntryField").value = "";
 	fusedStream = new FusedStream("messageFeedPane", "#messageSequence");
 	fusedStream.chatInit();
+	document.documentElement.style.setProperty('--vh', `${window.innerHeight/100}px`);
+	document.documentElement.style.setProperty('--dynMaxHeight', `${window.innerHeight}px`);
 });
 
 var noTransitionTimeout;
 window.addEventListener("resize", async function () {
+	document.documentElement.style.setProperty('--vh', `${window.innerHeight/100}px`);
+	document.documentElement.style.setProperty('--dynMaxHeight', `${window.innerHeight}px`);
 	var set = document.querySelectorAll("*");
 	for (let element of set) {
 		element.classList.add("force-noAnimation");
@@ -30,6 +34,8 @@ var res;
 var cachedConfigValues = {};
 
 window.onload = function () {
+	document.documentElement.style.setProperty('--vh', `${window.innerHeight/100}px`);
+	document.documentElement.style.setProperty('--dynMaxHeight', `${window.innerHeight}px`);
 	eventStream = new FusedStream("systemEventPane", "#systemEventSequence", false);
 	eventStream.streamInit();
 	res = new resHandler();
