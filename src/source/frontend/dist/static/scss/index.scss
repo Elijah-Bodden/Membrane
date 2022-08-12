@@ -46,6 +46,7 @@ body {
 	grid-template-columns: minmax(0, 4fr) minmax(0, 11fr) minmax(0, 5fr);
 	grid-template-rows: 1fr;
 	height: 100vh;
+	height: var(--dynMaxHeight, 100vh);
 	width: 100vw;
 }
 
@@ -91,6 +92,7 @@ body {
 	height: -moz-fit-content;
 	height: fit-content;
 	max-height: 30vh;
+    max-height: calc(var(--vh, 1vh) * 30);
 	min-height: 54px;
 	flex: 0;
 	border: 1px solid #dee2e6 !important;
@@ -100,7 +102,7 @@ body {
 	padding-top: 15px;
 	border-radius: 15px 15px 15px 15px;
 	box-shadow: inset rgba(0, 0, 0, 0.2) 6px 6px 12px -6px;
-	margin-top: 0vh;
+	margin-top: 0px;
 	margin-bottom: 0.6em;
 	margin-left: 1.5vw;
 	margin-right: 1.5vw;
@@ -125,8 +127,8 @@ body {
 	max-height: -webkit-fit-content;
 	max-height: -moz-fit-content;
 	max-height: fit-content;
-	margin-top: 0vh;
-	margin-bottom: 0vh;
+	margin-top: 0px;
+	margin-bottom: 0px;
 	margin-left: 0.3vw;
 	margin-right: 0.6vw;
 	scrollbar-width: none;
@@ -266,8 +268,9 @@ li {
 	font-size: 0.9em;
 	height: 2em;
 	max-height: 2em;
-	margin-top: 0vh;
+	margin-top: 0px;
 	margin-bottom: 0.2vh;
+    margin-bottom: calc(var(--vh, 1vh) * 0.2);
 	margin-left: 0.2vw;
 	margin-right: 0.5vw;
 	scrollbar-width: none;
@@ -312,7 +315,8 @@ li {
 #connectedNodesPane {
 	grid-row: 1;
 	grid-column: 1;
-	margin-top: calc(1em + 2.5em + 1vh);
+	margin-top: calc(3.5em + 1vh);
+    margin-top: calc(3.5em + var(--vh, 1vh));
 	z-index: 98;
 	border-bottom: 1px solid #dee2e6 !important;
 	border-top: 1px solid #c7c9ca !important;
@@ -499,6 +503,7 @@ li {
 
 #init-blur-wrapper {
 	height: 100vh;
+    height: var(--dynMaxHeight, 100vh);
 	width: 100vw;
 }
 
@@ -565,7 +570,7 @@ li {
 	font-size: 0.9em;
 	height: 2.2em;
 	padding-top: 7px;
-	margin-top: 0vh;
+	margin-top: 0px;
 	margin-bottom: -2px;
 	margin-left: 0.3vw;
 	margin-right: 0.6vw;
@@ -730,6 +735,7 @@ li {
 #aboutBody {
 	background-color: white;
 	height: calc(100vh - 3em);
+	height: calc(var(--dynMaxHeight, 100vh) - 3em);
 	position: relative;
 	overflow-y: auto;
 	text-align: center;
@@ -748,7 +754,8 @@ li {
 	display: flex;
 	flex-direction: column;
 	background-color: white;
-	height: calc(100vh - 3em);
+    height: calc(100vh - 3em);
+	height: calc(var(--dynMaxHeight, 100vh) - 3em);
 	position: relative;
 	overflow-y: auto;
 }
@@ -827,8 +834,9 @@ li {
 	font-size: 0.9em;
 	height: 2em;
 	max-height: 2em;
-	margin-top: 0vh;
+	margin-top: 0px;
 	margin-bottom: 0.2vh;
+    margin-bottom: calc(var(--vh, 1vh) * 0.2);
 	margin-right: 0.5vw;
 	scrollbar-width: none;
 	border: none;
@@ -1006,6 +1014,7 @@ li {
 	overflow: scroll;
 	-ms-overflow-style: scrollbar;
 	height: 90vh;
+    height: calc(var(--vh, 1vh) * 90);;
 	overflow-x: hidden !important;
 }
 
@@ -1029,6 +1038,8 @@ li {
 	transition: $right-panel-pane-transition;
 	-webkit-transform: translate3d(0px, 100vh, 0px);
 	        transform: translate3d(0px, 100vh, 0px);
+    -webkit-transform: translate3d(0px, var(--dynMaxHeight, 100vh), 0px);
+	        transform: translate3d(0px, var(--dynMaxHeight, 100vh), 0px);
 	position: absolute;
 	scrollbar-width: none;
 	border-radius: 15px 0px 0px 15px; /*NOTE: Corner rounding looks rather ridiculous with enclosed pane translation*/
@@ -1044,6 +1055,8 @@ li {
 	transition: $right-panel-pane-transition;
 	-webkit-transform: translate3d(0px, 100vh, 0px);
 	        transform: translate3d(0px, 100vh, 0px);
+    -webkit-transform: translate3d(0px, var(--dynMaxHeight, 100vh), 0px);
+	        transform: translate3d(0px, var(--dynMaxHeight, 100vh), 0px);
 	position: absolute;
 	scrollbar-width: none;
 	border-radius: 15px 0px 0px 15px; /*NOTE: Corner rounding looks rather ridiculous with enclosed pane translation*/
@@ -1068,6 +1081,8 @@ li {
 	flex-direction: column;
 	-webkit-transform: translate3d(0px, 100vh, 0px);
 	        transform: translate3d(0px, 100vh, 0px);
+    -webkit-transform: translate3d(0px, var(--dynMaxHeight, 100vh), 0px);
+	        transform: translate3d(0px, var(--dynMaxHeight, 100vh), 0px);
 	transition: $right-panel-pane-transition;
 	position: absolute;
 	scrollbar-width: none;
@@ -1084,6 +1099,8 @@ li {
 	flex-direction: column;
 	-webkit-transform: translate3d(0px, 100vh, 0px);
 	        transform: translate3d(0px, 100vh, 0px);
+    -webkit-transform: translate3d(0px, var(--dynMaxHeight, 100vh), 0px);
+	        transform: translate3d(0px, var(--dynMaxHeight, 100vh), 0px);
 	transition: $right-panel-pane-transition;
 	position: absolute;
 	scrollbar-width: none;
@@ -1126,6 +1143,8 @@ a {
 	flex-direction: column;
 	-webkit-transform: translate3d(0px, 100vh, 0px);
 	        transform: translate3d(0px, 100vh, 0px);
+    -webkit-transform: translate3d(0px, var(--dynMaxHeight, 100vh), 0px);
+	        transform: translate3d(0px, var(--dynMaxHeight, 100vh), 0px);
 	transition: $right-panel-pane-transition;
 	position: absolute;
 	scrollbar-width: none;
@@ -1141,6 +1160,7 @@ a {
 	margin-top: 1em;
 	margin-bottom: 1em;
 	height: 100vh;
+    height: var(--dynMaxHeight, 100vh);
 }
 
 #npclose {
@@ -1227,7 +1247,9 @@ a {
 	-webkit-text-stroke: 1px;
 	font-size: min(9vw, 9vh, 2.3em);
 	margin-top: 1vh;
+    margin-top: var(--vh, 1vh);
 	margin-bottom: 1vh;
+    margin-bottom: var(--vh, 1vh);
 	padding-left: 5px;
 	padding-right: 5px;
 	position: relative;
@@ -1236,6 +1258,7 @@ a {
 #backdrop {
 	width: 100vw;
 	height: 100vh;
+    height: var(--dynMaxHeight, 100vh);
 	left: 0px;
 	position: absolute;
 	z-index: -100;
@@ -1247,6 +1270,7 @@ a {
 	box-shadow: none;
 	border: none;
 	min-height: 100vh !important;
+    min-height: var(--dynMaxHeight, 100vh) !important;
 }
 
 #connectedPane #connectedNodesPane {
