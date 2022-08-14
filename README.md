@@ -1,14 +1,21 @@
 ![Membrane](./Assets/Membrane-banner.svg)</br>
-![](https://api.codiga.io/project/33828/score/svg)
-![](https://img.shields.io/github/license/Elijah-Bodden/membrane?color=blue&label=License)
-![](https://img.shields.io/github/languages/code-size/Elijah-Bodden/membrane?color=%20%23d0a011%20&label=Raw%20Code%20Size)
-[![](https://img.shields.io/website?down_color=%23D0342C&down_message=Offline&label=Website%20Status&up_color=%23e8daef&up_message=Operational&url=https%3A%2F%2Fmembranexus.com)](https://membranexus.com)
-[![CodeQL](https://github.com/Elijah-Bodden/Membrane/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Elijah-Bodden/Membrane/actions/workflows/codeql-analysis.yml)
+<p align="center">
+<img src="https://api.codiga.io/project/33828/score/svg"/>
+<img src="https://img.shields.io/github/license/Elijah-Bodden/membrane?color=blue&label=License"/>
+<img src="https://img.shields.io/github/languages/code-size/Elijah-Bodden/membrane?color=%20%23d0a011%20&label=Raw%20Code%20Size"/>
+<a href="https://membranexus.com">
+<img src="https://img.shields.io/website?down_color=%23D0342C&down_message=Offline&label=Website%20Status&up_color=%23e8daef&up_message=Operational&url=https%3A%2F%2Fmembranexus.com"/>
+</a>
+<a href="https://github.com/Elijah-Bodden/Membrane/actions/workflows/codeql-analysis.yml">
+<img src="https://github.com/Elijah-Bodden/Membrane/actions/workflows/codeql-analysis.yml/badge.svg"/>
+</a>
 <a href="https://twitter.com/intent/tweet?text=An+unkillable%2C+browser-based+p2p+network.&url=https%3A%2F%2Fgithub.com%2FElijah-Bodden%2FMembrane&hashtags=webrtc+opensource+p2p+peer2peer+github&original_referer=http%3A%2F%2Fgithub.com%2F&tw_p=tweetbutton" target="_blank">
   <img src="http://jpillora.com/github-twitter-button/img/tweet.png" title="An unkillable browser-based p2p network."></img>
 </a>
 </br>
 Robust, minimal-server-interaction peer routing in the browser
+</p>
+
 ## What  is this?
 The Membrane module creates living peer networks, taking signalling to the browser. After just one server-based signal, a node never again needs centrality. The network acts as one giant signaling *membrane*, connecting far-flung peers at a whim. So long as a node remains a part of the network, it has full contact with every participant. Meanwhile, the network actively stabilizes around each new member, ensuring that severed connections will not damage the network nor cut off nodes, and allowing for an overall seamless "immediate-access-to-anyone" experience.
 | ![](./Assets/demo.gif) |
