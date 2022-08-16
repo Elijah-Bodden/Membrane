@@ -83,5 +83,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - Backend - JS on [node](https://github.com/nodejs/node) using, most notably, [Winston Logger](https://github.com/winstonjs/winston) for logging and [WS](https://github.com/websockets/ws) as a WebSocket server
 
 ## Contact
-Elijah Bodden - elijahbodden@protonmail.com  
+Elijah Bodden - elijahbodden@protonmail.com / admin@membranexus.com  
 Project - https://github.com/Elijah-Bodden/Membrane  
