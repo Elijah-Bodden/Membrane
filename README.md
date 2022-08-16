@@ -55,11 +55,12 @@ Paste the following commands into a terminal to build a complete directory struc
   However, although this demo functions, this does not mean it should be used in production. It is a quick-and-dirty demonstration of the library's promise, and is not made for any serious scalable production situation. quoting `./src/source/frontend`'s "`PLEASENOTE.md`", 
   >Excluding the included `lib` code, the vast majority of the code within this directory and its descendants should never see the light of serious production. It was hastily coded to fit its closed use case. This is nothing more than a demo of the library—far out-of-scope of this project's goal. Please do not treat it as a true part of Membrane. The project begins and ends at `lib`.  
 TL;DR: This code is a great risk to the performance and stability of your frontend. Unlike `lib`, it was not intended as a viable product, and shouldn't be used like one.
-### Installing the Server
-Installing the pre-made server from `/src/source/server` is a piece of cake! Simply enter the following into a terminal, sit back, and relax while the project installs.
+### Deploying a New Signalling Server
+Installing the pre-made server from `/src/source/server/index.noStatic.js` is a piece of cake! Simply enter the following into a terminal while in the root of your node project, sit back, and relax while the project installs.
 ```bash
-
+npm i membrane-server
 ```
+Then, to deploy the server over pm2 onto websocket port 8777, enter `npm explore membrane-server -- npm run deploy`. Simmilarly, to kill the instance created by this command, run `npm explore membrane-server -- npm run kill`. Now just remember to replace the signalling addresses in your `lib` script's config with your new server's, and you're ready to go.
 ### Custom Applications
 Integrating the vanilla `lib` module in a custom use-case is relatively simple. Here is an overview of the typical integration process.
 1. Clone `/lib/index.js`
