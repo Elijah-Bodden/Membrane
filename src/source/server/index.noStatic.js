@@ -41,6 +41,8 @@ class clientQueue {
 		delete this.cachedPriorities[item];
 	}
 }
+const websocketServer = http.createServer();
+const websocketHandler = new webSocket.Server({ noServer: true });
 const routableClients = new clientQueue();
 const clients = {};
 const clientAges = {};
