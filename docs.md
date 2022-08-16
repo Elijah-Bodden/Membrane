@@ -1,10 +1,11 @@
 # Documentation
 Feel free to use this official documentation as heavily or lightly as you like as you build the applications of the future, with a little help from Membrane.
 - ### Aliases
-Aliases are *the* fundamental property of Membrane peers. They define the unique identities of peers, and come in two flavors: hidden and public. 
+Aliases are *the* fundamental property of Membrane peers. They define unique peer identities, and come in two flavors: hidden and public. 
   - `hiddenAliases` are used heavily in internal transactions and routing, acting as formal universally-unique-identifiers for peers. 
-  - Meanwhile `publicAliases` act as a user-definable skin which translates directly into hidden aliases, and vice-versa, allowing for some ammount of identity-customization. 
-These two are correlated by the object `hiddenAliasLookup`, for finding a `hiddenAlias`'s `publicAliase`, while `publicAliasLookup` does the opposite.
+  - Meanwhile `publicAliases` act as a user-definable skin which translates directly into hidden aliases, and vice-versa, allowing for some ammount of identity-customization.  
+###
+These two are correlated by the object `hiddenAliasLookup`, for finding a `hiddenAlias`'s `publicAlias`, while `publicAliasLookup` does the opposite.
 - ### Config
   - #### Loading custom configurations:
     Global preferences are loaded into the `CONFIG` object when the script is first initialized. The pre-filled contents of `defaultConfig` act as base, with its `constants.configLoadFunction` property dynamically providing values to substitute. These substitutions are formatted as follows:
@@ -26,15 +27,15 @@ These two are correlated by the object `hiddenAliasLookup`, for finding a `hidde
     This script extends two built-in prototypes, in both cases to add a specific formatting micro-protocol, and both times using unusual, unambiguous names to prevent potential future conflicts.<br><br>
     > **_NOTE:_** server reactions are specific to the signaling server used. Here it is assumed you are using the one from `/src/server`, but you can employ any custom implementation you want.
     - #### WebSocket.prototype.crudeSend
-        This function accepts a mandatory first argument, `type`, and an optional second `typeArgs`—an object containing data relevant to the specific type. This data is then bundled appropriately and sent to the server. The function allows for the following types:
-        - heartbeat - Generates an empty message to indicate a node is still living, as websocket does not implement any ping-pong functionality natively.
-        - reportNode - Indicates that a particular node provided an invalid SDP package to a node newly requesting entry. The server will increase this node's routing weight (making it less probable it will route to it again), and provide a new route to the caller. If the node receives invalid data three times in a row, it will throw a fatal error and cease attempting.
-        - returnSDP - Returns generaed SDP in response to a request from the server.
-        - ignoreSDPRequest - Like reportNode but for when a node is asked to provide an answer to a new entry's request; if the seed SDP provided is invalid, a node will call this. The server will modestly penalize the node reporting the error, and send an `["ERROR"]` package to the initial requester.
+        Accepts a mandatory first argument, `type`, and an optional second, `typeArgs`—an object containing data relevant to the specific type. This data is then bundled appropriately and sent to the server. The function allows for the following types:
+        - heartbeat - Sends an empty message to indicate a peer is still living for a non-native ping-pong implementation.
+        - reportNode - Alerts the server that a particular peer provided invalid SDP to a node newly requesting entry. The server will increase the offender's routing weight (making it less probable it will route to it again), and provide a new route to the caller. If the node receives invalid data from different nodes three times in a row, it will throw a fatal error and stop attempting.
+        - returnSDP - Returns SDP made in response to a request from the server (this will be provided, in turn, to a node newly entering the network, one half of the initial server signal).
+        - ignoreSDPRequest - Like reportNode but for a node helping a prospective new peer; if the seed SDP provided by said new node is invalid, this type will be used. The server will modestly penalize the node reporting the error, and send an `["ERROR"]` package to the initial requester.
     - #### RTCDatachannel.prototype.standardSend
-      Simmilarly to crudeSend, this function accepts either one or two arguments. However, no checks are performed to ensure packages conform to formatting standards, and therefore must be done before calling this function. For a full list of possible inputs, see [CONFIG.communication.packageArgs](https://github.com/Elijah-Bodden/Membrane#communicationpackageargs).
+      Like crudeSend, this function takes either one or two arguments. However, here no checks are performed to make sure a package is properly formatted, and thus it must contain the correct data from the beginning. For a full list of possible inputs, see [CONFIG.communication.packageArgs](https://github.com/Elijah-Bodden/Membrane#communicationpackageargs). In the end, all data are bundled up and sent to the rtcDataChannel which the method is called on.
 - ### EventHandlingMechanism
-  This class is instantiated globally under the variable name `eventHandler` within the project; see its section in [Utilities](https://github.com/Elijah-Bodden/Membrane#eventhandlingmechanism) for more information
+  This class is available globally under the variable name `eventHandler`; for more information, check out the official [kNow](https://github.com/Elijah-Bodden/kNow) repo, which was spun off of the Membrane version.
 - ### AbstractMap
   Once again, see the [relevant section](https://github.com/Elijah-Bodden/Membrane#abstractmap) of Utilities for a more complete treatment of the matter. The version in `lib` differs from the utility only insofar as it also contains efficient `exportList` and `importList` methods. Export values are stored compactly inside of the `export` variable once generated. The property `exportRefreshed` conveys whether the current value of `export` accurately represents the map. The higher-level `optionalExport` method will `exportList` if and only if `exportRefreshed` is false. This class is globally instantiated as `networkMap`; this is used to find the most efficient peer routes across the network. Taking `Object.keys(networkMap.nodes)` or `Object.keys(networkMap.adjacencyList)` will render a list of all nodes within the current network.
 - ### PeerConnection
