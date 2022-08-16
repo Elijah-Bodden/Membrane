@@ -32,6 +32,8 @@ To be clear, however, this approach is not perfect. The boon of decentralization
 
 In brief, this tool is robustly functional at enabling anonymous, homogeneous, untrusted data exchange across a network, but poor at most else.
 
+> **_NOTE:_** The module is currently only available to be built/integrated from source; however, an official npm package is currently in the works.
+
 ## Installation and Integation
 ### Demo
   #### Prerequisites
