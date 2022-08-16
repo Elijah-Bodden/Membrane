@@ -168,10 +168,9 @@ function init() {
 	initLogger();
 	websocketServer.listen(8777);
 	setInterval(() => {
-		for (let client of Object.values(clients)) {
-			if (client.socket.readyState === webSocket.OPEN) client.socket.crudeSend("heartbeat");
 		let present = +new Date();
 		for (let client of Object.values(clients)) {
+			if (client.socket.readyState === webSocket.OPEN) client.socket.crudeSend("heartbeat");
 			++clientAges[client.CID];
 			if (
 				present - client.mostRecentHeartbeat > defaultNoResponseTimeout ||
