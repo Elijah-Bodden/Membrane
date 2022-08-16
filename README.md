@@ -33,13 +33,13 @@ In brief, this tool is robustly functional at enabling anonymous, homogeneous, u
 > **_NOTE:_** The module can currently only be used once built/integrated from raw source; however, an official npm package is in the works.
 
 ## Installation and Integation
-### Demo
+### Installing the Demo or Building From Source
   #### Prerequisites
   - `npm`
   - `npx`
   - `node.js`  
 ### 
-Paste the following commands into a terminal to install and initialize the demo on 127.0.0.1:8000 on any system with the prerequisities installed.
+Paste the following commands into a terminal to build a complete directory structure, then install and initialize the demo on 127.0.0.1:8000 anywhere with the prerequisities installed.
   ```shell
   curl -LJo Membrane-current.tar.gz https://github.com/Elijah-Bodden/Membrane/tarball/v1.0.5
   tar xfv Membrane-current.tar.gz --transform 's!^[^/]\+\($\|/\)!Membrane-current\1!'
@@ -55,6 +55,11 @@ Paste the following commands into a terminal to install and initialize the demo 
   However, although this demo functions, this does not mean it should be used in production. It is a quick-and-dirty demonstration of the library's promise, and is not made for any serious scalable production situation. quoting `./src/source/frontend`'s "`PLEASENOTE.md`", 
   >Excluding the included `lib` code, the vast majority of the code within this directory and its descendants should never see the light of serious production. It was hastily coded to fit its closed use case. This is nothing more than a demo of the library—far out-of-scope of this project's goal. Please do not treat it as a true part of Membrane. The project begins and ends at `lib`.  
 TL;DR: This code is a great risk to the performance and stability of your frontend. Unlike `lib`, it was not intended as a viable product, and shouldn't be used like one.
+### Installing the Server
+Installing the pre-made server from `/src/source/server` is a piece of cake! Simply enter the following into a terminal, sit back, and relax while the project installs.
+```bash
+
+```
 ### Custom Applications
 Integrating the vanilla `lib` module in a custom use-case is relatively simple. Here is an overview of the typical integration process.
 1. Clone `/lib/index.js`
