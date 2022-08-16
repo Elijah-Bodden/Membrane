@@ -26,7 +26,7 @@ Membrane takes signalling to the browser, creating living peer networks. After j
 |:--:|
 | *Taken from [Membranexus.com](https://membranexus.com), which was built using Membrane* |  
 
-Membrane capitalizes upon the `RTCPeerConnection` API's agnosticism regarding signaling. You could just as well communicate `ICE` connectivity data through smoke signals or quantum teleportation (*if only*), as through a conventional signalling server. That's profound; *we forced to use this terribly unreliable, centralized approach*. With membrane, just one server-based signal opens an entire realm of peers; each membrane is a single, behemoth router. Distant, unconnected members can exchange arbitrary data in milliseconds, with no clumsy intermediary server, nor any risk of downtime.
+Membrane leverages the `RTCPeerConnection` API's agnosticism regarding signaling. You could just as well communicate `ICE` connectivity data through smoke signals or quantum teleportation (*if only*), as through a conventional signalling server. That's profound; *we forced to use this terribly unreliable, centralized approach*. With membrane, just one server-based signal opens an entire realm of peers; each membrane is a single, behemoth router. Distant, unconnected members can exchange arbitrary data in milliseconds, with no clumsy intermediary server, nor any risk of downtime.
 
 To be clear, however, this approach is not perfect. The boon of decentralization may in fact be this project's worst enemy. No singular, trusted ledger to authenticate peers means spoofing, posing, and general manipulation are elementary. 
 
