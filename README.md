@@ -81,3 +81,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - The core module - 100% [Vanilla.js](http://vanilla-js.com/). Additionally, check out [kNow](https://github.com/Elijah-Bodden/kNow), which I spun off of the homebrew event handler made for use in the script.
 - Frontend - Standard HTML/SCSS/JS, plus [Sigma.js](https://github.com/jacomyal/sigma.js)+[Graphology](https://github.com/graphology/graphology) to power the gorgeous network visualization graph (and a pinch of Font Awesome for icons)
 - Backend - JS on [node](https://github.com/nodejs/node) using, most notably, [Winston Logger](https://github.com/winstonjs/winston) for logging and [WS](https://github.com/websockets/ws) as a WebSocket server
+
+## Contact
+Elijah Bodden - elijahbodden@protonmail.com  
+Project - https://github.com/Elijah-Bodden/Membrane  
