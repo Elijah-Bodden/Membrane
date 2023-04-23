@@ -22,16 +22,16 @@ Robust, minimal-server-interaction peer routing in the browser
 </p>
 
 ## What  is this?
-Membrane takes signalling to the browser, creating living peer networks. After just one server-based signal, a node never again needs centrality. The network acts as one giant signaling *membrane*, connecting far-flung peers at a whim. So long as a node remains a part of the network, it has full contact with every participant. Meanwhile, the network actively stabilizes around each new member, ensuring that severed connections will not damage the network nor cut off nodes, and allowing for an overall seamless "immediate-access-to-anyone" experience.
+Membrane takes signalling to the browser, creating living peer networks. After just one contact with a central server, a node can spin off into a decentralized network, with its peers acting as signaling vectors from then on. The network acts as a giant signaling *membrane*, connecting even the most distant peers quickly, without the need for a server. So long as a node remains a part of the network, it has full contact with every participant. Meanwhile, the network actively stabilizes, minimizing heuristics like minimum node distance to ensure a healthy, well-connected network and giving a seamless "immediate-access-to-anyone" experience.
 | ![](./Assets/demo.gif) |
 |:--:|
-| *Taken from [Membranexus.com](https://membranexus.com), which was built using Membrane* |  
+| *[Membranexus.com](https://membranexus.com), built using Membrane* |  
 
-Membrane leverages the `RTCPeerConnection` API's agnosticism regarding signaling. You could just as well communicate `ICE` connectivity data through smoke signals or quantum teleportation (*if only*), as through a conventional signalling server. That's profound; *we forced to use this terribly unreliable, centralized approach*. With membrane, just one server-based signal opens an entire realm of peers; each membrane is a single, behemoth router. Distant, unconnected members can exchange arbitrary data in milliseconds, with no clumsy intermediary server, nor any risk of downtime.
+Membrane leverages the `RTCPeerConnection` API's agnosticism about signalling. You could just as well communicate `ICE` connectivity data through smoke signals or quantum teleportation as through the standard signalling server. In fact, in many cases, signaling servers prove a terribly unreliable, vulnerable approach approach. And so, Membrane attempts to implement a better, alternative protocol. With each membrane acting as a giant, decentralized routeter, distant, unconnected members can exchange arbitrary data in milliseconds with no clumsy intermediary server or risk of downtime.
 
-To be clear, however, this approach is not perfect. The boon of decentralization may in fact be this project's worst enemy. No singular, trusted ledger to authenticate peers means spoofing, posing, and general manipulation are elementary. 
+However, this approach is not perfect. The benefits of decentralization are ultimately also the project's fatal flaw. No centralized ledger to authenticate peers means spoofing, posing, and general manipulation are simple. 
 
-In brief, this tool is robustly functional at enabling anonymous, homogeneous, untrusted data exchange across a network, but poor at most else.
+In brief, this tool is robustly functional at enabling anonymous, homogeneous, untrusted data exchange, but poor for situations where peer identity is critical.
 
 ## Installation and Integation
 ### Installing the Demo or Building From Source
@@ -53,7 +53,7 @@ Paste the following commands into a terminal to build a complete directory struc
   ```
   To kill the pm2 daemon created by `npm run deploy`, run `npm run kill`.
   
-  However, although this demo functions, this does not mean it should be used in production. It is a quick-and-dirty demonstration of the library's promise, and is not made for any serious scalable production situation. quoting `./src/source/frontend`'s "`PLEASENOTE.md`", 
+  However, although this demo functions, this does not mean it should be used in production. It is a quick-and-dirty demonstration of the library's abilities, not made for any serious scalable production situation. quoting `./src/source/frontend`'s "`PLEASENOTE.md`", 
   >Excluding the included `lib` code, the vast majority of the code within this directory and its descendants should never see the light of serious production. It was hastily coded to fit its closed use case. This is nothing more than a demo of the library—far out-of-scope of this project's goal. Please do not treat it as a true part of Membrane. The project begins and ends at `lib`.  
 TL;DR: This code is a great risk to the performance and stability of your frontend. Unlike `lib`, it was not intended as a viable product, and shouldn't be used like one.
 ### Deploying a New Signalling Server
@@ -86,7 +86,7 @@ Then, to interact with the modlue:
 ___
 <b id="f1">1 </b>The following items are able to be imported from the npm module: `CONFIG`, `GossipTransport`, `authPeers`, `deauthPeer`, `defaultConfig`, `detatchedRoute`, `eventHandler`, `eventHandlingMechanism`, `gossipTransport`, `hiddenAliasLookup`, `init`, `initialReferenceLedger`, `livePeers`, `loadConfig`, `mostRecentServerHeartbeat`, `networkMap`, `networkMap`, `onAuthRejected`, `onLivePeersUpdated`, `onPublicError`, `peerConnection`, `pubAliasLookup`, `pubAliasUnparser`, `routingTableTransport`, `serverHardRestart`, and `topologyTransport`. [↩](#a1)
 ## Contributing
-Any and all contributions are greatly appreciated. If you want to see this project grow as much as I do, there are several ways to help. Firstly, if you see something you think you can improve within the code, please `fork` the repository and make a `pull` request once you have made any changes you'd like to see. If you just have an idea, or spot a bug, that's great too! In this case, please file an `issue` with a corresponding `bug` or `enhancement` tag. Oh, and if you like what you see here, please feel free to leave a star on the project, it would mean a ton to me.
+Any and all contributions are greatly appreciated. If you want to see this project grow like I do, there are several ways to help. Firstly, if you see something you think you can improve in the code, please `fork` the repository and make a `pull` request once you have made any changes you'd like to see. If you just have an idea, or spot a bug, that's great too! In this case, please file an `issue` with a corresponding `bug` or `enhancement` tag. Oh, and if you like what you see here, please feel free to leave a star on the project, it would mean a ton to me.
 ## Authors
 * **Elijah Bodden** - *Initial work* - [Elijah-Bodden](https://github.com/Elijah-Bodden)
 ## License
