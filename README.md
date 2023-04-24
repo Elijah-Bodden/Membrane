@@ -20,7 +20,7 @@
 </br>
 Robust, minimal-server-interaction peer routing in the browser
 </br>
-Note: much of this repo is production materials. If you're looking for the actual library source, you can find it [GitHub Pages](https://pages.github.com/).
+Note: much of this repo is production materials. If you're looking for the actual library source, you can find it <a href="https://pages.github.com/">here</a>.
 </p>
 
 ## What  is this?
