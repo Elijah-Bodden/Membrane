@@ -40,7 +40,7 @@ In brief, this tool is robustly functional at enabling anonymous, homogeneous, u
   - `npx`
   - `node.js`  
 ### 
-Paste the following commands into a terminal to build a complete directory structure, then install and initialize the demo on 127.0.0.1:8000 anywhere with the prerequisities installed.
+Paste the following commands into a terminal to build a complete directory structure and initialize the demo on 127.0.0.1:8000 anywhere with the prerequisities installed.
   ```shell
   curl -LJo Membrane-current.tar.gz https://github.com/Elijah-Bodden/Membrane/tarball/v1.0.5
   tar xfv Membrane-current.tar.gz --transform 's!^[^/]\+\($\|/\)!Membrane-current\1!'
