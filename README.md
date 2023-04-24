@@ -25,7 +25,7 @@ Robust, minimal-server-interaction peer routing in the browser
 The Membrane protocol takes signalling to the browser, creating living peer networks. With minimal server-based bootstrapping, it can create self-sufficient WebRTC peer networks with full self-signaling abilities. The network acts as a giant signaling *membrane*, connecting even the most distant peers quickly, without the need for a server. So long as a node remains a part of the network, it has full contact with every participant. Meanwhile, the network actively stabilizes, minimizing heuristics like minimum node distance to ensure a healthy, well-connected network and giving a seamless "immediate-access-to-anyone" experience.
 | ![](./Assets/demo.gif) |
 |:--:|
-| *[Membranexus.com](https://membranexus.com), built using Membrane* |  
+| *[Membranexus.com](https://membranexus.com), built using Membrane. After each node's first connection, it never again needs the server to help it connect to other nodes or communicate network information. Its peers do both instead.* |  
 
 Membrane leverages the `RTCPeerConnection` API's agnosticism about signalling. You could just as well communicate `ICE` connectivity data through smoke signals or quantum teleportation as through the standard signalling server. In fact, in many cases, signaling servers prove a terribly unreliable, vulnerable approach approach. And so, Membrane attempts to implement a better, alternative protocol. With each membrane acting as a giant, decentralized routeter, distant, unconnected members can exchange arbitrary data in milliseconds with no clumsy intermediary server or risk of downtime.
 
