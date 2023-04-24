@@ -22,7 +22,7 @@ Robust, minimal-server-interaction peer routing in the browser
 </p>
 
 ## What  is this?
-Membrane takes signalling to the browser, creating living peer networks. After just one contact with a central server, a node can spin off into a decentralized network, with its peers acting as signaling vectors from then on. The network acts as a giant signaling *membrane*, connecting even the most distant peers quickly, without the need for a server. So long as a node remains a part of the network, it has full contact with every participant. Meanwhile, the network actively stabilizes, minimizing heuristics like minimum node distance to ensure a healthy, well-connected network and giving a seamless "immediate-access-to-anyone" experience.
+The Membrane protocol takes signalling to the browser, creating living peer networks. With minimal server-based bootstrapping, it can create self-sufficient WebRTC peer networks with full self-signaling abilities. The network acts as a giant signaling *membrane*, connecting even the most distant peers quickly, without the need for a server. So long as a node remains a part of the network, it has full contact with every participant. Meanwhile, the network actively stabilizes, minimizing heuristics like minimum node distance to ensure a healthy, well-connected network and giving a seamless "immediate-access-to-anyone" experience.
 | ![](./Assets/demo.gif) |
 |:--:|
 | *[Membranexus.com](https://membranexus.com), built using Membrane* |  
