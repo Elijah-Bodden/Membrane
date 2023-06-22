@@ -21,6 +21,7 @@
 Robust, minimal-server-interaction peer routing in the browser
 </br>
 Note: much of this repo is production materials. If you're looking for the actual library source, you can find it <a href="https://github.com/Elijah-Bodden/Membrane/blob/main/lib/index.js">here</a>.
+TODO: Update this garbage readme
 </p>
 
 ## What  is this?
