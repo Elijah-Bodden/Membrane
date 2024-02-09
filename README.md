@@ -1,6 +1,5 @@
 ![Membrane](./Assets/Membrane-banner.svg)
 <p align="center">
-<img src="https://api.codiga.io/project/33828/score/svg"/>
 <img src="https://img.shields.io/github/license/Elijah-Bodden/membrane?color=blue&label=License"/>
 <img src="https://img.shields.io/github/languages/code-size/Elijah-Bodden/membrane?color=%20%23d0a011%20&label=Raw%20Code%20Size"/>
 <a href="https://membranexus.com">
