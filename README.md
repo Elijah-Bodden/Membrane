@@ -5,7 +5,7 @@
 <a href="https://membranexus.com">
 <img src="https://img.shields.io/website?down_color=%23D0342C&down_message=Offline&label=Website%20Status&up_color=%23e8daef&up_message=Operational&url=https%3A%2F%2Fmembranexus.com"/>
 </a>
-<img src="https://img.shields.io/maintenance/yes/2023?label=Maintained"/>
+<img src="https://img.shields.io/maintenance/yes/2025?label=Maintained"/>
 <a href="https://twitter.com/intent/tweet?text=An+unkillable%2C+browser-based+p2p+network.&url=https%3A%2F%2Fgithub.com%2FElijah-Bodden%2FMembrane&hashtags=webrtc+opensource+p2p+peer2peer+github+projectMembrane&original_referer=http%3A%2F%2Fgithub.com%2F&tw_p=tweetbutton" target="_blank">
   <img src="http://jpillora.com/github-twitter-button/img/tweet.png" title="An unkillable browser-based p2p network."></img>
 </a>
