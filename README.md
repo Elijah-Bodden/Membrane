@@ -1,12 +1,11 @@
 ![Membrane](./Assets/Membrane-banner.svg)
 <p align="center">
-<img src="https://api.codiga.io/project/33828/score/svg"/>
 <img src="https://img.shields.io/github/license/Elijah-Bodden/membrane?color=blue&label=License"/>
 <img src="https://img.shields.io/github/languages/code-size/Elijah-Bodden/membrane?color=%20%23d0a011%20&label=Raw%20Code%20Size"/>
 <a href="https://membranexus.com">
 <img src="https://img.shields.io/website?down_color=%23D0342C&down_message=Offline&label=Website%20Status&up_color=%23e8daef&up_message=Operational&url=https%3A%2F%2Fmembranexus.com"/>
 </a>
-<img src="https://img.shields.io/maintenance/yes/2023?label=Maintained"/>
+<img src="https://img.shields.io/maintenance/yes/2025?label=Maintained"/>
 <a href="https://twitter.com/intent/tweet?text=An+unkillable%2C+browser-based+p2p+network.&url=https%3A%2F%2Fgithub.com%2FElijah-Bodden%2FMembrane&hashtags=webrtc+opensource+p2p+peer2peer+github+projectMembrane&original_referer=http%3A%2F%2Fgithub.com%2F&tw_p=tweetbutton" target="_blank">
   <img src="http://jpillora.com/github-twitter-button/img/tweet.png" title="An unkillable browser-based p2p network."></img>
 </a>
@@ -21,7 +20,6 @@
 Robust, minimal-server-interaction peer routing in the browser
 </br>
 Note: much of this repo is production materials. If you're looking for the actual library source, you can find it <a href="https://github.com/Elijah-Bodden/Membrane/blob/main/lib/index.js">here</a>.
-TODO: Update this garbage readme
 </p>
 
 ## What  is this?
