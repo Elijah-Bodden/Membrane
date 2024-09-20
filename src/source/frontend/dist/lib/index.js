@@ -41,6 +41,11 @@ var defaultConfig = {
 			iceServers: [
 				{
 					urls: "stun:membranexus.com"
+				},
+				{
+                			urls: "turn:membranexus.com",
+                			username: "membrane",
+                			credential: "membrane"
 				}
 			],
 			iceCandidatePoolSize: 255,
