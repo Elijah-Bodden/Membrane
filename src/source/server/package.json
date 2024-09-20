@@ -6,7 +6,7 @@
 	"scripts": {
 		"postinstall": "cross-env NODE_ENV=production; npx pm2 update",
 		"deploy": "pm2 start index.js --exp-backoff-restart-delay=75",
-		"kill" : "pm2 stop index.js; kill -9 $(lsof -t -i:8000); kill -9 $(lsof -t -i:8777)"
+		"kill" : "pm2 stop index.js & kill -9 $(lsof -t -i:8000) & kill -9 $(lsof -t -i:8777) & kill -9 $(lsof -t -i:8192)"
 	},
 	"author": "Elijah Bodden",
 	"license": "MIT",
