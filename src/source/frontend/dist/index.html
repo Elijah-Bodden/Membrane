@@ -141,7 +141,7 @@
           <li class="context-item">
             <button class="context-button border-surround"
               onclick="(event => {peerConnection.prototype.negotiateAgnosticAuthConnection(event.target.parentElement.parentElement.getAttribute('data-caller'))})(event)">
-              Establish Authenticated Connection
+              Send message request
             </button>
           </li>
           <li class="context-item">
@@ -194,15 +194,15 @@
             <div class="configText">
               Block TURN connections&nbsp;<i class="fa-solid fa-circle-info"
                 onclick="toggleDescription(event)"></i>
-              <div class="configTextDescription">Disables TURN fallbacks when STUN connections fail. You may not be able to connect to clients behind certain firewalls, but if you're paranoid this can make your data a bit safer.
-                (Changes will only apply to new connections.)</div>
+              <div class="configTextDescription">Disables TURN for when STUN connections fail. May block connections if you/the other person are behind a firewall.
+                (Will only apply to new connections.)</div>
             </div>
             <input type="checkbox" class="toggle settingsToggle" data-objective="doTURN" />
           </div>
           <div class="configCardBool">
             <div class="configText">
               Distrust suspicious map packages&nbsp;<i class="fa-solid fa-circle-info" onclick="toggleDescription(event)"></i>
-              <div class="configTextDescription">React destructively to suspicious map data. Can potentially increase security, but risks network integrity.</div>
+              <div class="configTextDescription">React destructively to suspicious map data. Can increase security, but makes network less stable.</div>
             </div>
             <input type="checkbox" class="toggle settingsToggle"
               data-objective="communication.moderateMapInstabilityTolerance" />
@@ -211,7 +211,7 @@
             <div class="configText">
               Show public aliases&nbsp;<i class="fa-solid fa-circle-info"
                 onclick="toggleDescription(event)"></i>
-              <div class="configTextDescription">Shows/hides other people's public aliases. Can uhhh make you less likely to see naughty language if that's important to you.</div>
+              <div class="configTextDescription">Show/hide public aliases. Can uhhh hide naughty language if that's important to you.</div>
             </div>
             <input type="checkbox" class="toggle settingsToggle" data-objective="UI.renderUnfamiliarPublicAliases"
               checked="true" />
@@ -219,7 +219,7 @@
           <div class="configCardBool">
             <div class="configText">
               Remember me&nbsp;<i class="fa-solid fa-circle-info" onclick="toggleDescription(event)"></i>
-              <div class="configTextDescription">Saves your public alias so you don't have to re-enter it every time.</div>
+              <div class="configTextDescription">Save your public alias so you don't have to re-enter it every time.</div>
             </div>
             <input type="checkbox" class="toggle settingsToggle" data-objective="rememberMe" checked="true" />
           </div>
@@ -227,8 +227,8 @@
             <div class="configText">
               Max ICE gathering time&nbsp;<i class="fa-solid fa-circle-info"
                 onclick="toggleDescription(event)"></i>
-              <div class="configTextDescription">How many milliseconds to wait for local ICE
-                gathering before erroring. If you're getting errors when trying to make connections, you can try increasing this.</div>
+              <div class="configTextDescription">How many milliseconds to wait for ICE
+                gathering before erroring. If you're getting errors when connecting, you can try increasing this.</div>
             </div>
             <div class="integerEntryContainer carved-element">
               <textarea class="integerEntryField" maxlength="6" id="ICELatencyEntry"
@@ -239,7 +239,7 @@
             <div class="configText">
               Peer route timeout&nbsp;<i class="fa-solid fa-circle-info" onclick="toggleDescription(event)"></i>
               <div class="configTextDescription">How many milliseconds to wait for a peer to respond to a
-                route before auto-rejecting. You can try increasing this if your (or someone else's) internet is slow.</div>
+                route before auto-rejecting. You can try increasing this if routes are failing.</div>
             </div>
             <div class="integerEntryContainer integerEntryContainer-wide carved-element" id="">
               <textarea class="integerEntryField" maxlength="9" id="peerRouteTimeoutEntry"
