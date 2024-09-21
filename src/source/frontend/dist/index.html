@@ -192,30 +192,26 @@
         <div id="configBody">
           <div class="configCardBool">
             <div class="configText">
-              Require strict STUN connection&nbsp;<i class="fa-solid fa-circle-info"
+              Block TURN connections&nbsp;<i class="fa-solid fa-circle-info"
                 onclick="toggleDescription(event)"></i>
-              <div class="configTextDescription">This option can help ensure data sent between peers remains private by
-                disabling TURN fallback; however, you may be unable to connect to clients behind certain firewalls.
+              <div class="configTextDescription">Disables TURN fallbacks when STUN connections fail. You may not be able to connect to clients behind certain firewalls, but if you're paranoid this can make your data a bit safer.
                 (Changes will only apply to new connections.)</div>
             </div>
             <input type="checkbox" class="toggle settingsToggle" data-objective="doTURN" />
           </div>
           <div class="configCardBool">
             <div class="configText">
-              Disallow map faults&nbsp;<i class="fa-solid fa-circle-info" onclick="toggleDescription(event)"></i>
-              <div class="configTextDescription">When enabled, peers will react violently to non-destructive
-                map-package-errors, potentially increasing security, but at a great risk to connection integrity.</div>
+              Distrust suspicious map packages&nbsp;<i class="fa-solid fa-circle-info" onclick="toggleDescription(event)"></i>
+              <div class="configTextDescription">React destructively to suspicious map data. Can potentially increase security, but risks network integrity.</div>
             </div>
             <input type="checkbox" class="toggle settingsToggle"
               data-objective="communication.moderateMapInstabilityTolerance" />
           </div>
           <div class="configCardBool">
             <div class="configText">
-              Render others' public aliases&nbsp;<i class="fa-solid fa-circle-info"
+              Show public aliases&nbsp;<i class="fa-solid fa-circle-info"
                 onclick="toggleDescription(event)"></i>
-              <div class="configTextDescription">Disabling this option will make all public aliases render as their
-                private-alias counterparts, or else not at all, moderately reducing the risk of exposure to crude
-                language. (This method is far from foolproof, and may be bypassed with little skill.)</div>
+              <div class="configTextDescription">Shows/hides other people's public aliases. Can uhhh make you less likely to see naughty language if that's important to you.</div>
             </div>
             <input type="checkbox" class="toggle settingsToggle" data-objective="UI.renderUnfamiliarPublicAliases"
               checked="true" />
@@ -223,18 +219,16 @@
           <div class="configCardBool">
             <div class="configText">
               Remember me&nbsp;<i class="fa-solid fa-circle-info" onclick="toggleDescription(event)"></i>
-              <div class="configTextDescription">When enabled, your current public alias will be hard-cached in your
-                system, so you need not fill out the initial prompt every load.</div>
+              <div class="configTextDescription">Saves your public alias so you don't have to re-enter it every time.</div>
             </div>
             <input type="checkbox" class="toggle settingsToggle" data-objective="rememberMe" checked="true" />
           </div>
           <div class="configCardInt">
             <div class="configText">
-              Maximum ICE gathering latency&nbsp;<i class="fa-solid fa-circle-info"
+              Max ICE gathering time&nbsp;<i class="fa-solid fa-circle-info"
                 onclick="toggleDescription(event)"></i>
-              <div class="configTextDescription">The maximum length of time, in milliseconds, to wait for local ICE
-                gathering before erroring. The higher the value, the greater the probability of a successful route, and
-                the more stable the network, but also the higher the ceiling on possible wait time.</div>
+              <div class="configTextDescription">How many milliseconds to wait for local ICE
+                gathering before erroring. If you're getting errors when trying to make connections, you can try increasing this.</div>
             </div>
             <div class="integerEntryContainer carved-element">
               <textarea class="integerEntryField" maxlength="6" id="ICELatencyEntry"
@@ -244,8 +238,8 @@
           <div class="configCardInt">
             <div class="configText">
               Peer route timeout&nbsp;<i class="fa-solid fa-circle-info" onclick="toggleDescription(event)"></i>
-              <div class="configTextDescription">How long, in milliseconds, to wait for a live peer to respond to a
-                route before auto-rejecting.</div>
+              <div class="configTextDescription">How many milliseconds to wait for a peer to respond to a
+                route before auto-rejecting. You can try increasing this if your (or someone else's) internet is slow.</div>
             </div>
             <div class="integerEntryContainer integerEntryContainer-wide carved-element" id="">
               <textarea class="integerEntryField" maxlength="9" id="peerRouteTimeoutEntry"
@@ -253,7 +247,7 @@
             </div>
           </div>
           <div class="configFootnote">
-            For a more comprehensive list of modifiable attributes, see <a
+            For the full hidden config, check out <a
               href="https://github.com/Elijah-Bodden/Membrane/blob/main/src/source/frontend/dist/lib/index.js"
               target="_blank" title="/src/source/frontend/dist/lib/index.js"
               class="underline configFootnote">defaultConfig</a> in ./lib/index.js
