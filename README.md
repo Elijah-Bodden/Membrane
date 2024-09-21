@@ -43,7 +43,7 @@ In brief, this tool is robustly functional at enabling anonymous, homogeneous, u
 ### 
 Paste the following commands into a terminal to build a complete directory structure and initialize the demo on 127.0.0.1:8000 anywhere with the prerequisities installed.
   ```shell
-  curl -LJo Membrane-current.tar.gz https://github.com/Elijah-Bodden/Membrane/tarball/v1.2.1
+  wget Membrane-current.tar.gz https://github.com/Elijah-Bodden/Membrane/tarball/v1.2.1
   tar xfv Membrane-current.tar.gz --transform 's!^[^/]\+\($\|/\)!Membrane-current\1!'
   cd Membrane-current/src/source/frontend
   npm install
