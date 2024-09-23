@@ -14,7 +14,7 @@
 <img src="https://img.shields.io/badge/Demo-here-blue?style=for-the-badge"/>
 </a>
 </br>
-Robust, server-minimal peer routing in the browser
+Robust, server-minimal peer routing in the browser  
 <!-- </br>
 Note: much of this repo is production materials. If you're looking for the actual library source, you can find it <a href="https://github.com/Elijah-Bodden/Membrane/blob/main/lib/index.js">here</a>.
 </p> -->
