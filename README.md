@@ -30,7 +30,7 @@ The Membrane protocol takes signalling to the browser, creating living peer netw
 
 Membrane leverages the `RTCPeerConnection` API's agnosticism about signalling. You could just as well communicate `ICE` connection data through smoke signals or quantum teleportation as through the standard signalling server. In fact, in many cases, signaling servers are an unreliable and vulnerable approach. Membrane attempts to implement a better alternative protocol. With each membrane acting as a giant, decentralized router, distant, unconnected members can exchange arbitrary data in milliseconds with no clumsy intermediary server or risk of downtime.
 
-Of course, this approach isn't perfect. The benefits of decentralization are ultimately also the fatal flaw. What it gains in robustness and decentralization, it loses in making spoofing and manipulation easier, thanks to its lack of centralized authentication. 
+Of course, this approach isn't perfect. The benefits of decentralization are ultimately also the fatal flaw. What it gains in robustness and decentralization, it loses in making spoofing and manipulation easier. A decentralized public key ledger for cryptographic signing is WIP, which should largely remedy these issues. And for non trust-critical operations, the existing implementation should be good enough.  
 
 ## Installation and Integation
 ### Installing the Demo or Building From Source
