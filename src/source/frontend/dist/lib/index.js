@@ -200,7 +200,7 @@ var defaultConfig = {
 			}
 			modifiedConfig = JSON.parse(window.localStorage.config ?? "{}");
 			keys = await window.crypto.subtle.generateKey({name: "ECDSA", namedCurve: "P-384"}, true, ["sign", "verify"])
-			modifiedConfig["communication.publicKey"] = keys.publicKey
+			var modifiedConfig["communication.publicKey"] = keys.publicKey
 			modifiedConfig["communication.privateKey"] = keys.privateKey
 			return modifiedConfig
 		},
