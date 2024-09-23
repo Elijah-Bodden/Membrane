@@ -20,7 +20,9 @@ Note: much of this repo is production materials. If you're looking for the actua
 </p> -->
 
 ## What's this?
-Membrane is a protocol that takes WebRTC signalling to the browser, creating living peer networks. With minimal server-based bootstrapping, it can make self-sufficient peer-to-peer networks that can operate without servers. Any member browser can create a connection to any other by signaling across its peers, avoiding clumsy, centralized signaling servers. The network also self-stabilizes, minmizing its diameter and collectively tracking its status and topology through peer "gossip". The library is designed to be as agnostic as possible, making no-installation web clients for distributed chat, hosting, torrenting, computing, and so much more easy to implement!  
+Membrane is a protocol that takes WebRTC signalling to the browser, creating living peer networks. With minimal server-based bootstrapping, it can make self-sufficient peer-to-peer networks that can operate without servers. Any member browser can create a connection to any other by signaling across its peers, avoiding clumsy, centralized signaling servers. The network also self-stabilizes, minmizing its diameter and collectively tracking its status and topology through peer "gossip".
+
+The library is designed to be as agnostic as possible, making no-installation web clients for distributed chat, hosting, torrenting, computing, and so much more easy to implement!  
 | ![](./Assets/demo.gif) |
 |:--:|
 | *[Membranexus.com](https://membranexus.com), built using Membrane. After a first-contact server signal, clients never need to interact with a server again - all network functions can happen on the peer level.* |  
