@@ -59,13 +59,13 @@ Installing the pre-made server from `/src/source/server/index.noStatic.js` is a 
 npm i membrane-server
 ```
 Then, to deploy the server over pm2 onto websocket port 8777, enter `npm explore membrane-server -- npm run deploy`. Simmilarly, to kill the instance created by this command, run `npm explore membrane-server -- npm run kill`. Now just remember to replace the websocket addresses in your client's config with your new server's, and you're ready to go.
-### Custom Applications
-Using the vanilla `lib` module in a custom use-case is relatively simple. Here's a typical integration process. First, find the delivery method you like, then, after you've completed its unique instructions, head down below to the general next steps  
-| Delivery Vector | Instructions |
+### Build Your Own App!
+Using the library for your own use-case is relatively simple. Here's a typical integration process. Find the delivery method you like below, then head down below to the general next steps  
+| Delivery Method | Instructions |
 ---- | ----
 | npm + Webpack | Run `npm install @elijah-bodden/membrane \| cd node-modules/elijah-bodden/membrane` in the root of your webpack project<sup id="a1">[ \[1\]](#f1)</sup>|
-| HTML script tag | Enter your project's static file directory, find where you'd like to store the script, then run `wget https://raw.githubusercontent.com/Elijah-Bodden/Membrane/main/lib/index.js -o membrane.min.js`. Then insert within your HTML `head` the following tag: `<script src="/path/to/membrane.min.js"/>`. From here, return to the folder where you installed the script and follow the instructions found after this table |
-| Jsdelivr CDN (not recommended) | With this method, you will not need to follow the general instruction which come after the table; however, you will be stuck with the default config and every peer request will be accepted by default. If you wish to proceed, knowing this, simply prepend the following tag to your HTML `head`'s contents. `<script src="https://cdn.jsdelivr.net/npm/@elijah-bodden/membrane/index.min.js"` |
+| HTML script tag | Go to the directory you serve static files from, find where you want to save the script, then run `wget https://raw.githubusercontent.com/Elijah-Bodden/Membrane/main/lib/index.js -o membrane.min.js`. And finally, paste following tag into your HTML head `<script src="/path/to/membrane.min.js"/>`. |
+| Jsdelivr CDN (not recommended) | With this method, you won't need to (can't) follow the general instruction that come after the table; however, you'll be stuck with the default config and every peer request will be accepted by default. If that works, just paste this into your HTML head: `<script src="https://cdn.jsdelivr.net/npm/@elijah-bodden/membrane/index.min.js"` |
 
 <p align=center><i>then</i></p>
 
