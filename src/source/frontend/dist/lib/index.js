@@ -206,7 +206,7 @@ var defaultConfig = {
 		},
 	},
 	serverLink: {
-		initBindURL: `wss://${window.location.hostname}:8777/bind?originatingSDP=*&publicKey=*`,
+		initBindURL: `wss://${window.location.hostname}:8777/bind?originatingSDP=*`,
 		reconnectURL: `wss://${window.location.hostname}:8777/reconnect`,
 		reconnectInterval: 5000,
 		defaultNoResponseTimeout: 20000,
@@ -1538,15 +1538,13 @@ async function makeServerLink(isReconnect) {
 		}
 		unparsedAddress = CONFIG.serverLink.initBindURL;
 		const addressComponents = unparsedAddress.split("*");
-		if (addressComponents[1] === undefined || addressComponents[2] === undefined)
-			throw new Error(`Bind url requires at least two wildcards - the first for SDP and the second for public key`);
+		if (addressComponents[1] === undefined)
+			throw new Error(`Bind url requires a wildcard (*) for SDP`);
 		server = new WebSocket(
 			[
 				addressComponents[0],
 				encodeURIComponent(btoa(JSON.stringify(offer))),
-				addressComponents[1],
-				encodeURIComponent(btoa(JSON.stringify(await window.crypto.subtle.exportKey("jwk"), CONFIG.communication.publicKey)))
-				addressComponents[2],
+				addressComponents[1]
 			].join("")
 		);
 	} else {
