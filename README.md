@@ -53,7 +53,7 @@ Paste the following commands into a terminal to build a complete directory struc
 
 ### Deploying a New First-Contact Signalling Server
 Installing the pre-made server from `/src/source/server/index.noStatic.js` is a piece of cake! Just run `npm i membrane-server` at the root of your node project, sit back, and relax while it installs.  
-To deploy the server on pm2, run `npm explore membrane-server -- npm run deploy`. To kill the pm2 instance, run `npm explore membrane-server -- npm run kill`. Now just remember to replace the websocket addresses in your client's config with your new server's.
+To deploy the server on pm2, run `npm explore membrane-server -- npm run deploy`. To kill the pm2 instance, run `npx pm2 kill`. Now just remember to replace the websocket addresses in your client's config with your new server's.
 
 You will likely also want to set up coturn TURN and STUN servers and replace the addresses in the frontend's `defaultConfig` with those. And since this is a standalone signaling server, you'll have to serve your frontend (in the demo's case, `/src/source/frontend/dist`) separately.
 ### Build Your Own App!
