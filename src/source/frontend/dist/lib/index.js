@@ -68,6 +68,8 @@ var defaultConfig = {
 			len: 9,
 		},
 		hiddenAlias: Math.random().toString(36).slice(2, 11),
+		publicKey: null,
+		privateKey: null,
 		packageArgs: {
 			consumable: { required: ["raw"], optional: [] },
 			gossip: { required: ["type", "block"], optional: ["!*"] },
@@ -196,13 +198,16 @@ var defaultConfig = {
 					.querySelector("#init-blur-wrapper")
 					.replaceWith(...document.querySelector("#init-blur-wrapper").childNodes);
 			}
-			return JSON.parse(window.localStorage.config ?? "{}");
+			modifiedConfig = JSON.parse(window.localStorage.config ?? "{}");
+			keys = await window.crypto.subtle.generateKey({name: "ECDSA", namedCurve: "P-384"}, true, ["sign", "verify"])
+			modifiedConfig["communication.publicKey"] = keys.publicKey
+			modifiedConfig["communication.privateKey"] = keys.privateKey
+			return modifiedConfig
 		},
 	},
 	serverLink: {
-		//Change to "wss://..." for ssl-secured sockets
-		initBindURL: `ws://${window.location.hostname}:8777/bind?originatingSDP=*`,
-		reconnectURL: `ws://${window.location.hostname}:8777/reconnect`,
+		initBindURL: `wss://${window.location.hostname}:8777/bind?originatingSDP=*`,
+		reconnectURL: `wss://${window.location.hostname}:8777/reconnect`,
 		reconnectInterval: 5000,
 		defaultNoResponseTimeout: 20000,
 	},
