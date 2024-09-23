@@ -42,7 +42,7 @@ Of course, this approach isn't perfect. The benefits of decentralization are ult
 ### 
 Paste the following commands into a terminal to build a complete directory structure and initialize the demo on 127.0.0.1:8000 anywhere with the prerequisities installed.
   ```shell
-  wget Membrane-current.tar.gz https://github.com/Elijah-Bodden/Membrane/tarball/v1.2.1
+  wget Membrane-current.tar.gz https://github.com/Elijah-Bodden/Membrane/tarball/v1.2.2
   tar xfv Membrane-current.tar.gz --transform 's!^[^/]\+\($\|/\)!Membrane-current\1!'
   cd Membrane-current/src/source/frontend
   npm install
@@ -51,19 +51,16 @@ Paste the following commands into a terminal to build a complete directory struc
   npm run deploy
   rm ../../../../Membrane-current.tar.gz
   ```
-  To kill the pm2 daemon created by `npm run deploy`, run `npm run kill`.
-  
-  However, although this demo functions, this does not mean it should be used in production. It is a quick-and-dirty demonstration of the library's abilities, not made for any serious scalable production situation. quoting `./src/source/frontend`'s "`PLEASENOTE.md`", 
-  >Excluding the included `lib` code, the vast majority of the code within this directory and its descendants should never see the light of serious production. It was hastily coded to fit its closed use case. This is nothing more than a demo of the library—far out-of-scope of this project's goal. Please do not treat it as a true part of Membrane. The project begins and ends at `lib`.  
-TL;DR: This code is a great risk to the performance and stability of your frontend. Unlike `lib`, it was not intended as a viable product, and shouldn't be used like one.
+  To kill the pm2 instance created by `npm run deploy`, run `npm run kill`.
+
 ### Deploying a New Signalling Server
 Installing the pre-made server from `/src/source/server/index.noStatic.js` is a piece of cake! Simply enter the following into a terminal while in the root of your node project, sit back, and relax while the project installs.
 ```bash
 npm i membrane-server
 ```
-Then, to deploy the server over pm2 onto websocket port 8777, enter `npm explore membrane-server -- npm run deploy`. Simmilarly, to kill the instance created by this command, run `npm explore membrane-server -- npm run kill`. Now just remember to replace the signalling addresses in your `lib` script's config with your new server's, and you're ready to go.
+Then, to deploy the server over pm2 onto websocket port 8777, enter `npm explore membrane-server -- npm run deploy`. Simmilarly, to kill the instance created by this command, run `npm explore membrane-server -- npm run kill`. Now just remember to replace the websocket addresses in your client's config with your new server's, and you're ready to go.
 ### Custom Applications
-Using the vanilla `lib` module in a custom use-case is relatively simple. Here is an overview of the typical integration process. First, find the delivery method you like below, then, after you've completed its unique instructions, head down below to the general next steps  
+Using the vanilla `lib` module in a custom use-case is relatively simple. Here's a typical integration process. First, find the delivery method you like, then, after you've completed its unique instructions, head down below to the general next steps  
 | Delivery Vector | Instructions |
 ---- | ----
 | npm + Webpack | Run `npm install @elijah-bodden/membrane \| cd node-modules/elijah-bodden/membrane` in the root of your webpack project<sup id="a1">[ \[1\]](#f1)</sup>|
