@@ -18,9 +18,9 @@
 </a>
 </br>
 Robust, minimal-server-interaction peer routing in the browser
-</br>
+<!-- </br>
 Note: much of this repo is production materials. If you're looking for the actual library source, you can find it <a href="https://github.com/Elijah-Bodden/Membrane/blob/main/lib/index.js">here</a>.
-</p>
+</p> -->
 
 ## What  is this?
 The Membrane protocol takes signalling to the browser, creating living peer networks. With minimal server-based bootstrapping, it can create self-sufficient WebRTC peer networks with full self-signaling abilities. The network acts as a giant signaling *membrane*, connecting even the most distant peers quickly, without the need for a server. So long as a node remains a part of the network, it has full contact with every participant. Meanwhile, the network actively stabilizes, minimizing heuristics like minimum node distance to ensure a healthy, well-connected network and giving a seamless "immediate-access-to-anyone" experience.
