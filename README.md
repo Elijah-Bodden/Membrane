@@ -52,7 +52,7 @@ Paste the following commands into a terminal to build a complete directory struc
   ```
   To kill the pm2 instance created by `npm run deploy`, run `npm run kill`.
 
-### Deploying a New Signalling Server
+### Deploying a New First-Contact Signalling Server
 Installing the pre-made server from `/src/source/server/index.noStatic.js` is a piece of cake! Simply enter the following into a terminal while in the root of your node project, sit back, and relax while the project installs.
 ```bash
 npm i membrane-server
@@ -63,26 +63,26 @@ Using the library for your own use-case is relatively simple. Here's a typical i
 | Delivery Method | Instructions |
 ---- | ----
 | npm + Webpack | Run `npm install @elijah-bodden/membrane \| cd node-modules/elijah-bodden/membrane` in the root of your webpack project<sup id="a1">[ \[1\]](#f1)</sup>|
-| HTML script tag | Go to the directory you serve static files from, find where you want to save the script, then run `wget https://raw.githubusercontent.com/Elijah-Bodden/Membrane/main/lib/index.js -o membrane.min.js`. And finally, paste following tag into your HTML head `<script src="/path/to/membrane.min.js"/>`. |
-| Jsdelivr CDN (not recommended) | With this method, you won't need to (can't) follow the general instruction that come after the table; however, you'll be stuck with the default config and every peer request will be accepted by default. If that works, just paste this into your HTML head: `<script src="https://cdn.jsdelivr.net/npm/@elijah-bodden/membrane/index.min.js"` |
+| HTML script tag | Go to the directory you serve static files from and find where you want to save the script. Run `wget https://raw.githubusercontent.com/Elijah-Bodden/Membrane/main/lib/index.js -o membrane.js`, and finally paste `<script src="/path/to/membrane.js"/>` into your HTML head. |
+| Jsdelivr CDN (not recommended) | With this method, you won't need to (can't) follow the general instructions that come after this table. You'll be stuck with the default config and every peer request will be accepted by default. If that works, just paste this into your HTML head: `<script src="https://cdn.jsdelivr.net/npm/@elijah-bodden/membrane/index.min.js"` |
 
 <p align=center><i>then</i></p>
 
 1. (optionally) Modify your script's `CONFIG.communication.configLoaderFunction` as needed in [this](https://github.com/Elijah-Bodden/Membrane/blob/main/docs.md#loading-custom-configurations) form.
 2. (optionally) Create a `CONFIG.communication.routeAcceptHeuristic` either statically in `defaultConfig` or dynamically at runtime through `CONFIG.constants.configLoadFunction`. If you want to allow the user to explicitly accept certain routes, you can include an awaited async function which fetches user responses.
 <!--List Break-->
-At this stage, the script should be capable of standalone function. To verify, serve several instances of it into any relatively-recent `window`-based environment (i.e. a browser) with the [default server](https://github.com/Elijah-Bodden/Membrane#deploying-a-new-signalling-server). If an instance's `livePeers` variable contains at least one `Object`, everything's working.  
+At this point, the script should be able to function on its own. To verify, load a few instances of the script into e.g. a browser with the [default server](https://github.com/Elijah-Bodden/Membrane#deploying-a-new-signalling-server) running. If you `livePeers` contains at least one object when you type it into console, everything's working.  
 Then, to interact with the modlue:
 - Use `negotiateAgnosticAuthRoute` on members of `Object.keys(networkMap.nodes)` to authenticate arbitrary nodes.
 - Use `* Authenticated Peer *.standardSend("consumable", *arbitrary data*)` to send consumable data to authenticated peers.
 - Define an output for consumable data with `onConsumableAuth((_dontUse, data) => {* useData *(data)})`.
-- Provide initial connect and reconnect websocket urls in `CONFIG.serverLink`.
-- Set up a signaling server with the appropriate endpoints and exchange methods (or use the [included](https://github.com/Elijah-Bodden/Membrane#deploying-a-new-signalling-server) one)  
+- Set up a custom first-contact signaling server (or use the [included](https://github.com/Elijah-Bodden/Membrane#deploying-a-new-signalling-server) one)
+- Don't forget to edit the websocket urls in `CONFIG.serverLink` to point to this server.
 ###
 ___
 <b id="f1">1 </b>The following items are able to be imported from the npm module: `CONFIG`, `GossipTransport`, `authPeers`, `deauthPeer`, `defaultConfig`, `detatchedRoute`, `eventHandler`, `eventHandlingMechanism`, `gossipTransport`, `hiddenAliasLookup`, `init`, `initialReferenceLedger`, `livePeers`, `loadConfig`, `mostRecentServerHeartbeat`, `networkMap`, `networkMap`, `onAuthRejected`, `onLivePeersUpdated`, `onPublicError`, `peerConnection`, `pubAliasLookup`, `pubAliasUnparser`, `routingTableTransport`, `serverHardRestart`, and `topologyTransport`. [↩](#a1)
 ## Contributing
-Any and all contributions are greatly appreciated. If you want to see this project grow like I do, there are several ways to help. Firstly, if you see something you think you can improve in the code, please `fork` the repository and make a `pull` request once you have made any changes you'd like to see. If you just have an idea, or spot a bug, that's great too! In this case, please file an `issue` with a corresponding `bug` or `enhancement` tag. Oh, and if you like what you see here, please feel free to leave a star on the project, it would mean a ton to me.
+I appreciate any and all contributions! If you see something you think you can improve in the code, please make a PR. If you just have an idea or spot a bug, that's great too! Please, open an `issue` with either the `bug` or `enhancement` tag. And if you just want to show some love to the project, it'd mean a ton if you left a star!  
 ## Authors
 * **Elijah Bodden** - *Initial work* - [Elijah-Bodden](https://github.com/Elijah-Bodden)
 ## License
