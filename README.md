@@ -53,11 +53,8 @@ Paste the following commands into a terminal to build a complete directory struc
   To kill the pm2 instance created by `npm run deploy`, run `npm run kill`.
 
 ### Deploying a New First-Contact Signalling Server
-Installing the pre-made server from `/src/source/server/index.noStatic.js` is a piece of cake! Simply enter the following into a terminal while in the root of your node project, sit back, and relax while the project installs.
-```bash
-npm i membrane-server
-```
-Then, to deploy the server over pm2 onto websocket port 8777, enter `npm explore membrane-server -- npm run deploy`. Simmilarly, to kill the instance created by this command, run `npm explore membrane-server -- npm run kill`. Now just remember to replace the websocket addresses in your client's config with your new server's, and you're ready to go.
+Installing the pre-made server from `/src/source/server/index.noStatic.js` is a piece of cake! Just run `npm i membrane-server` at the root of your node project, sit back, and relax while it installs.  
+To deploy the server on pm2, run `npm explore membrane-server -- npm run deploy`. To kill the pm2 instance, run `npm explore membrane-server -- npm run kill`. Now just remember to replace the websocket addresses in your client's config with your new server's.
 ### Build Your Own App!
 Using the library for your own use-case is relatively simple. Here's a typical integration process. Find the delivery method you like below, then head down below to the general next steps  
 | Delivery Method | Instructions |
@@ -68,7 +65,8 @@ Using the library for your own use-case is relatively simple. Here's a typical i
 
 <p align=center><i>then</i></p>
 
-1. (optionally) Modify your script's `CONFIG.communication.configLoaderFunction` as needed in [this](https://github.com/Elijah-Bodden/Membrane/blob/main/docs.md#loading-custom-configurations) form.
+THIS IS SHIT -- TODO
+1. (optionally) Modify your script's `CONFIG.communication.configLoaderFunction` in [this](https://github.com/Elijah-Bodden/Membrane/blob/main/docs.md#loading-custom-configurations) form.
 2. (optionally) Create a `CONFIG.communication.routeAcceptHeuristic` either statically in `defaultConfig` or dynamically at runtime through `CONFIG.constants.configLoadFunction`. If you want to allow the user to explicitly accept certain routes, you can include an awaited async function which fetches user responses.
 <!--List Break-->
 At this point, the script should be able to function on its own. To verify, load a few instances of the script into e.g. a browser with the [default server](https://github.com/Elijah-Bodden/Membrane#deploying-a-new-signalling-server) running. If you `livePeers` contains at least one object when you type it into console, everything's working.  
