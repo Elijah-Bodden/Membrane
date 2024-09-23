@@ -2,9 +2,6 @@
 <p align="center">
 <img src="https://img.shields.io/github/license/Elijah-Bodden/membrane?color=blue&label=License"/>
 <img src="https://img.shields.io/github/languages/code-size/Elijah-Bodden/membrane?color=%20%23d0a011%20&label=Raw%20Code%20Size"/>
-<a href="https://membranexus.com">
-<img src="https://img.shields.io/website?label=Website%20Status&url=https%3A%2F%2Fmembranexus.com"/>
-</a>
 <img src="https://img.shields.io/maintenance/yes/2025?label=Maintained"/>
 <a href="https://twitter.com/intent/tweet?text=An+unkillable%2C+browser-based+p2p+network.&url=https%3A%2F%2Fgithub.com%2FElijah-Bodden%2FMembrane&hashtags=webrtc+opensource+p2p+peer2peer+github+projectMembrane&original_referer=http%3A%2F%2Fgithub.com%2F&tw_p=tweetbutton" target="_blank">
   <img src="http://jpillora.com/github-twitter-button/img/tweet.png" title="An unkillable browser-based p2p network."></img>
@@ -23,12 +20,12 @@ Note: much of this repo is production materials. If you're looking for the actua
 </p> -->
 
 ## What's this?
-The Membrane protocol takes signalling to the browser, creating living peer networks. With minimal server-based bootstrapping, it can make self-sufficient peer-to-peer WebRTC networks with full self-signaling capabilities. Instead of relying on centralized signaling servers, members rely on the network itself to pass on information to peers they want to make a new connection with. The network of disconnected peer browsers acts like a unit, tracking its geometry and spreading common knowledge about peers by "gossiping". Meanwhile, it actively stabilizes, with members mimimizing their own eccentricity to give a robust, snappy, immediate-access-to-anyone experience.
+Membrane is a protocol that takes WebRTC signalling to the browser, creating living peer networks. With minimal server-based bootstrapping, it can make self-sufficient peer-to-peer networks that can operate without servers. Any member browser can create a connection to any other by signaling across its peers, avoiding clumsy, centralized signaling servers. The network also self-stabilizes, minmizing its diameter and collectively tracking its status and topology through peer "gossip". The library is designed to be as agnostic as possible, making no-installation web clients for distributed chat, hosting, torrenting, computing, and so much more easy to implement!  
 | ![](./Assets/demo.gif) |
 |:--:|
-| *[Membranexus.com](https://membranexus.com), built using Membrane. After each node's first connection, it never again needs the server to help it connect to other nodes or communicate network information. Its peers do both instead.* |  
+| *[Membranexus.com](https://membranexus.com), built using Membrane. After a first-contact server signal, clients never need to interact with a server again - all network functions can happen on the peer level.* |  
 
-Membrane leverages the `RTCPeerConnection` API's agnosticism about signalling. You could just as well communicate `ICE` connection data through smoke signals or quantum teleportation as through the standard signalling server. In fact, in many cases, signaling servers are an unreliable and vulnerable approach. Membrane attempts to implement a better alternative protocol. With each membrane acting as a giant, decentralized router, distant, unconnected members can exchange arbitrary data in milliseconds with no clumsy intermediary server or risk of downtime.
+Membrane leverages `RTCPeerConnection`'s agnosticism about signalling. You could just as well communicate `ICE` connection data through smoke signals or quantum teleportation as through a standard signalling server. In many cases, signaling servers are an unreliable and vulnerable approach. Membrane attempts to implement a better alternative protocol. With each membrane network acting as a giant, decentralized router, distant, unconnected members can exchange arbitrary data in milliseconds with no clumsy intermediary server or risk of downtime.
 
 Of course, this approach isn't perfect. The benefits of decentralization are ultimately also the fatal flaw. What it gains in robustness and decentralization, it loses in making spoofing and manipulation easier. A decentralized public key ledger for cryptographic signing is WIP, which should largely remedy these issues. And for non trust-critical operations, the existing implementation should be good enough.  
 
@@ -50,7 +47,7 @@ Paste the following commands into a terminal to build a complete directory struc
   npm run deploy
   rm ../../../../Membrane-current.tar.gz
   ```
-  To kill the pm2 instance created by `npm run deploy`, run `npm run kill`.
+  To kill the pm2 instance this creates, run `npm run kill`. To re-spawn it, run `npm run deploy` in `/src/source/server`.
 
 ### Deploying a New First-Contact Signalling Server
 Installing the pre-made server from `/src/source/server/index.noStatic.js` is a piece of cake! Just run `npm i membrane-server` at the root of your node project, sit back, and relax while it installs.  
