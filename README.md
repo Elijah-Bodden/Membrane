@@ -79,7 +79,9 @@ The library has lots of things to play with, but here are some of the most usefu
 - `[instance of peerConnection].onConsumableAuth` lets you provide a callback for recieving consumable packages.
 - `peerConnection.prototype.negotiateAgnosticAuthConnection` will do its best to get you an authenticated connection to the provided hidden alias
 - `sendConsumable` sends specified data as a consumable package to a specified hiddenAlias (only works if you already have an authenticated connection). Consumable packages will likely be the only kind of package you'll need to work with when building applications. 
-###
+#### Custom App Demo
+Here's a tiny demo app that shows off these functions. It's a tiny distributed self-hosting platform, where clients can resources (for example websites) and advertise them to the rest of the network through a custom gossip transport. Using this, peers are able to syncronize across the network and keep track of the available resources. If a peer wants a resource, it creates an agnostic auth route to the target, and the two use an ad-hoc formatting protocol to handle request and response. This way, the dynamic forming and breaking of connections is screened away from the user, and as far as they're concerned, they're directly connected to every single node. With (signed) redundant hosting, where peers host copies of each other's sites, this could be fleshed out into a pretty usable p2p version of the web. Just one example of an interesting use for Membrane. Here's the demo in action:
+![Demo](./Assets/membrane-minimal-demo.gif)
 ## Contributing
 I appreciate any contributions! If you see something you think you can improve in the code, please make a PR. If you just have an idea or spot a bug, that's great too! Please, open an `issue` with either the `bug` or `enhancement` tag. And if you just want to show some love to the project, it'd mean a ton if you left a star!  
 ## Authors
