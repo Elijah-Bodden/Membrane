@@ -60,26 +60,26 @@ You will likely also want to set up coturn TURN and STUN servers and replace the
 Using the library for your own use-case is relatively simple. Here's a typical integration process. Find the delivery method you like below, then head down below to the general next steps  
 | Delivery Method | Instructions |
 ---- | ----
-| npm + Webpack | Run `npm install @elijah-bodden/membrane \| cd node-modules/elijah-bodden/membrane` in the root of your webpack project<sup id="a1">[ \[1\]](#f1)</sup>|
+| npm + Webpack | Run `npm install @elijah-bodden/membrane \| cd node-modules/elijah-bodden/membrane` in the root of your webpack project |
 | HTML script tag | Go to the directory you serve static files from and find where you want to save the script. Run `wget https://raw.githubusercontent.com/Elijah-Bodden/Membrane/main/lib/index.js -o membrane.js`, and finally paste `<script src="/path/to/membrane.js"/>` into your HTML head. |
-| Jsdelivr CDN (not recommended) | With this method, you won't need to (can't) follow the general instructions that come after this table. You'll be stuck with the default config and every peer request will be accepted by default. If that works, just paste this into your HTML head: `<script src="https://cdn.jsdelivr.net/npm/@elijah-bodden/membrane/index.min.js"` |
+| Jsdelivr CDN (recommended) | Simply paste this tag into your HTML head: `<script src="https://cdn.jsdelivr.net/npm/@elijah-bodden/membrane@1.2.1/index.js"></scrípt>` |
 
 <p align=center><i>then</i></p>
 
-THIS IS SHIT -- TODO
-1. (optionally) Modify your script's `CONFIG.communication.configLoaderFunction` in [this](https://github.com/Elijah-Bodden/Membrane/blob/main/docs.md#loading-custom-configurations) form.
-2. (optionally) Create a `CONFIG.communication.routeAcceptHeuristic` either statically in `defaultConfig` or dynamically at runtime through `CONFIG.constants.configLoadFunction`. If you want to allow the user to explicitly accept certain routes, you can include an awaited async function which fetches user responses.
 <!--List Break-->
-At this point, the script should be able to function on its own. To verify, load a few instances of the script into e.g. a browser with the [default server](https://github.com/Elijah-Bodden/Membrane#deploying-a-new-signalling-server) running. If you `livePeers` contains at least one object when you type it into console, everything's working.  
-Then, to interact with the modlue:
-- Use `negotiateAgnosticAuthRoute` on members of `Object.keys(networkMap.nodes)` to authenticate arbitrary nodes.
-- Use `* Authenticated Peer *.standardSend("consumable", *arbitrary data*)` to send consumable data to authenticated peers.
-- Define an output for consumable data with `onConsumableAuth((_dontUse, data) => {* useData *(data)})`.
-- Set up a custom first-contact signaling server (or use the [included](https://github.com/Elijah-Bodden/Membrane#deploying-a-new-signalling-server) one)
-- Don't forget to edit the websocket urls in `CONFIG.serverLink` to point to this server.
+Now comes the fun part - building the thing! You'll likely want to set up your own first-contact signaling server (like [this](https://github.com/Elijah-Bodden/Membrane#deploying-a-new-signalling-server)) and host it publicly so people can use your app from all different networks. Don't forget to edit the websocket urls in `CONFIG.serverLink` to point to it (or pass a config loader into init and do that without editing the source - how to do that next)!
+
+The library has lots of things to play with, but here are some of the most useful (also check out the demo below to see them in use):
+- `init` - Call this function to create a fully-functional, self contained client that will join your network if any exists.
+- You can also define your own config loader function and pass it as a parameter to init. Its return value should look like [this](https://github.com/Elijah-Bodden/Membrane/blob/main/docs.md#loading-custom-configurations).
+- If you want to make new data fields that are syncronized across the network the way the network map is, you'll need `gossipTransport`. Create a new type with `gossipTransport.addType`, use `gossipTransport.addParser` to tell it how to handle this type, and use `[gossip type you created].addGossip()` to broadcast gossip across the network.
+- `Object.keys(networkMap.nodes)` is the hidden alias of every node on the network. `livePeers` is an object mapping the hidden alias of every peer the client has a direct connection to, to said client. `authPeers` is the list of all peers the client has consumable send permissions for.
+- `networkMap.onUpdate` lets you track topology changes
+- `onAuthPeersUpdated` lets you track changes to `authPeers`
+- `[instance of peerConnection].onConsumableAuth` lets you provide a callback for recieving consumable packages.
+- `peerConnection.prototype.negotiateAgnosticAuthConnection` will do its best to get you an authenticated connection to the provided hidden alias
+- `sendConsumable` sends specified data as a consumable package to a specified hiddenAlias (only works if you already have an authenticated connection). Consumable packages will likely be the only kind of package you'll need to work with when building applications. 
 ###
-___
-<b id="f1">1 </b>The following items are able to be imported from the npm module: `CONFIG`, `GossipTransport`, `authPeers`, `deauthPeer`, `defaultConfig`, `detatchedRoute`, `eventHandler`, `eventHandlingMechanism`, `gossipTransport`, `hiddenAliasLookup`, `init`, `initialReferenceLedger`, `livePeers`, `loadConfig`, `mostRecentServerHeartbeat`, `networkMap`, `networkMap`, `onAuthRejected`, `onLivePeersUpdated`, `onPublicError`, `peerConnection`, `pubAliasLookup`, `pubAliasUnparser`, `routingTableTransport`, `serverHardRestart`, and `topologyTransport`. [↩](#a1)
 ## Contributing
 I appreciate any contributions! If you see something you think you can improve in the code, please make a PR. If you just have an idea or spot a bug, that's great too! Please, open an `issue` with either the `bug` or `enhancement` tag. And if you just want to show some love to the project, it'd mean a ton if you left a star!  
 ## Authors
