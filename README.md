@@ -80,8 +80,161 @@ The library has lots of things to play with, but here are some of the most usefu
 - `peerConnection.prototype.negotiateAgnosticAuthConnection` will do its best to get you an authenticated connection to the provided hidden alias
 - `sendConsumable` sends specified data as a consumable package to a specified hiddenAlias (only works if you already have an authenticated connection). Consumable packages will likely be the only kind of package you'll need to work with when building applications. 
 #### Custom App Demo
-Here's a tiny demo app that shows off these functions. It's a tiny distributed self-hosting platform, where clients can resources (for example websites) and advertise them to the rest of the network through a custom gossip transport. Using this, peers are able to syncronize across the network and keep track of the available resources. If a peer wants a resource, it creates an agnostic auth route to the target, and the two use an ad-hoc formatting protocol to handle request and response. This way, the dynamic forming and breaking of connections is screened away from the user, and as far as they're concerned, they're directly connected to every single node. With (signed) redundant hosting, where peers host copies of each other's sites, this could be fleshed out into a pretty usable p2p version of the web. Just one example of an interesting use for Membrane. Here's the demo in action:
+Here's a tiny demo app that shows off how to build an app on membrane. It's a tiny distributed self-hosting platform, where clients can publish resources (for example websites) and advertise them to the rest of the network through a custom gossip transport. If a peer wants a resource, it creates an agnostic auth route to the target, and the two use an ad-hoc formatting protocol to handle request and response. The actual structure of the network is screened off from the user, so as far as they're concerned, they're directly connected to every single node. With (signed) redundant hosting, where peers host copies of each other's sites, this could be fleshed out into a pretty usable p2p version of the web. Here's the demo in action:  
+
+
 ![Demo](./Assets/membrane-minimal-demo.gif)
+
+
+And here's the code
+```js
+// index.js
+var selfHostingTransport
+var resourceLocations = {}
+var myResources = {}
+document.addEventListener("DOMContentLoaded", function() {
+    resourceList = document.getElementById("resource-list")
+    resourceDisplay = document.getElementById("resource-display")
+})
+
+async function configLoadFunction() {
+    return {
+            "serverLink.initBindURL": "ws://localhost:8777/bind?originatingSDP=*",
+            "serverLink.reconnectURL": "ws://localhost:8777/reconnect",
+            "communication.publicAlias": "Random person",
+        }
+}
+
+// Can only add gossip transports after init
+init(configLoadFunction).then(async () => {
+    // This transport will broadcast each peer's content list
+    selfHostingTransport = gossipTransport.addType("contentList");
+    // When we get gossip about content lists, edit our content list
+    gossipTransport.addParser(
+        "contentList",
+        // Means we use the default pre-parser. Automatically handles passing gossip along for us
+        true,
+        // block = all gossip; commitable = all gossip, but only the "constantParameter" fields - ones that the transport uses to decide if gossip is new; unknown = all new gossip
+        async function (_block, _committable, unknown) {
+            unknown.forEach((fact) => {
+                if (networkMap.nodes[fact.alias]) {
+                    resourceLocations[fact.alias] = fact.content
+                    // Rerender resource list if it's currently visible
+                    if (resourceList.innerHTML !== "") {
+                        renderResourceList()
+                    }            
+                }
+            });
+        },
+        // constantParameters - in this case each gossip has a uniqe ID to make sure it doesn't circulate the network infinitely
+        ["UID"]
+    );
+})
+
+networkMap.onUpdate((_sig, externalDetail) => {
+    let modification = externalDetail[0]
+    // Will be a tuple of aliases if it's an edge change, but we're only interested in node changes
+    let alias = externalDetail[1]
+    if (modification === "addNode") {
+        // Add a content tracker for every new node
+        resourceLocations[alias] = []
+    }
+    if (modification === "removeNode") {
+        // Delete our tracker for a node's content when it leaves
+        delete resourceLocations[alias]
+    }
+});
+
+onAuthPeersUpdated((__sig, externalDetail) => {
+    // When we get a new auth peer
+    if (externalDetail[0] === "addition") {
+        // Give it a callback for consumable packages
+        livePeers[externalDetail[1]].onConsumableAuth((__sig, detail) => {
+            // If it's a lookup request (defined by our arbitrary formatting protocol), give a response
+            if (detail.startsWith("lookup: ")) {
+                lookupResponse(externalDetail[1], myResources[detail.slice(8)])
+            }
+            else if (detail.startsWith("resource: ")) {
+                // And render if it's a lookup response
+                renderResourceDisplay(detail.slice(9))
+            }
+            else {
+                console.error("Unknown consumable package: " + detail)
+            }
+        })
+    }
+})
+
+async function lookupRequest(alias, location) {
+    if (!Object.keys(networkMap.nodes).includes(alias)) { 
+        return
+    }
+    // Make a route to the resource host if we don't already have one. This is screened off from the user.
+    if (!authPeers.includes(alias)) {
+        // Try to create an auth connection to the given alias
+        console.log("Making auth connection to " + alias)
+        await peerConnection.prototype.negotiateAgnosticAuthConnection(alias)
+    }
+    sendConsumable(alias, {raw: "lookup: " + location})
+}
+
+async function lookupResponse(alias, resource) {
+    if (!Object.keys(networkMap.nodes).includes(alias) || alias === CONFIG.communication.hiddenAlias) { 
+        return
+    }
+    sendConsumable(alias, {raw: "resource: " + resource})
+}
+
+async function publishResource(location, resource) {
+    // Add the resource to our list
+    myResources[location] = resource
+}
+
+// Broadcast our resource list every 1 second
+setInterval(() => {
+    selfHostingTransport.addGossip({alias: CONFIG.communication.hiddenAlias, content: Object.keys(myResources), UID: Math.random().toString().slice(2, 17)})
+}, 1000);
+
+function renderResourceList() {
+    resourceList.innerHTML = ""
+    resourceDisplay.innerHTML = ""
+    for (let i in resourceLocations) {
+        resourceList.innerHTML += `<p>${hiddenAliasLookup[i]}</p><ul>`
+        for (let j of resourceLocations[i]) {
+            resourceList.innerHTML += `<li><a href="#" onclick="lookupRequest('${i}', '${j}')">${j}</a></li>`
+        }   
+    }
+}
+
+function renderResourceDisplay(resource) {
+    let resourceDisplay = document.getElementById("resource-display")
+    resourceDisplay.innerHTML = resource
+    resourceList.innerHTML = ""
+    resourceDisplay.innerHTML += "<br><button onclick='renderResourceList()'>Back</button>"
+}
+```
+```html
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>P2P hosting</title>
+        <script src="https://cdn.jsdelivr.net/npm/@elijah-bodden/membrane@1.2.2/index.js" type="text/javascript"></script>
+        <script src="index.js"></script>
+    </head>
+    <body>
+        <h1>P2P self-hosting</h1>
+        <div id="resource-list">(No sites up right now)</div>
+        <div id="resource-display"></div>
+        <textarea id="resource-writer" rows="5" cols="50" placeholder="Your site"></textarea>
+        <textarea id="name-field" rows="1" cols="10" placeholder="Site name"></textarea>
+        <button onclick="publishResource(document.getElementById('name-field').value, document.getElementById('resource-writer').value)">Publish</button>
+    </body>
+</html>
+```
 ## Contributing
 I appreciate any contributions! If you see something you think you can improve in the code, please make a PR. If you just have an idea or spot a bug, that's great too! Please, open an `issue` with either the `bug` or `enhancement` tag. And if you just want to show some love to the project, it'd mean a ton if you left a star!  
 ## Authors
