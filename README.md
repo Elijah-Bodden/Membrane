@@ -62,7 +62,7 @@ Using the library for your own use-case is relatively simple. Here's a typical i
 ---- | ----
 | npm + Webpack | Run `npm install @elijah-bodden/membrane \| cd node-modules/elijah-bodden/membrane` in the root of your webpack project |
 | HTML script tag | Go to the directory you serve static files from and find where you want to save the script. Run `wget https://raw.githubusercontent.com/Elijah-Bodden/Membrane/main/lib/index.js -o membrane.js`, and finally paste `<script src="/path/to/membrane.js"/>` into your HTML head. |
-| Jsdelivr CDN (recommended) | Simply paste this tag into your HTML head: `<script src="https://cdn.jsdelivr.net/npm/@elijah-bodden/membrane@1.2.1/index.js"></scrípt>` |
+| Jsdelivr CDN (recommended) | Simply paste this tag into your HTML head: `<script src="https://cdn.jsdelivr.net/npm/@elijah-bodden/membrane@1.2.2/index.js"></scrípt>` |
 
 <p align=center><i>then</i></p>
 
