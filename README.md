@@ -74,7 +74,7 @@ The library has lots of things to play with, but here are some of the most usefu
 - You can also define your own config loader function and pass it as a parameter to init. Its return value should look like [this](https://github.com/Elijah-Bodden/Membrane/blob/main/docs.md#loading-custom-configurations).
 - If you want to make new data fields that are syncronized across the network the way the network map is, you'll need `gossipTransport`. Create a new type with `gossipTransport.addType`, use `gossipTransport.addParser` to tell it how to handle this type, and use `[gossip type you created].addGossip()` to broadcast gossip across the network.
 - `Object.keys(networkMap.nodes)` is the hidden alias of every node on the network. `livePeers` is an object mapping the hidden alias of every peer the client has a direct connection to, to said client. `authPeers` is the list of all peers the client has consumable send permissions for.
-- `networkMap.onUpdate` lets you track topology changes
+- `onNetworkMapUpdate` lets you track topology changes
 - `onAuthPeersUpdated` lets you track changes to `authPeers`
 - `[instance of peerConnection].onConsumableAuth` lets you provide a callback for recieving consumable packages.
 - `peerConnection.prototype.negotiateAgnosticAuthConnection` will do its best to get you an authenticated connection to the provided hidden alias
