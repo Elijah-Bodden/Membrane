@@ -16,7 +16,7 @@
 </br>
 Robust, server-minimal peer routing in the browser  
 <!-- </br>
-Note: much of this repo is production materials. If you're looking for the actual library source, you can find it <a href="https://github.com/Elijah-Bodden/Membrane/blob/main/lib/index.js">here</a>.
+Note: most of this repo is materials for membranexus.com, the project's main demo. If you're looking for the actual library, you can find it <a href="https://github.com/Elijah-Bodden/Membrane/blob/main/lib/index.js">here</a>.
 </p> -->
 
 ## What's this?
