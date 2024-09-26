@@ -120,9 +120,7 @@ init(configLoadFunction).then(async () => {
                 if (networkMap.nodes[fact.alias]) {
                     resourceLocations[fact.alias] = fact.content
                     // Rerender resource list if it's currently visible
-                    if (resourceList.innerHTML !== "") {
-                        renderResourceList()
-                    }            
+                    reRenderResourceList()
                 }
             });
         },
@@ -131,58 +129,60 @@ init(configLoadFunction).then(async () => {
     );
 })
 
-networkMap.onUpdate((_sig, externalDetail) => {
-    let modification = externalDetail[0]
+onNetworkMapUpdate((kind, info) => {
     // Will be a tuple of aliases if it's an edge change, but we're only interested in node changes
-    let alias = externalDetail[1]
-    if (modification === "addNode") {
+    let alias = info
+    if (kind === "addNode") {
         // Add a content tracker for every new node
         resourceLocations[alias] = []
     }
-    if (modification === "removeNode") {
+    if (kind === "removeNode") {
         // Delete our tracker for a node's content when it leaves
         delete resourceLocations[alias]
     }
+    // Rerender the resource list every time the network map updates
+    // If the DOM hasn't loaded yet, we'll have to wait until it does
+    if (!document.body) {
+        document.addEventListener("DOMContentLoaded", () => {
+            reRenderResourceList()
+        })
+        return
+    }
+    reRenderResourceList()
 });
 
-onAuthPeersUpdated((__sig, externalDetail) => {
-    // When we get a new auth peer
-    if (externalDetail[0] === "addition") {
-        // Give it a callback for consumable packages
-        livePeers[externalDetail[1]].onConsumableAuth((__sig, detail) => {
-            // If it's a lookup request (defined by our arbitrary formatting protocol), give a response
-            if (detail.startsWith("lookup: ")) {
-                lookupResponse(externalDetail[1], myResources[detail.slice(8)])
-            }
-            else if (detail.startsWith("resource: ")) {
-                // And render if it's a lookup response
-                renderResourceDisplay(detail.slice(9))
-            }
-            else {
-                console.error("Unknown consumable package: " + detail)
-            }
-        })
-    }
+onNewAuthPeer((alias) => {
+    // Give it a callback for consumable packages
+    onConsumable(alias, (request) => {
+        // If it's a lookup request (defined by our arbitrary formatting protocol), give a response
+        if (request.startsWith("lookup: ")) {
+            lookupResponse(alias, myResources[request.slice(8)])
+        }
+        else if (request.startsWith("resource: ")) {
+            // And render if it's a lookup response
+            renderResourceDisplay(request.slice(9))
+        }
+        else {
+            console.error("Unknown consumable package: " + request)
+        }
+    })
 })
 
 async function lookupRequest(alias, location) {
-    if (!Object.keys(networkMap.nodes).includes(alias)) { 
+    if (alias === CONFIG.communication.hiddenAlias) {
+        renderResourceDisplay(myResources[location])
         return
     }
     // Make a route to the resource host if we don't already have one. This is screened off from the user.
-    if (!authPeers.includes(alias)) {
-        // Try to create an auth connection to the given alias
-        console.log("Making auth connection to " + alias)
-        await peerConnection.prototype.negotiateAgnosticAuthConnection(alias)
-    }
-    sendConsumable(alias, {raw: "lookup: " + location})
+    // If we already have a connection, this will do nothing
+    await makeConnection(alias, true)
+    onAuth(alias, () => {
+        sendConsumable(alias, "lookup: " + location)
+    })
 }
 
 async function lookupResponse(alias, resource) {
-    if (!Object.keys(networkMap.nodes).includes(alias) || alias === CONFIG.communication.hiddenAlias) { 
-        return
-    }
-    sendConsumable(alias, {raw: "resource: " + resource})
+    sendConsumable(alias, "resource: " + resource)
 }
 
 async function publishResource(location, resource) {
@@ -207,10 +207,15 @@ function renderResourceList() {
 }
 
 function renderResourceDisplay(resource) {
-    let resourceDisplay = document.getElementById("resource-display")
     resourceDisplay.innerHTML = resource
     resourceList.innerHTML = ""
     resourceDisplay.innerHTML += "<br><button onclick='renderResourceList()'>Back</button>"
+}
+
+function reRenderResourceList() {
+    if (resourceList.innerHTML !== "") {
+        renderResourceList()
+    }
 }
 ```
 ```html
@@ -222,7 +227,7 @@ function renderResourceDisplay(resource) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>P2P hosting</title>
-        <script src="https://cdn.jsdelivr.net/npm/@elijah-bodden/membrane@1.2.2/index.js" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@elijah-bodden/membrane@2.1.1/index.js" type="text/javascript"></script>
         <script src="index.js"></script>
     </head>
     <body>
