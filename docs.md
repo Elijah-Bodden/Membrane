@@ -7,6 +7,7 @@
 - `peerConnection.prototype.negotiateAgnosticAuthConnection` will do its best to get you an authenticated connection to the provided hidden alias
 - `sendConsumable` sends specified data as a consumable package to a specified hiddenAlias (only works if you already have an authenticated connection). Consumable packages will likely be the only kind of package you'll need to work with when building applications. 
 
+## Useful exports
 - `init`: initializes a fully-functional, self contained client that will join your network if any exists. Params: `configLoadFunction (optional)`
 ##### Aside: configLoadFunction:
 Preferences are loaded into the `CONFIG` object when the script run. The pre-filled [`defaultConfig`](https://github.com/Elijah-Bodden/Membrane/blob/2ae86422b14dda2b2da0b4345580c387713e1988/lib/index.js#L11) acts as base, with `configLoadFunction` providing selected values to swap out. These substitutions should be formatted like:
