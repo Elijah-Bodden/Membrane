@@ -29,7 +29,7 @@ The library is designed to be as agnostic as possible, making no-installation we
 
 Membrane leverages `RTCPeerConnection`'s agnosticism about signalling. You could just as well communicate `ICE` connection data through smoke signals or quantum teleportation as through a standard signalling server. In many cases, signaling servers are an unreliable and vulnerable approach. Membrane attempts to implement a better alternative protocol. With each membrane network acting as a giant, decentralized router, unconnected members on opposite sides of the earth can exchange arbitrary data in milliseconds, with no clumsy intermediary server or risk of downtime.
 
-Of course, this approach isn't perfect. The benefits of decentralization are ultimately also the fatal flaw. What it gains in robustness and decentralization, it loses in making spoofing and manipulation easier. A decentralized public key ledger for cryptographic signing is WIP, which should largely remedy these issues. And for non trust-critical operations, the existing implementation should be good enough.  
+Of course, this approach isn't perfect. The benefits of decentralization are ultimately also the fatal flaw. What it gains in robustness and decentralization, it loses in making spoofing and manipulation easier. A public key ledger for cryptographic signing is WIP, which should largely remedy these issues (it will likely be served up by the signaling server on initial connectioen, which isn't a problem, since new peers can only be added when the server's up). And for non trust-critical operations, the existing implementation should be good enough.  
 
 ## Installation and Integation
 ### Installing the Demo or Building From Source
