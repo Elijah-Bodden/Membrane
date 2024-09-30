@@ -1,5 +1,5 @@
 ## Exports
-- `init`: initializes a fully-functional, self contained client that will join your network if any exists. Params: `configLoadFunction (optional)`
+- `init`: initializes a self contained client that will join your network if any exists. Params: `configLoadFunction (optional)`
 ##### Aside: configLoadFunction:
 Preferences are loaded into the `CONFIG` object when the script run. The pre-filled [`defaultConfig`](https://github.com/Elijah-Bodden/Membrane/blob/2ae86422b14dda2b2da0b4345580c387713e1988/lib/index.js#L11) acts as base, with `configLoadFunction` providing selected values to swap out. These substitutions should be formatted like:
     `
@@ -18,7 +18,7 @@ You can convert from hidden aliases to public aliases with `hiddenAliasLookup`, 
 - `livePeers`: on object mapping `hiddenAliases` of peers the client is connected to onto the `peerConnection` instances of those peers.
 - `authPeers`: an array containing the `hiddenAliases` of all the client's "authenticated" peers
 ##### Aside: authentication
-Authenticated peers are peers that the client has agreed to recieve `consumable` packages from. Packages are information structures used in communication between peers. Consumable packages are the kind package used on the application level. Consumable packages will likely be the only kind of package you'll need to explicitly worry about, so authentication effectively grants a connection the right to send data. There will be many un-authenticated structural connections, but these aren't directly relevant to applications.  
+Authenticated peers are peers that the client has agreed to recieve `consumable` packages from. Packages are information structures peers use for communication. Consumable packages are the kind package used on the application level - likely the only kind library users will need to work with. There are many un-authenticated structural connections, but they're only used for internal things like routing and gossip.  
 - `makeConnection`: tries to create a `PeerConnection` (passing signaling information through neighbors if necessary). Params: `alias` - the hidden alias of the target; `wantAuth` - boolean. If you already have a non-auth connection to a peer, calling this with `wantAuth` will attempt to upgrade the connection to an auth connection. A `PeerConnection` to the target if successful. Throws an error if unsuccessful (e.g. the target rejects the request).
 - `onNewAuthPeer`: triggers whenever a new peer gets added to `authPeers`. Params: `callback` (can accept one parameter, the alias of the new peer)
 - `onLostAuthPeer`: same as `onNewAuthPeer` but for when an auth peer gets removed.
