@@ -15,9 +15,9 @@
 </a>
 </br>
 Robust, server-minimal peer routing in the browser  
-<!-- </br>
+</br>
 Note: most of this repo is materials for membranexus.com, the project's main demo. If you're looking for the actual library, you can find it <a href="https://github.com/Elijah-Bodden/Membrane/blob/main/lib/index.js">here</a>.
-</p> -->
+</p>
 
 ## What's this?
 Membrane is a protocol that takes WebRTC signalling to the browser, creating living peer networks. With minimal server-based bootstrapping, it can make self-sufficient peer-to-peer networks that can operate without servers. Any member browser can create a connection to any other by signaling across its peers, avoiding clumsy, centralized signaling servers. The network also self-stabilizes, minmizing its diameter and collectively tracking its status and topology through peer "gossip".
