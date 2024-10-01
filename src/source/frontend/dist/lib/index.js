@@ -648,12 +648,20 @@ class AbstractMap {
 
 networkMap = new AbstractMap();
 
-networkMap.onUpdate((_sig, externalDetail) => {
-	if (Object.keys(livePeers).length != 1 || externalDetail[0] != "addNode") return;
-	setTimeout(() => {
-		peerConnection.prototype.stabilizeLink().catch(() => {});
-	}, 500);
-});
+// Try and stabilize link every second that we only have one peer
+var linkStabilizing = false;
+setInterval(async () => {
+  if (Object.keys(livePeers).length === 1 && !linkStabilizing) {
+    linkStabilizing = true;
+    try {
+      await PeerConnection.prototype.stabilizeLink();
+    } catch (error) {
+      linkStabilizing = false;
+      throw error;
+    }
+    linkStabilizing = false;
+  }
+}, 1000);
 
 class crudeQueue {
 	constructor() {
