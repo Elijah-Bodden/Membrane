@@ -56,7 +56,7 @@ var recentlyClickedNode;
 const mod = new modifierHandler();
 const container = document.getElementById("graphContainer");
 const suggestionsList = document.querySelector("#search-opts");
-const nodeDismissHandler = new EventHandler();
+const nodeDismissHandler = new eventHandlingMechanism();
 const state = {
 	activeNode: undefined,
 	searchQuery: "",
@@ -184,9 +184,13 @@ renderer.setSetting("edgeReducer", (edge, data) => {
 });
 
 function setSearchQuery(query) {
+	if (!CONFIG.UI.renderUnfamiliarPublicAliases) {
+		suggestionsList.innerHTML = "";
+		return;
+	}
 	state.searchQuery = query;
 	if (query) {
-		const lcQuery = query.toLowerCase();
+		const lcQuery = escapeHTML(query.toLowerCase());
 		let suggestions = Object.keys(networkMap.nodes).filter((node) => {
 			try {
 				return hiddenAliasLookup[node].toLowerCase().indexOf(lcQuery) != -1;
@@ -309,7 +313,9 @@ networkMap.onUpdate(async (_sig, externalDetail) => {
 					label:
 						externalDetail[1] === CONFIG.communication.hiddenAlias
 							? "𝙈𝙚"
-							: hiddenAliasLookup[externalDetail[1]],
+							: CONFIG.UI.renderUnfamiliarPublicAliases
+							? hiddenAliasLookup[externalDetail[1]]
+							: externalDetail[1],
 					size: externalDetail[1] === CONFIG.communication.hiddenAlias ? 10 : 5,
 					color: statusColors.Neutral,
 					type: externalDetail[1] === CONFIG.communication.hiddenAlias ? "server" : "unrelated",
@@ -457,7 +463,7 @@ async function nodeClick(event) {
 		activateNode(event.node);
 		if (mod.ALT) {
 			if (event.node === "server" || event.node === CONFIG.communication.hiddenAlias) return;
-			makeConnection(event.node, true);
+			peerConnection.prototype.negotiateAgnosticAuthConnection(event.node);
 		}
 	}, 10);
 	if (recentlyClickedNode === event.node) {
