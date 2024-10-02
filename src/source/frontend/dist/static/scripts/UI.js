@@ -221,8 +221,8 @@ window.onload = function () {
             if (
                 !eventHandler.handlerFrame[`consumableAuth | ${livePeers[alias].internalUID}`]
             )
-                livePeers[alias].onConsumableAuth((_signal, _externalDetail_) => {
-                    fusedStream.log(alias, _externalDetail_, "remote", [
+                onConsumableAuth(alias, consumable => {
+                    fusedStream.log(alias, consumable, "remote", [
                         "message-card-unread",
                     ]);
                 });
