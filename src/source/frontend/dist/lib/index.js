@@ -651,6 +651,7 @@ networkMap = new AbstractMap();
 // Try and stabilize link every second that we only have one peer
 var linkStabilizing = false;
 setInterval(async () => {
+  console.log(linkStabilizing)
   if (Object.keys(livePeers).length === 1 && !linkStabilizing) {
     linkStabilizing = true;
     try {
