@@ -654,7 +654,7 @@ setInterval(async () => {
   if (Object.keys(livePeers).length === 1 && !linkStabilizing) {
     linkStabilizing = true;
     try {
-      await PeerConnection.prototype.stabilizeLink();
+      await peerConnection.prototype.stabilizeLink();
     } catch (error) {
       linkStabilizing = false;
       throw error;
