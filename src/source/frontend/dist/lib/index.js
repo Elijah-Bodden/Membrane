@@ -900,9 +900,6 @@ class peerConnection {
 					obviatePeerError(destination);
 					return;
 				}
-				if (desiredPermissions === "advanced") {
-					addAuthPeer(destination);
-				}
 				indicateRouteAccepted(destination);
 		}
 	}
