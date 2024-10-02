@@ -785,7 +785,9 @@ class peerConnection {
 			);
 		await this.transport.connection.setLocalDescription(await this.transport.connection.createOffer());
 		const concurrentICEDifferentiator = Math.floor(Math.random() * 1000);
+		console.log(2324134)
 		this.transport.connection.onicecandidate = async ({ candidate }) => {
+			console.log("aststat")
 			if (candidate) return;
 			eventHandler.dispatch(`exhaustedICECandidates | ${concurrentICEDifferentiator}`);
 		};
@@ -855,7 +857,9 @@ class peerConnection {
 		if (Object.keys(livePeers).includes(destination))
 			throw new Error(`Direct route already exists to requested node ${destination}`);
 		const generatedChannel = new peerConnection(desiredPermissions);
+		console.log("test")
 		const SDP = JSON.stringify(await generatedChannel.makeOffer());
+		console.log("hi")
 		const routeID = Math.random().toString().slice(2, 12);
 		var result;
 		try {
