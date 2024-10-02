@@ -140,7 +140,7 @@
         <nav id="node-context" class="context border-surround">
           <li class="context-item">
             <button class="context-button border-surround"
-              onclick="(event => {peerConnection.prototype.negotiateAgnosticAuthConnection(event.target.parentElement.parentElement.getAttribute('data-caller'))})(event)">
+              onclick="(event => {makeConnection(event.target.parentElement.parentElement.getAttribute('data-caller'), true)})(event)">
               Send message request
             </button>
           </li>
@@ -160,7 +160,7 @@
           <nav id="post-context" class="context border-surround">
             <li class="context-item">
               <button class="context-button border-surround"
-                onclick="navigator.clipboard.writeText(`${CONFIG.UI.renderUnfamiliarPublicAliases ? (hiddenAliasLookup[event.target.parentElement.parentElement.getAttribute('data-sender')] ?? event.target.parentElement.parentElement.getAttribute('data-sender')) : event.target.parentElement.parentElement.getAttribute('data-sender')}: ${event.target.parentElement.parentElement.getAttribute('data-content')}`)">
+                onclick="navigator.clipboard.writeText(`${hiddenAliasLookup[event.target.parentElement.parentElement.getAttribute('data-sender')] ?? event.target.parentElement.parentElement.getAttribute('data-sender')}: ${event.target.parentElement.parentElement.getAttribute('data-content')}`)">
                 Copy as Plain Text
               </button>
             </li>
