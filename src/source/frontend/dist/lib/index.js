@@ -67,6 +67,7 @@ var defaultConfig = {
 };
 
 var CONFIG;
+var effectiveFirstVisit = false;
 const livePeers = {};
 const authPeers = [];
 const currentlyAuthenticating = [];
