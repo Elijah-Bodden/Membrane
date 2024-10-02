@@ -1639,37 +1639,4 @@ function onAuth(alias, callback) {
   authPeerAddListener.addListener(alias, callback);
 }
 
-if (typeof process === "object") {
-  module.exports = {
-	init,
-    CONFIG,
-	defaultConfig,
-    GossipTransport,
-    ServerConnection,
-	EventHandler,
-	NetworkMap,
-	PeerConnection,
-	Queue,
-	gossipTransport,
-	serverConnection,
-	eventHandler,
-	networkMap,
-	livePeers,
-	authPeers,
-	pubAliasLookup,
-	hiddenAliasLookup,
-	pubAliasUnparser,
-	onNetworkMapUpdate,
-	makeConnection,
-	deauthPeer,
-	onNewPeer,
-	onNewAuthPeer,
-	onAuthRejected,
-	onLostPeer,
-	onLostAuthPeer,
-	onConsumable,
-	onServerError,
-	onAuth,
-	sendConsumable
-  };
-}
+init()
