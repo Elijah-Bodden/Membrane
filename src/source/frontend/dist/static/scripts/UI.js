@@ -1,5 +1,3 @@
-/** @format */
-
 window.addEventListener("DOMContentLoaded", async function () {
 	document.querySelector("#searchEntryField").value = "";
 	fusedStream = new FusedStream("messageFeedPane", "#messageSequence");
@@ -128,19 +126,12 @@ window.onload = function () {
 				exportToLS("doTURN", toggle.checked);
 				writeSetting("rtc.ICEpresets.iceServers", toggle.checked ? STUNOnly : allICEServers);
 				return;
-			} else if (toggle.dataset.objective === "communication.moderateMapInstabilityTolerance") {
-				writeSetting(toggle.dataset.objective, !toggle.checked);
-				return;
 			}
 			writeSetting(toggle.dataset.objective, toggle.checked);
 		});
 	});
 	Array.from(document.querySelectorAll(".settingsToggle")).forEach((element) => {
 		if (Object.keys(JSON.parse(localStorage.config ?? "{}")).includes(element.dataset.objective)) {
-			if (element.dataset.objective === "communication.moderateMapInstabilityTolerance") {
-				element.checked = !JSON.parse(localStorage.config)[element.dataset.objective];
-				return;
-			}
 			element.checked = JSON.parse(localStorage.config)[element.dataset.objective];
 		}
 	});
@@ -149,19 +140,17 @@ window.onload = function () {
 			element.value = JSON.parse(localStorage.config)[element.dataset.objective];
 		}
 	});
-	onAuthRejected((_sig, externalDetail) => {
+	onAuthRejected(alias => {
 		eventStream.log(
 			"system",
 			`Authentication request rejected by ${
-				CONFIG.UI.renderUnfamiliarPublicAliases
-					? hiddenAliasLookup[externalDetail] ?? externalDetail
-					: externalDetail
+                hiddenAliasLookup[alias] ?? alias
 			}`,
 			"transient",
 			["align-center", "system-message-card-error", "message-card-slim"]
 		);
 	});
-	onPublicError(async (_sig, externalDetail) => {
+	onServerError(async (message, stack) => {
 		var blurWrapper = document.createElement("div");
 		blurWrapper.style.position = "absolute";
 		blurWrapper.style.left =
@@ -189,7 +178,7 @@ window.onload = function () {
 		);
 		document.querySelector(
 			".fatalBody"
-		).innerHTML = `<div class="center">Oh no! Something went wrong!</div><br><br>If you want to retry, just reload the page. If this error persits, feel free to email <b>admin@membranexus.com</b> with this stack trace:<div class="center"></div><br>${externalDetail[0]}<br>[stack]<br>${externalDetail[1]}</div>`;
+		).innerHTML = `<div class="center">Oh no! Something went wrong!</div><br><br>If you want to retry, just reload the page. If this error persits, feel free to email <b>admin@membranexus.com</b> with this stack trace:<div class="center"></div><br>${message}<br>[stack]<br>${stack}</div>`;
 		document.querySelector(".fatalWrapper").style.visibility = "visible";
 	});
 	if (!JSON.parse(localStorage.config ?? "{}")["UI.renderUnfamiliarPublicAliases"]) {
@@ -201,66 +190,66 @@ window.onload = function () {
 	connectioncardcontext = new standardContextMenu("connection-card-context", "connectedNodesPane");
 	connectionspanel = new connectionsPanel();
 	connectionspanel.renderConnectionCards();
-	onLivePeersUpdated(() => {
-		Object.keys(eventHandler.dispatchWatchers)
-			.filter((id) => id.slice(0, 25) === "authenticationAuthorized|")
-			.forEach((relevantKey) => {
-				if (!Object.keys(livePeers).includes(relevantKey.split("|")[1])) {
-					eventHandler.forceReject(
-						relevantKey,
-						"The associated peer died before the route could be authenticated."
-					);
-				}
-			});
-	});
-	onAuthPeersUpdated((_signalID, externalDetail) => {
-		if (externalDetail[0] == "addition") {
-			if (livePeers[externalDetail[1]]) {
-				fusedStream.addAndLoadPeerStream(externalDetail[1]);
-				if (eventStream.dontAlert.includes(externalDetail[1])) {
-					eventStream.dontAlert.splice(eventStream.dontAlert.indexOf(externalDetail[1]), 1);
-				} else {
-					eventStream.log(
-						"system",
-						`Successfully authenticated peer session with ${
-							CONFIG.UI.renderUnfamiliarPublicAliases
-								? hiddenAliasLookup[externalDetail[1]] ?? externalDetail[1]
-								: externalDetail[1]
-						}`,
-						"transient",
-						["align-center", "system-message-card-success", "message-card-slim"]
-					);
-				}
-				if (
-					!eventHandler.handlerFrame[`consumableAuth | ${livePeers[externalDetail[1]].internalUID}`]
-				)
-					livePeers[externalDetail[1]].onConsumableAuth((_signal, _externalDetail_) => {
-						fusedStream.log(externalDetail[1], _externalDetail_, "remote", [
-							"message-card-unread",
-						]);
-					});
-				fusedStream.chatCache[externalDetail[1]].isActive = true;
-			}
-		}
-		if (externalDetail[0] == "deletion") {
-			fusedStream.log(externalDetail[1], "Peer session deauthenticated", "transient", [
-				"align-center",
-				"system-message-card-error",
-				"message-card-slim",
-			]);
-			eventStream.log(
-				"system",
-				`Peer session with ${
-					CONFIG.UI.renderUnfamiliarPublicAliases
-						? hiddenAliasLookup[externalDetail[1]] ?? externalDetail[1]
-						: externalDetail[1]
-				} deauthenticated`,
-				"transient",
-				["align-center", "system-message-card-error", "message-card-slim"]
-			);
-			fusedStream.chatCache[externalDetail[1]].isActive = false;
-		}
-		if (!(fusedStream.chatCache?.[externalDetail[1]]?.isActive ?? true)) {
+	// onLivePeersUpdated(() => {
+	// 	Object.keys(eventHandler.dispatchWatchers)
+	// 		.filter((id) => id.slice(0, 25) === "authenticationAuthorized|")
+	// 		.forEach((relevantKey) => {
+	// 			if (!Object.keys(livePeers).includes(relevantKey.split("|")[1])) {
+	// 				eventHandler.forceReject(
+	// 					relevantKey,
+	// 					"The associated peer died before the route could be authenticated."
+	// 				);
+	// 			}
+	// 		});
+	// });
+
+    onNewAuthPeer(alias => {
+        if (livePeers[alias]) {
+            fusedStream.addAndLoadPeerStream(alias);
+            if (eventStream.dontAlert.includes(alias)) {
+                eventStream.dontAlert.splice(eventStream.dontAlert.indexOf(alias), 1);
+            } else {
+                eventStream.log(
+                    "system",
+                    `Successfully authenticated peer session with ${
+                        hiddenAliasLookup[alias] ?? alias
+                    }`,
+                    "transient",
+                    ["align-center", "system-message-card-success", "message-card-slim"]
+                );
+            }
+            if (
+                !eventHandler.handlerFrame[`consumableAuth | ${livePeers[alias].internalUID}`]
+            )
+                livePeers[alias].onConsumableAuth((_signal, _externalDetail_) => {
+                    fusedStream.log(alias, _externalDetail_, "remote", [
+                        "message-card-unread",
+                    ]);
+                });
+            fusedStream.chatCache[alias].isActive = true;
+        }
+        onAuthPeersUpdated(alias);
+    });
+    onLostAuthPeer(alias => {
+        fusedStream.log(alias, "Peer session deauthenticated", "transient", [
+            "align-center",
+            "system-message-card-error",
+            "message-card-slim",
+        ]);
+        eventStream.log(
+            "system",
+            `Peer session with ${
+                    hiddenAliasLookup[alias] ?? alias
+            } deauthenticated`,
+            "transient",
+            ["align-center", "system-message-card-error", "message-card-slim"]
+        );
+        fusedStream.chatCache[alias].isActive = false;
+        onAuthPeersUpdated(alias);
+    });
+
+    async function onAuthPeersUpdated(alias) {
+		if (!(fusedStream.chatCache?.[alias]?.isActive ?? true)) {
 			document.querySelector(".sendbutton").style.setProperty("pointer-events", "none");
 			document.querySelector(".sendbutton").style.setProperty("filter", "brightness(330%)");
 		} else {
@@ -271,8 +260,8 @@ window.onload = function () {
 		authPeers.forEach((node) => {
 			Graph.updateNodeAttribute(node, "type", () => "related");
 		});
-	});
-};
+    }
+}
 
 class RightPanel {
 	constructor() {
@@ -558,9 +547,6 @@ class FusedStream {
 	}
 	getRenderableID(ID) {
 		if (ID === "system") return "System";
-		if (!CONFIG.UI.renderUnfamiliarPublicAliases) {
-			return ID;
-		}
 		return hiddenAliasLookup[ID] ?? ID;
 	}
 	async log(ID, data, polarity, tags = [], adhoc = "") {
@@ -682,7 +668,7 @@ class standardContextMenu {
 	constructor(id, parentID) {
 		this.parentID = `#${parentID}` ?? "document";
 		this.container = document.querySelector(this.parentID);
-		this.eventhandler = new eventHandlingMechanism();
+		this.eventhandler = new EventHandler();
 		this.active = false;
 		this.id = id;
 		this.menu = document.querySelector(`#${this.id}`);
@@ -739,7 +725,7 @@ class connectionsPanel {
 	}
 	formatConnectionCard(label) {
 		return `<div class="connectedNodeCard" onclick="((event) => {if (event.target!==event.currentTarget&&event.target!==event.currentTarget.firstChild) return; rightPanel.rotateIn('messageFeedPane'); fusedStream.loadCache('${label}')})(event)"><p class="nodeCardText">@${
-			CONFIG.UI.renderUnfamiliarPublicAliases ? hiddenAliasLookup[label] : label
+			hiddenAliasLookup[label] ?? label
 		}</p><i class="icon kebab connection-kebab fa-solid fa-ellipsis-vertical" onclick="connectioncardcontext.click(event)" data-index="" data-reference="${label}" tabindex=0></i></div>`;
 	}
 	renderConnectionCards() {
