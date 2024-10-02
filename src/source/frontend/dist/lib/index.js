@@ -786,6 +786,7 @@ class peerConnection {
 		await this.transport.connection.setLocalDescription(await this.transport.connection.createOffer());
 		const concurrentICEDifferentiator = Math.floor(Math.random() * 1000);
 		this.transport.connection.onicecandidate = async ({ candidate }) => {
+			console.log("TEST")
 			if (candidate) return;
 			eventHandler.dispatch(`exhaustedICECandidates | ${concurrentICEDifferentiator}`);
 		};
