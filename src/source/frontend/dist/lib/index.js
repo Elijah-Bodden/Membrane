@@ -46,8 +46,39 @@ var defaultConfig = {
     mapImportTimeout: 10000,
     connectionTimeout: 100000000,
     connectionAcceptRejectFunction: async function (pkg) {
-      return true;
-    },
+	if (pkg.wantAuth) {
+		var crystalizedRef = hiddenAliasLookup[pkg.sender] ?? pkg.sender;
+		eventStream.log(
+			"system",
+			`Peer authentication requested by ${crystalizedRef}`,
+			"transient",
+			["align-center", "system-message-card-route-pending", "message-card-slim"],
+			pkg.sender
+		);
+		var accepted = true;
+		try {
+			await eventHandler.acquireExpectedDispatch(
+				`authenticationAuthorized|${pkg.sender}`,
+				CONFIG.communication.arbitraryPeerRouteTimeout
+			);
+		} catch {
+			eventStream.chatCache.system.exchange
+				.filter(
+					(item) =>
+						item.data.includes(crystalizedRef) &&
+						item.tags.includes("system-message-card-route-pending")
+				)
+				.forEach((request) => {
+					request.tags.push("system-message-card-error");
+					request.tags.splice(request.tags.indexOf("system-message-card-route-pending"), 1);
+					eventStream.optionalLoad("system");
+				});
+			accepted = false;
+		}
+		return accepted;
+	}
+	return true;
+},
   },
   constants: {
     defaultEventHandlerTimeout: 100000,
