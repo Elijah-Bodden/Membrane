@@ -1638,4 +1638,43 @@ function onAuth(alias, callback) {
   authPeerAddListener.addListener(alias, callback);
 }
 
-init()
+async function configLoadFunction() {
+	window.addEventListener("DOMContentLoaded", () => eventHandler.dispatch("DOMFunctional"));
+	await eventHandler.acquireExpectedDispatch("DOMFunctional");
+	await fillDefaults();
+	if (
+		!JSON.parse(window.localStorage.config ?? "{}")?.["communication.publicAlias"] ||
+		!JSON.parse(window.localStorage.config ?? "{}").rememberMe
+	) {
+		await (async () => {
+			effectiveFirstVisit = true;
+			var contentDisabler = document.createElement("iframe");
+			contentDisabler.style.position = "absolute";
+			contentDisabler.style.left =
+				contentDisabler.style.right =
+				contentDisabler.style.top =
+				contentDisabler.style.bottom =
+					"0px";
+			contentDisabler.style.width = contentDisabler.style.height = "100%";
+			contentDisabler.style.border = "0px";
+			contentDisabler.style.zIndex = 100000;
+			document.querySelector("#init-blur-wrapper").style.visibility = "visible";
+			document.querySelector("#init-blur-wrapper").style.filter =
+				"blur(3px) saturate(90%) brightness(90%)";
+			document.body.appendChild(contentDisabler);
+			const selectedHiddenAlias = await hiddenAliasPromptMenu();
+			document
+				.querySelector("#init-blur-wrapper")
+				.replaceWith(...document.querySelector("#init-blur-wrapper").childNodes);
+			document.body.removeChild(contentDisabler);
+			exportToLS("communication.publicAlias", selectedHiddenAlias);
+		})();
+	} else {
+		document
+			.querySelector("#init-blur-wrapper")
+			.replaceWith(...document.querySelector("#init-blur-wrapper").childNodes);
+	}
+	return JSON.parse(window.localStorage.config ?? "{}");
+}
+
+init(configLoadFunction)
