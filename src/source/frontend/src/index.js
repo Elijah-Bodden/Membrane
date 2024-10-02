@@ -299,36 +299,36 @@ async function renderQuerySuggestions(suggestionPairs, suggestionPriority, isInf
 	});
 }
 
-networkMap.onUpdate(async (_sig, externalDetail) => {
-	switch (externalDetail[0]) {
+onNetworkMapUpdate(async (method, relevantInformation) => {
+	switch (method) {
 		case "addNode":
-			graph.updateNode(externalDetail[1], () => {
+			graph.updateNode(relevantInformation, () => {
 				return {
 					x: 0,
 					y: 0,
 					label:
-						externalDetail[1] === CONFIG.communication.hiddenAlias
+						relevantInformation === CONFIG.communication.hiddenAlias
 							? "𝙈𝙚"
-							: hiddenAliasLookup[externalDetail[1]],
-					size: externalDetail[1] === CONFIG.communication.hiddenAlias ? 10 : 5,
+							: hiddenAliasLookup[relevantInformation],
+					size: relevantInformation === CONFIG.communication.hiddenAlias ? 10 : 5,
 					color: statusColors.Neutral,
-					type: externalDetail[1] === CONFIG.communication.hiddenAlias ? "server" : "unrelated",
+					type: relevantInformation === CONFIG.communication.hiddenAlias ? "server" : "unrelated",
 				};
 			});
-			graph.updateEdge(externalDetail[1], "server", () => {
+			graph.updateEdge(relevantInformation, "server", () => {
 				return { type: "antialias", size: 1 };
 			});
 			break;
 		case "addEdge":
-			graph.updateEdge(...externalDetail[1].sort(), () => {
+			graph.updateEdge(...relevantInformation.sort(), () => {
 				return { type: "antialias", size: 1 };
 			});
 			break;
 		case "removeEdge":
-			graph.dropEdge(...externalDetail[1].sort());
+			graph.dropEdge(...relevantInformation.sort());
 			break;
 		case "removeNode":
-			graph.dropNode(externalDetail[1]);
+			graph.dropNode(relevantInformation);
 			break;
 		case "totalWipe":
 			graph.forEachNode((node) => {
@@ -514,3 +514,4 @@ window.activateNode = activateNode;
 window.Graph = graph;
 window.blinkStatus = blinkStatus;
 window.renderer = renderer;
+
