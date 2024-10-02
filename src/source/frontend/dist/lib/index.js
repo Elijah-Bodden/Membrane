@@ -1260,7 +1260,7 @@ class peerConnection {
 		}, {});
 		var target = invertedDistances[Math.max(...Object.keys(invertedDistances))][0];
 		if (Object.keys(livePeers).includes(target)) return;
-		peerConnection.prototype.makeDefiniteRoute(target);
+		peerConnection.prototype.makeDefiniteRoute(target, "standard");
 	}
 	async negotiateAgnosticAuthConnection(target) {
 		if (authPeers.includes(target) || currentlyAuthenticating.includes(target)) {
