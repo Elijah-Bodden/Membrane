@@ -181,11 +181,6 @@ window.onload = function () {
 		).innerHTML = `<div class="center">Oh no! Something went wrong!</div><br><br>If you want to retry, just reload the page. If this error persits, feel free to email <b>admin@membranexus.com</b> with this stack trace:<div class="center"></div><br>${message}<br>[stack]<br>${stack}</div>`;
 		document.querySelector(".fatalWrapper").style.visibility = "visible";
 	});
-	if (!JSON.parse(localStorage.config ?? "{}")["UI.renderUnfamiliarPublicAliases"]) {
-		var field = document.querySelector("#searchEntryField");
-		field.disabled = true;
-		field.placeholder = "Cannot search, public aliases are disabled";
-	}
 	postcontext = new standardContextMenu("post-context", "messagefeed");
 	connectioncardcontext = new standardContextMenu("connection-card-context", "connectedNodesPane");
 	connectionspanel = new connectionsPanel();
@@ -824,15 +819,6 @@ async function exportToLS(reference, value) {
 }
 
 async function writeSetting(reference, value) {
-	if (reference === "UI.renderUnfamiliarPublicAliases") {
-		var field = document.querySelector("#searchEntryField");
-		field.disabled = !value;
-		if (value) {
-			field.placeholder = "Search for an active node";
-		} else {
-			field.placeholder = "Cannot search, public aliases are disabled";
-		}
-	}
 	if (reference === "communication.arbitraryPeerRouteTimeout") {
 		eventHandler.dispatch("arbitraryPeerRouteTimeoutUpdated");
 	}
