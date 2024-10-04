@@ -1437,6 +1437,7 @@ async function loadConfig(configLoadFunction) {
 
 async function init(configLoadFunction) {
   await loadConfig(configLoadFunction);
+  eventHandler.dispatch("configLoaded")
   addAlias(CONFIG.communication.publicAlias, CONFIG.communication.hiddenAlias);
   serverConnection = new ServerConnection();
   await serverConnection.connect();
