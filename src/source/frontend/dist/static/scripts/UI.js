@@ -219,7 +219,7 @@ window.onload = function () {
                 );
             }
             if (
-                !eventHandler.handlerFrame[`consumableAuth | ${livePeers[alias].internalUID}`]
+                !eventHandler.handlerFrame[`consumable | ${livePeers[alias].internalUID}`]
             )
                 onConsumable(alias, consumable => {
                     fusedStream.log(alias, consumable, "remote", [
