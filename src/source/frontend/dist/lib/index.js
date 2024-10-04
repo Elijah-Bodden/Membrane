@@ -825,7 +825,7 @@ class PeerConnection {
             [
               {
                 sender: this.peerData.hiddenAlias,
-                desiredPermissions: "advanced",
+                wantAuth: true,
               },
             ]
           )
