@@ -1416,7 +1416,7 @@ class ServerConnection {
         break;
       case "ERROR":
         const error = new Error(
-          `Unidentified server error`
+          `Unidentified server error (likely hibernated tab or overloaded STUN server/network interface)`
         );
         serverError(error, error.stack);
         break;
