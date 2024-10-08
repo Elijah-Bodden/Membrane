@@ -1060,7 +1060,7 @@ async function makeConnection(destination, wantAuth) {
       SDP,
       sender: CONFIG.communication.hiddenAlias,
       destination,
-      false,
+      wantAuth: false,
       routeID,
     });
     result = await Promise.race(
