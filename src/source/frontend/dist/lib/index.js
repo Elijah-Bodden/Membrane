@@ -1431,7 +1431,7 @@ class ServerConnection {
         break;
       case "ERROR":
         const error = new Error(
-          `Server timeout (likely inactive or hibernated tab)`
+          `Unidentified server error`
         );
         serverError(error, error.stack);
         break;
