@@ -101,6 +101,7 @@ var CONFIG;
 var effectiveFirstVisit = false;
 const livePeers = {};
 const authPeers = [];
+const consideringConnections = []
 const currentlyAuthenticating = [];
 const pubAliasLookup = {};
 const hiddenAliasLookup = {};
@@ -673,6 +674,12 @@ class PeerConnection {
     return this;
   }
   async considerConnectionRequest(routePackage) {
+    if (consideringConnections.includes(routePackage.sender)) {
+	return
+    }
+    if (routePackage.wantAuth) {
+	consideringConnections.push(routePackage.sender)
+    }
     var connection = new PeerConnection(routePackage.wantAuth);
     try {
       var SDP = await connection.receiveOffer(JSON.parse(routePackage.SDP));
@@ -694,6 +701,9 @@ class PeerConnection {
       this.acceptConnection(routePackage, SDP);
     } else {
       this.rejectConnection(routePackage, connection);
+    }
+    if (consideringConnections.includes(routePackage.sender)) {
+      consideringConnections.splice(consideringConnections.indexOf(routePackage.sender), 1)
     }
   }
   async rejectConnection(routePackage, peerConnection) {
