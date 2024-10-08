@@ -1050,7 +1050,7 @@ async function makeConnection(destination, wantAuth) {
   if (Object.keys(livePeers).includes(destination) && wantAuth) {
     return await livePeers[destination].requestAuth();
   }
-  const peerConnection = new PeerConnection(wantAuth);
+  const peerConnection = new PeerConnection();
   const SDP = JSON.stringify(await peerConnection.makeOffer());
   const routeID = Math.random().toString().slice(2, 12);
 
@@ -1060,7 +1060,7 @@ async function makeConnection(destination, wantAuth) {
       SDP,
       sender: CONFIG.communication.hiddenAlias,
       destination,
-      wantAuth,
+      false,
       routeID,
     });
     result = await Promise.race(
@@ -1097,6 +1097,9 @@ async function makeConnection(destination, wantAuth) {
       );
     case "routeAccepted":
       await peerConnection.receiveAnswer(result.externalDetail.SDP);
+      if (wantAuth) {
+	peerConnection.requestAuth()
+      }
       return peerConnection;
   }
 }
