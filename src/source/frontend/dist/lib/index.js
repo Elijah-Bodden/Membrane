@@ -101,7 +101,16 @@ var CONFIG;
 var effectiveFirstVisit = false;
 const livePeers = {};
 const authPeers = [];
-const consideringConnections = []
+// All aliases with auth connections being considered
+// (so we ignore subsequent non-auth requests)
+// Ofc this blocks stabilization, see comment below about maybe eliminating auth requests alltogether
+// This hack is incredibly fuck
+// Will fix later
+const consideringAuthConnections = []
+const consideringNonAuthConnections = []
+// For if a non-auth request is ongoing
+// Escalate to auth once that connection is done
+const authConnectionQueue = []
 const currentlyAuthenticating = [];
 const pubAliasLookup = {};
 const hiddenAliasLookup = {};
@@ -674,11 +683,18 @@ class PeerConnection {
     return this;
   }
   async considerConnectionRequest(routePackage) {
-    if (consideringConnections.includes(routePackage.sender)) {
+    // this is a hack to fix race condition. Will come back to it and do something less disgusting when I have more time
+    // Maybe eliminate auth requests all together and turn them into non-auth requests with an escalation request tacked on?
+    if (consideringAuthConnections.includes(routePackage.sender)) {
 	return
     }
+    if (consideringNonAuthConnections.includes(routePackage.sender) && routePackage.wantAuth) {
+	authConnectionQueue.append(routePackage.sender)
+    }
     if (routePackage.wantAuth) {
-	consideringConnections.push(routePackage.sender)
+	consideringAuthConnections.push(routePackage.sender)
+    } else {
+	consideringNonAuthConnections.push(routePackage.sender)
     }
     var connection = new PeerConnection(routePackage.wantAuth);
     try {
@@ -702,8 +718,14 @@ class PeerConnection {
     } else {
       this.rejectConnection(routePackage, connection);
     }
-    if (consideringConnections.includes(routePackage.sender)) {
-      consideringConnections.splice(consideringConnections.indexOf(routePackage.sender), 1)
+    if (routePackage.wantAuth) {
+      consideringAuthConnections.splice(consideringAuthConnections.indexOf(routePackage.sender), 1)
+    } else {
+	consideringNonAuthConnections.splice(consideringNonAuthConnections.indexOf(routePackage.sender), 1)  
+    }
+    if (authConnectionQueue.includes(routePackage.sender)) {
+	makeConnection(routePackage.sender, true)
+	authConnectionQueue.splice(authConnectionQueue.indexOf(routePackage.sender), 1)  
     }
   }
   async rejectConnection(routePackage, peerConnection) {
