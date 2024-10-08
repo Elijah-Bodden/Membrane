@@ -1332,9 +1332,11 @@ class ServerConnection {
       let offer;
       this.peer = new PeerConnection();
       try {
-        offer = await this.peer.makeOffer();
+        offer = await Promise.race([this.peer.makeOffer(), eventHandler.acquireExpectedDispatch("serverClosing")];
+	if (offer === "serverClosing") {
+	  return
+	}
       } catch (error) {
-	console.log(JSON.stringify(this))
         this.close();
         return;
       }
@@ -1363,6 +1365,7 @@ class ServerConnection {
   }
   async onClose() {
     clearInterval(this.heartBeatTimeout);
+    eventHandler.dispatch("serverClosing")
     this.server = undefined;
     this.peer = undefined;
     setTimeout(() => {
