@@ -1334,6 +1334,7 @@ class ServerConnection {
       try {
         offer = await this.peer.makeOffer();
       } catch (error) {
+	console.log(JSON.stringify(this))
         this.close();
         return;
       }
