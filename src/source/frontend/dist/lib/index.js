@@ -690,6 +690,7 @@ class PeerConnection {
     }
     if (consideringNonAuthConnections.includes(routePackage.sender) && routePackage.wantAuth) {
 	authConnectionQueue.append(routePackage.sender)
+	return
     }
     if (routePackage.wantAuth) {
 	consideringAuthConnections.push(routePackage.sender)
