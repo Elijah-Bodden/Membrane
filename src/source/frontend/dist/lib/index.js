@@ -1332,7 +1332,7 @@ class ServerConnection {
       let offer;
       this.peer = new PeerConnection();
       try {
-        offer = await Promise.race([this.peer.makeOffer(), eventHandler.acquireExpectedDispatch("serverClosing")];
+        offer = await Promise.race([this.peer.makeOffer(), eventHandler.acquireExpectedDispatch("serverClosing")]);
 	if (offer === "serverClosing") {
 	  return
 	}
