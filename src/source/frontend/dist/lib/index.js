@@ -488,7 +488,7 @@ networkMap = new NetworkMap();
 // Try and stabilize link every second that we only have one peer
 var linkStabilizing = false;
 setInterval(async () => {
-  if (Object.keys(livePeers).length === 1 && !linkStabilizing) {
+  if (Object.keys(livePeers).length < 3 && !linkStabilizing) {
     linkStabilizing = true;
     try {
       await PeerConnection.prototype.stabilizeLink();
