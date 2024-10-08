@@ -1098,7 +1098,7 @@ async function makeConnection(destination, wantAuth) {
     case "routeAccepted":
       await peerConnection.receiveAnswer(result.externalDetail.SDP);
       if (wantAuth) {
-	peerConnection.channel.onopen = this.requestAuth.bind(this)
+	peerConnection.channel.onopen = peerConnection.requestAuth.bind(peerConnection)
       }
       return peerConnection;
   }
