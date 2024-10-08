@@ -46,7 +46,7 @@ var defaultConfig = {
     mapImportTimeout: 10000,
     connectionTimeout: 100000000,
     connectionAcceptRejectFunction: async function (pkg) {
-	if (pkg.wantAuth) {
+	  if (pkg.wantAuth) {
 		var crystalizedRef = hiddenAliasLookup[pkg.sender] ?? pkg.sender;
 		eventStream.log(
 			"system",
@@ -101,6 +101,16 @@ var CONFIG;
 var effectiveFirstVisit = false;
 const livePeers = {};
 const authPeers = [];
+// All aliases with auth connections being considered
+// (so we ignore subsequent non-auth requests)
+// Ofc this blocks stabilization, see comment below about maybe eliminating auth requests alltogether
+// This hack is incredibly fuck
+// Will fix later
+const consideringAuthConnections = []
+const consideringNonAuthConnections = []
+// For if a non-auth request is ongoing
+// Escalate to auth once that connection is done
+const authConnectionQueue = []
 const currentlyAuthenticating = [];
 const pubAliasLookup = {};
 const hiddenAliasLookup = {};
@@ -488,7 +498,7 @@ networkMap = new NetworkMap();
 // Try and stabilize link every second that we only have one peer
 var linkStabilizing = false;
 setInterval(async () => {
-  if (Object.keys(livePeers).length === 1 && !linkStabilizing) {
+  if (Object.keys(livePeers).length < 3 && !linkStabilizing) {
     linkStabilizing = true;
     try {
       await PeerConnection.prototype.stabilizeLink();
@@ -673,6 +683,20 @@ class PeerConnection {
     return this;
   }
   async considerConnectionRequest(routePackage) {
+    // this is a hack to fix race condition. Will come back to it and do something less disgusting when I have more time
+    // Maybe eliminate auth requests all together and turn them into non-auth requests with an escalation request tacked on?
+    if (consideringAuthConnections.includes(routePackage.sender)) {
+	return
+    }
+    if (consideringNonAuthConnections.includes(routePackage.sender) && routePackage.wantAuth) {
+	authConnectionQueue.append(routePackage.sender)
+	return
+    }
+    if (routePackage.wantAuth) {
+	consideringAuthConnections.push(routePackage.sender)
+    } else {
+	consideringNonAuthConnections.push(routePackage.sender)
+    }
     var connection = new PeerConnection(routePackage.wantAuth);
     try {
       var SDP = await connection.receiveOffer(JSON.parse(routePackage.SDP));
@@ -694,6 +718,15 @@ class PeerConnection {
       this.acceptConnection(routePackage, SDP);
     } else {
       this.rejectConnection(routePackage, connection);
+    }
+    if (routePackage.wantAuth) {
+      consideringAuthConnections.splice(consideringAuthConnections.indexOf(routePackage.sender), 1)
+    } else {
+	consideringNonAuthConnections.splice(consideringNonAuthConnections.indexOf(routePackage.sender), 1)  
+    }
+    if (authConnectionQueue.includes(routePackage.sender)) {
+	makeConnection(routePackage.sender, true)
+	authConnectionQueue.splice(authConnectionQueue.indexOf(routePackage.sender), 1)  
     }
   }
   async rejectConnection(routePackage, peerConnection) {
@@ -790,7 +823,7 @@ class PeerConnection {
         }
         break;
       case "routeRejected":
-        if (packageData.destination == CONFIG.communication.hiddenAlias) {
+	if (packageData.destination == CONFIG.communication.hiddenAlias) {
           eventHandler.dispatch(
             `routeRejected|${packageData.routeID}`,
             packageData
@@ -1017,7 +1050,7 @@ async function makeConnection(destination, wantAuth) {
   if (Object.keys(livePeers).includes(destination) && wantAuth) {
     return await livePeers[destination].requestAuth();
   }
-  const peerConnection = new PeerConnection(wantAuth);
+  const peerConnection = new PeerConnection();
   const SDP = JSON.stringify(await peerConnection.makeOffer());
   const routeID = Math.random().toString().slice(2, 12);
 
@@ -1027,7 +1060,7 @@ async function makeConnection(destination, wantAuth) {
       SDP,
       sender: CONFIG.communication.hiddenAlias,
       destination,
-      wantAuth,
+      false,
       routeID,
     });
     result = await Promise.race(
@@ -1064,6 +1097,9 @@ async function makeConnection(destination, wantAuth) {
       );
     case "routeAccepted":
       await peerConnection.receiveAnswer(result.externalDetail.SDP);
+      if (wantAuth) {
+	peerConnection.requestAuth()
+      }
       return peerConnection;
   }
 }

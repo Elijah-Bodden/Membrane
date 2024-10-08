@@ -18,7 +18,7 @@ Robust browser-based peer to peer networks
 </br>
 
 ## What's this?
-Membrane is a protocol that takes WebRTC signalling to the browser, creating living peer networks. With minimal server-based bootstrapping, it makes self-sufficient peer-to-peer networks that can operate without servers. Any member browser can create a connection to any other by signaling across its peers, avoiding clumsy, centralized signaling servers. The network automatically stabilizes its topology and coordinates using broadcast "gossip".
+Membrane is a protocol that takes WebRTC signalling to the browser with living peer networks. With minimal server-based bootstrapping, it makes self-sufficient peer-to-peer networks that can operate without servers. Any member browser can create a connection to any other by signaling across its peers, avoiding clumsy, centralized signaling servers. The network automatically stabilizes its topology and coordinates using broadcast "gossip".
 
 Designed to be agnostic and easy to use, membrane is ideal for web clients for distributed chat, hosting, torrenting, computing, and so much more!  
 | ![](./Assets/demo.gif) |
