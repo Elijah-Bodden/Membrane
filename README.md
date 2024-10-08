@@ -14,15 +14,13 @@
 <img src="https://img.shields.io/badge/Demo-here-blue?style=for-the-badge"/>
 </a>
 </br>
-Robust, server-minimal peer routing in the browser  
+Robust browser-based peer to peer networks  
 </br>
-Note: most of this repo is materials for membranexus.com, the project's main demo. If you're looking for the actual library, you can find it <a href="https://github.com/Elijah-Bodden/Membrane/blob/main/lib/index.js">here</a>.
-</p>
 
 ## What's this?
-Membrane is a protocol that takes WebRTC signalling to the browser, creating living peer networks. With minimal server-based bootstrapping, it can make self-sufficient peer-to-peer networks that can operate without servers. Any member browser can create a connection to any other by signaling across its peers, avoiding clumsy, centralized signaling servers. The network also self-stabilizes, minmizing its diameter and collectively tracking its status and topology through peer "gossip".
+Membrane is a protocol that takes WebRTC signalling to the browser, creating living peer networks. With minimal server-based bootstrapping, it makes self-sufficient peer-to-peer networks that can operate without servers. Any member browser can create a connection to any other by signaling across its peers, avoiding clumsy, centralized signaling servers. The network automatically stabilizes its topology and coordinates using broadcast "gossip".
 
-The library is designed to be as agnostic as possible, making no-installation web clients for distributed chat, hosting, torrenting, computing, and so much more easy to implement!  
+Designed to be agnostic and easy to use, membrane is ideal for web clients for distributed chat, hosting, torrenting, computing, and so much more!  
 | ![](./Assets/demo.gif) |
 |:--:|
 | *[Membranexus.com](https://membranexus.com), built using Membrane. After a first-contact server signal, clients never need to interact with a server again - all network functions can happen on the peer level.* |  
