@@ -1395,7 +1395,7 @@ class ServerConnection {
         break;
       case "ERROR":
         const error = new Error(
-          `Unidentified internal error on server ${message[1]}`
+          `Unidentified server error`
         );
         serverError(error, error.stack);
         break;
