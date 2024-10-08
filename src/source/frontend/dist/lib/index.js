@@ -714,7 +714,6 @@ class PeerConnection {
     }).catch(() => {});
   }
   async acceptConnection(routePackage, SDP) {
-    console.log("accepting")
     await sendTowards(routePackage.sender, "routeAccepted", {
       SDP,
       destination: routePackage.sender,
@@ -783,7 +782,6 @@ class PeerConnection {
         }
         break;
       case "routeInaccessible":
-	console.log("inaccessible")
         if (packageData.destination == CONFIG.communication.hiddenAlias) {
           eventHandler.dispatch(
             `routeInaccessible|${packageData.routeID}`,
@@ -802,8 +800,7 @@ class PeerConnection {
         }
         break;
       case "routeRejected":
-	console.log("route rejected")
-        if (packageData.destination == CONFIG.communication.hiddenAlias) {
+	if (packageData.destination == CONFIG.communication.hiddenAlias) {
           eventHandler.dispatch(
             `routeRejected|${packageData.routeID}`,
             packageData
@@ -817,7 +814,6 @@ class PeerConnection {
         }
         break;
       case "routeAccepted":
-	console.log("route accepted")
         if (packageData.destination == CONFIG.communication.hiddenAlias) {
           eventHandler.dispatch(
             `routeAccepted|${packageData.routeID}`,
