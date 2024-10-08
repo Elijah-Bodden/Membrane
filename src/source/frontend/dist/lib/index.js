@@ -1716,7 +1716,7 @@ const authPeerAddListener = new AuthPeerAddListener();
 function onAuth(alias, callback) {
   authPeerAddListener.addListener(alias, callback);
 }
-const peerAddListener = new peerAddListener();
+const peerAddListener = new PeerAddListener();
 function onPeer(alias, callback) {
   peerAddListener.addListener(alias, callback);
 }
