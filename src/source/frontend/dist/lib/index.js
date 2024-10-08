@@ -683,21 +683,11 @@ class PeerConnection {
     return this;
   }
   async considerConnectionRequest(routePackage) {
-    // this is a hack to fix race condition. Will come back to it and do something less disgusting when I have more time
-    // Maybe eliminate auth requests all together and turn them into non-auth requests with an escalation request tacked on?
-    if (consideringAuthConnections.includes(routePackage.sender)) {
+    if (consideringNonAuthConnections.includes(routePackage.sender)) {
 	return
     }
-    if (consideringNonAuthConnections.includes(routePackage.sender) && routePackage.wantAuth) {
-	authConnectionQueue.append(routePackage.sender)
-	return
-    }
-    if (routePackage.wantAuth) {
-	consideringAuthConnections.push(routePackage.sender)
-    } else {
-	consideringNonAuthConnections.push(routePackage.sender)
-    }
-    var connection = new PeerConnection(routePackage.wantAuth);
+    consideringNonAuthConnections.push(routePackage.sender)
+    var connection = new PeerConnection();
     try {
       var SDP = await connection.receiveOffer(JSON.parse(routePackage.SDP));
     } catch (error) {
@@ -719,15 +709,7 @@ class PeerConnection {
     } else {
       this.rejectConnection(routePackage, connection);
     }
-    if (routePackage.wantAuth) {
-      consideringAuthConnections.splice(consideringAuthConnections.indexOf(routePackage.sender), 1)
-    } else {
-	consideringNonAuthConnections.splice(consideringNonAuthConnections.indexOf(routePackage.sender), 1)  
-    }
-    if (authConnectionQueue.includes(routePackage.sender)) {
-	makeConnection(routePackage.sender, true)
-	authConnectionQueue.splice(authConnectionQueue.indexOf(routePackage.sender), 1)  
-    }
+    consideringNonAuthConnections.splice(consideringNonAuthConnections.indexOf(routePackage.sender), 1)  
   }
   async rejectConnection(routePackage, peerConnection) {
     peerConnection.connection.close();
@@ -1097,7 +1079,12 @@ async function makeConnection(destination, wantAuth) {
       );
     case "routeAccepted":
       await peerConnection.receiveAnswer(result.externalDetail.SDP);
-      // TODO: Figure out where to do actual auth requesting then
+      // Sneakily make normal connection and then upgrade on connect instead of sending auth from the start
+      if (wantAuth) {
+	  onPeer(destination, () => {
+	      makeConnection(destination, true)
+	  })
+      }
       return peerConnection;
   }
 }
@@ -1704,10 +1691,36 @@ class AuthPeerAddListener {
   }
 }
 
+class PeerAddListener {
+  constructor() {
+    this.listening = {};
+    onNewPeer(this.listener.bind(this));
+  }
+  async listener(externalDetail) {
+    if (Object.keys(this.listening).includes(externalDetail)) {
+      this.listening[externalDetail]();
+      delete this.listening[externalDetail];
+    }
+  }
+  async addListener(alias, callback) {
+    if (Object.keys(livePeers).includes(alias)) {
+      callback();
+      return;
+    }
+    this.listening[alias] = callback;
+  }
+}
+
+
 const authPeerAddListener = new AuthPeerAddListener();
 function onAuth(alias, callback) {
   authPeerAddListener.addListener(alias, callback);
 }
+const peerAddListener = new peerAddListener();
+function onPeer(alias, callback) {
+  peerAddListener.addListener(alias, callback);
+}
+
 
 async function configLoadFunction() {
 	window.addEventListener("DOMContentLoaded", () => eventHandler.dispatch("DOMFunctional"));
