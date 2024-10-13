@@ -16,7 +16,7 @@
 </br>
 Robust browser-based peer to peer networks  
 </br>
-*Happily announcing Membrane v2 with overhauled developer experience and reliability!*
+<i>Happily announcing Membrane v2 with overhauled developer experience and reliability!</i>
 </br>
 
 ## What's this?
